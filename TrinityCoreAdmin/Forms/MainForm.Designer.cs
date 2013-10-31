@@ -1,6 +1,6 @@
 ﻿namespace TrinityCoreAdmin
 {
-    partial class Main
+    partial class MainForm
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -66,38 +66,38 @@
             // verbindenToolStripMenuItem
             // 
             this.verbindenToolStripMenuItem.Name = "verbindenToolStripMenuItem";
-            this.verbindenToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.verbindenToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.verbindenToolStripMenuItem.Text = "Verbinden";
             this.verbindenToolStripMenuItem.Click += new System.EventHandler(this.verbindenToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(142, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
             // 
             // einstellungenToolStripMenuItem1
             // 
             this.einstellungenToolStripMenuItem1.Name = "einstellungenToolStripMenuItem1";
-            this.einstellungenToolStripMenuItem1.Size = new System.Drawing.Size(145, 22);
-            this.einstellungenToolStripMenuItem1.Text = "Einstellungen";
+            this.einstellungenToolStripMenuItem1.Size = new System.Drawing.Size(154, 22);
+            this.einstellungenToolStripMenuItem1.Text = "Realmmanager";
             this.einstellungenToolStripMenuItem1.Click += new System.EventHandler(this.einstellungenToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(142, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(151, 6);
             // 
             // beendenToolStripMenuItem
             // 
             this.beendenToolStripMenuItem.Name = "beendenToolStripMenuItem";
-            this.beendenToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.beendenToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.beendenToolStripMenuItem.Text = "Beenden";
             this.beendenToolStripMenuItem.Click += new System.EventHandler(this.beendenToolStripMenuItem_Click);
             // 
             // sOAPToolStripMenuItem
             // 
             this.sOAPToolStripMenuItem.Name = "sOAPToolStripMenuItem";
-            this.sOAPToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.sOAPToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.sOAPToolStripMenuItem.Text = "SOAP";
             this.sOAPToolStripMenuItem.Click += new System.EventHandler(this.sOAPToolStripMenuItem_Click);
             // 
@@ -111,14 +111,14 @@
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
             // 
-            // Main
+            // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.ClientSize = new System.Drawing.Size(493, 273);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Main";
+            this.Name = "MainForm";
             this.Text = "TrinityAdmin";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);

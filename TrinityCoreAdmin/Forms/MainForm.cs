@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace TrinityCoreAdmin
 {
-    public partial class Main : Form
+    public partial class MainForm : Form
     {
-        public Main()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -71,7 +71,7 @@ namespace TrinityCoreAdmin
 
         private void einstellungenToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Settings frm_Settings = new Settings();
+            RealmManagerForm frm_Settings = new RealmManagerForm();
             frm_Settings.ShowInTaskbar = false;
             frm_Settings.ShowDialog();
         }

@@ -9,9 +9,29 @@ namespace TrinityCoreAdmin
     [DataContract]
     public class Realm
     {
+        private string _authdb;
+
+        private string _chardb;
+
+        private int _dbId;
+
+        [DataMember]
+        private string _encryptedPassword;
+
+        private string _entropy;
+
+        private string _host;
+
+        private string _name;
+
+        private int _port;
+
+        private string _user;
+
+        private string _worlddb;
+
         public Realm()
-        {
-        }
+        { }
 
         public Realm(int dbId, string name, string host, int port, string user, string password, string authdb, string chardb, string worlddb)
         {
@@ -33,7 +53,19 @@ namespace TrinityCoreAdmin
             Worlddb = worlddb;
         }
 
-        private int _dbId;
+        [DataMember]
+        public string Authdb
+        {
+            get { return _authdb; }
+            set { _authdb = value; }
+        }
+
+        [DataMember]
+        public string Chardb
+        {
+            get { return _chardb; }
+            set { _chardb = value; }
+        }
 
         [DataMember]
         public int DbId
@@ -42,16 +74,12 @@ namespace TrinityCoreAdmin
             set { _dbId = value; }
         }
 
-        private string _name;
-
         [DataMember]
-        public string Name
+        public string Entropy
         {
-            get { return _name; }
-            set { _name = value; }
+            get { return _entropy; }
+            set { _entropy = value; }
         }
-
-        private string _host;
 
         [DataMember]
         public string Host
@@ -60,22 +88,11 @@ namespace TrinityCoreAdmin
             set { _host = value; }
         }
 
-        private int _port;
-
         [DataMember]
-        public int Port
+        public string Name
         {
-            get { return _port; }
-            set { _port = value; }
-        }
-
-        private string _user;
-
-        [DataMember]
-        public string User
-        {
-            get { return _user; }
-            set { _user = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         public string Password
@@ -88,42 +105,24 @@ namespace TrinityCoreAdmin
         }
 
         [DataMember]
-        private string _encryptedPassword;
-
-        private string _authdb;
-
-        [DataMember]
-        public string Authdb
+        public int Port
         {
-            get { return _authdb; }
-            set { _authdb = value; }
+            get { return _port; }
+            set { _port = value; }
         }
 
-        private string _chardb;
-
         [DataMember]
-        public string Chardb
+        public string User
         {
-            get { return _chardb; }
-            set { _chardb = value; }
+            get { return _user; }
+            set { _user = value; }
         }
-
-        private string _worlddb;
 
         [DataMember]
         public string Worlddb
         {
             get { return _worlddb; }
             set { _worlddb = value; }
-        }
-
-        private string _entropy;
-
-        [DataMember]
-        public string Entropy
-        {
-            get { return _entropy; }
-            set { _entropy = value; }
         }
     }
 }

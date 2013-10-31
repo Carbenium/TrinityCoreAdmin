@@ -1,6 +1,6 @@
 ﻿namespace TrinityCoreAdmin
 {
-    partial class Settings
+    partial class RealmManagerForm
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -46,13 +46,13 @@
             this.lblCharDB = new System.Windows.Forms.Label();
             this.lblWorldDB = new System.Windows.Forms.Label();
             this.panelRealm = new System.Windows.Forms.Panel();
-            this.numId = new System.Windows.Forms.NumericUpDown();
+            this.numDbId = new System.Windows.Forms.NumericUpDown();
             this.lblDbId = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.panelRealm.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numId)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDbId)).BeginInit();
             this.SuspendLayout();
             // 
             // lblHost
@@ -156,6 +156,7 @@
             this.treeRealm.Size = new System.Drawing.Size(133, 295);
             this.treeRealm.TabIndex = 11;
             this.treeRealm.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeRealm_AfterLabelEdit);
+            this.treeRealm.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeRealm_BeforeSelect);
             this.treeRealm.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeRealm_AfterSelect);
             // 
             // btnNewRealm
@@ -212,7 +213,7 @@
             // 
             // panelRealm
             // 
-            this.panelRealm.Controls.Add(this.numId);
+            this.panelRealm.Controls.Add(this.numDbId);
             this.panelRealm.Controls.Add(this.lblDbId);
             this.panelRealm.Controls.Add(this.lblWorldDB);
             this.panelRealm.Controls.Add(this.lblCharDB);
@@ -233,12 +234,12 @@
             this.panelRealm.Size = new System.Drawing.Size(290, 278);
             this.panelRealm.TabIndex = 21;
             // 
-            // numId
+            // numDbId
             // 
-            this.numId.Location = new System.Drawing.Point(94, 21);
-            this.numId.Name = "numId";
-            this.numId.Size = new System.Drawing.Size(57, 20);
-            this.numId.TabIndex = 22;
+            this.numDbId.Location = new System.Drawing.Point(94, 21);
+            this.numDbId.Name = "numDbId";
+            this.numDbId.Size = new System.Drawing.Size(57, 20);
+            this.numDbId.TabIndex = 22;
             // 
             // lblDbId
             // 
@@ -269,7 +270,7 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // Settings
+            // RealmManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -280,13 +281,13 @@
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnNewRealm);
             this.Controls.Add(this.treeRealm);
-            this.Name = "Settings";
-            this.Text = "Settings";
+            this.Name = "RealmManagerForm";
+            this.Text = "Realmmanager";
             this.Load += new System.EventHandler(this.Settings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
             this.panelRealm.ResumeLayout(false);
             this.panelRealm.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numId)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDbId)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -313,7 +314,7 @@
         private System.Windows.Forms.Panel panelRealm;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.NumericUpDown numId;
+        private System.Windows.Forms.NumericUpDown numDbId;
         private System.Windows.Forms.Label lblDbId;
 
     }
