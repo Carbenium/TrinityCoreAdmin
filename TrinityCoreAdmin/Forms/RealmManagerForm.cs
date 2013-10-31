@@ -48,13 +48,14 @@ namespace TrinityCoreAdmin
 
             treeRealm.Nodes.Clear();
             TreeNode node = treeRealm.Nodes.Add("Realms");
-            treeRealm.SelectedNode = node;
+            
 
             foreach (Realm r in realms)
             {
                 treeRealm.Nodes[0].Nodes.Add(r.Name);
                 treeRealm.ExpandAll();
             }
+            treeRealm.SelectedNode = node;
         }
 
         private void Save(bool reload = false)
@@ -245,7 +246,7 @@ namespace TrinityCoreAdmin
 
         private void treeRealm_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (treeRealm.SelectedNode.Parent != null)
+            if (treeRealm.SelectedNode != null && treeRealm.SelectedNode.Parent != null)
                 UpdateRealm(realms.ElementAt(treeRealm.SelectedNode.Index));
         }
     }
