@@ -35,15 +35,12 @@
             this.einstellungenToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.beendenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sOAPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewAccounts = new TrinityCoreAdmin.AccountListView();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.einstellungenToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(493, 24);
@@ -52,13 +49,6 @@
             // 
             // einstellungenToolStripMenuItem
             // 
-            this.einstellungenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.verbindenToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.einstellungenToolStripMenuItem1,
-            this.toolStripSeparator1,
-            this.beendenToolStripMenuItem,
-            this.sOAPToolStripMenuItem});
             this.einstellungenToolStripMenuItem.Name = "einstellungenToolStripMenuItem";
             this.einstellungenToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.einstellungenToolStripMenuItem.Text = "Datei";
@@ -93,13 +83,6 @@
             this.beendenToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.beendenToolStripMenuItem.Text = "Beenden";
             this.beendenToolStripMenuItem.Click += new System.EventHandler(this.beendenToolStripMenuItem_Click);
-            // 
-            // sOAPToolStripMenuItem
-            // 
-            this.sOAPToolStripMenuItem.Name = "sOAPToolStripMenuItem";
-            this.sOAPToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.sOAPToolStripMenuItem.Text = "SOAP";
-            this.sOAPToolStripMenuItem.Click += new System.EventHandler(this.sOAPToolStripMenuItem_Click);
             // 
             // listViewAccounts
             // 
@@ -137,7 +120,6 @@
         private System.Windows.Forms.ToolStripMenuItem beendenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verbindenToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem sOAPToolStripMenuItem;
         private AccountListView listViewAccounts;
     }
 }

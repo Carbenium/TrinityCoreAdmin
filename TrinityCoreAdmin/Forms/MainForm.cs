@@ -131,10 +131,5 @@ namespace TrinityCoreAdmin
             this.Close();
         }
 
-        private void sOAPToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form2 frm_soap = new Form2();
-            frm_soap.ShowDialog();
-        }
     }
 }

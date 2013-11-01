@@ -233,7 +233,6 @@ namespace TrinityCoreAdmin
             else
             {
                 Realm selectedRealm = realms.ElementAt(treeRealm.SelectedNode.Index);
-                string oldName = selectedRealm.Name;
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     selectedRealm.Name = e.Node.Text;

@@ -7,7 +7,7 @@ namespace TrinityCoreAdmin
 {
     internal class MySQLConnection
     {
-        protected List<MySqlCommand> m_stmt;
+        protected List<MySqlCommand> m_stmts = new List<MySqlCommand>();
         private MySql.Data.MySqlClient.MySqlConnection conn;
 
         public MySQLConnection(MySqlConnectionStringBuilder connBuilder)
@@ -71,7 +71,7 @@ namespace TrinityCoreAdmin
             }
             else
             {
-                m_stmt[index] = stmt;
+                m_stmts[index] = stmt;
             }
         }
     }
