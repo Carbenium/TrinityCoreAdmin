@@ -20,9 +20,9 @@ namespace TrinityCoreAdmin
             //string server = Settings1.Default.server;
             //string database = Settings1.Default.database;
             //string user = Settings1.Default.user;
-            RealmManagerForm.LoadRealms();
+            RealmManager.LoadRealms();
 
-            MessageBox.Show(RealmManagerForm.realms[0].Name);
+            MessageBox.Show(RealmManager.realms[0].Name);
 
             //listViewUsers.Columns.Add("Benutzername", 100);
             //listViewUsers.Columns.Add("E-Mail");
@@ -72,7 +72,7 @@ namespace TrinityCoreAdmin
         //    }
         //}
 
-        private void einstellungenToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void realmmanagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RealmManagerForm frm_Settings = new RealmManagerForm();
             frm_Settings.ShowInTaskbar = false;

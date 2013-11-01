@@ -10,16 +10,6 @@ namespace TrinityCoreAdmin
 {
     public partial class RealmManagerForm : Form
     {
-        public static List<Realm> realms = new List<Realm>();
-
-        private enum RealmsStatus
-        {
-            SAVED = 0,
-            CHANGED = 1,
-            NEW = 2
-        }
-
-        private static RealmsStatus Status = RealmsStatus.SAVED;
 
         public RealmManagerForm()
         {
@@ -38,64 +28,26 @@ namespace TrinityCoreAdmin
             {
                 using (FileStream fs = f.OpenRead())
                 {
-                    realms = DeserializeRealms(fs);
+                    //RealmManager.realms = DeserializeRealms(fs);
                 }
             }
             else
             {
-                Save(true);
+                RealmManager.Save(true);
             }
 
             treeRealm.Nodes.Clear();
             TreeNode node = treeRealm.Nodes.Add("Realms");
-            
 
-            foreach (Realm r in realms)
+
+            foreach (Realm r in RealmManager.realms)
             {
                 treeRealm.Nodes[0].Nodes.Add(r.Name);
                 treeRealm.ExpandAll();
             }
             treeRealm.SelectedNode = node;
         }
-        public static void LoadRealms()
-        {
-            FileInfo f = new FileInfo("D:\\config.xml");
-            if (f.Exists)
-            {
-                using (FileStream fs = f.OpenRead())
-                {
-                    realms = DeserializeRealms(fs);
-                }
-            }
-            else
-            {
-                Save(true);
-            }
- 
-        }
-
-        private static void Save(bool reload = false)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream("D:\\config.xml", System.IO.FileMode.Create))
-                {
-                    bool success = SerializeRealms(realms, fs);
-
-                    if (reload && success)
-                    {
-                        fs.Position = 0;
-                        realms = DeserializeRealms(fs);
-                    }
-                }
-
-                Status = RealmsStatus.SAVED;
-            }
-            catch (SystemException e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
+        
 
         private void UpdateRealm(Realm r)
         {
@@ -107,49 +59,20 @@ namespace TrinityCoreAdmin
             r.Authdb = txtAuthDB.Text;
             r.Chardb = txtCharDB.Text;
             r.Worlddb = txtWorldDB.Text;
-        }
-
-        public static bool SerializeRealms(List<Realm> realms, FileStream stream)
-        {
-            try
-            {
-                var serializer = new DataContractSerializer(typeof(List<Realm>));
-                var settings = new XmlWriterSettings { Indent = true };
-                using (var w = XmlWriter.Create(stream, settings))
-                    serializer.WriteObject(w, realms);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
-            return true;
-        }
-
-        public static List<Realm> DeserializeRealms(FileStream stream)
-        {
-            var serializer = new DataContractSerializer(typeof(List<Realm>));
-            try
-            {
-                List<Realm> l = (List<Realm>)serializer.ReadObject(stream);
-                return l;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return realms;
-            }
+            
+            RealmManager.Status = RealmsStatus.SAVED;
         }
 
         private void btnNewRealm_Click(object sender, EventArgs e)
         {
-            ClearTextBoxes(panelRealm);
+            
 
             if (treeRealm.SelectedNode.Parent != null)
-                UpdateRealm(realms.ElementAt(treeRealm.SelectedNode.Index));
+                UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
 
+            ClearTextBoxes(panelRealm);
             numPort.Value = 3306;
-            Status = RealmsStatus.NEW;
+            RealmManager.Status = RealmsStatus.NEW;
 
             TreeNode newNode = new TreeNode("Neuer Realm");
             TreeNode selectedNode = treeRealm.SelectedNode;
@@ -166,9 +89,9 @@ namespace TrinityCoreAdmin
         private void btnOK_Click(object sender, EventArgs e)
         {
             if(treeRealm.SelectedNode.Parent != null)
-                UpdateRealm(realms.ElementAt(treeRealm.SelectedNode.Index));
+                UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
 
-            Save();
+            RealmManager.Save();
             this.Close();
         }
 
@@ -176,8 +99,8 @@ namespace TrinityCoreAdmin
         {
             if (treeRealm.SelectedNode.Level != 0) //Root darf nicht gelöscht werden
             {
-                Realm selectedRealm = realms.ElementAt(treeRealm.SelectedNode.Index);
-                realms.Remove(selectedRealm);
+                Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
+                RealmManager.realms.Remove(selectedRealm);
                 treeRealm.SelectedNode.Remove();
             }
         }
@@ -189,7 +112,7 @@ namespace TrinityCoreAdmin
 
         private void treeRealm_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (treeRealm.SelectedNode.Level == 0)
+            if (treeRealm.SelectedNode.Parent == null)
             {
                 ClearTextBoxes(panelRealm);
                 SetEnabledControls(panelRealm, false);
@@ -201,11 +124,11 @@ namespace TrinityCoreAdmin
             {
                 treeRealm.LabelEdit = true; //Nicht-Root-Elemente dürfen editiert werden
 
-                if (Status == RealmsStatus.NEW)
+                if (RealmManager.Status == RealmsStatus.NEW)
                     return;
 
                 SetEnabledControls(panelRealm, true);
-                Realm selectedRealm = realms.ElementAt(treeRealm.SelectedNode.Index);
+                Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
 
                 numDbId.Value = selectedRealm.DbId;
                 treeRealm.SelectedNode.Text = selectedRealm.Name;
@@ -222,17 +145,18 @@ namespace TrinityCoreAdmin
 
         private void treeRealm_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if (Status == RealmsStatus.NEW)
+            if (RealmManager.Status == RealmsStatus.NEW)
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     Realm r = new Realm(XConverter.ToInt32(numDbId.Value), treeRealm.SelectedNode.Text, txtHost.Text, XConverter.ToInt32(numPort.Value), txtUser.Text, txtPassword.Text, txtAuthDB.Text, txtCharDB.Text, txtWorldDB.Text);
-                    realms.Add(r);
+                    RealmManager.realms.Add(r);
+                    RealmManager.Status = RealmsStatus.SAVED;
                 });
             }
             else
             {
-                Realm selectedRealm = realms.ElementAt(treeRealm.SelectedNode.Index);
+                Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     selectedRealm.Name = e.Node.Text;
@@ -261,8 +185,8 @@ namespace TrinityCoreAdmin
 
         private void treeRealm_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (treeRealm.SelectedNode != null && treeRealm.SelectedNode.Parent != null)
-                UpdateRealm(realms.ElementAt(treeRealm.SelectedNode.Index));
+            if (treeRealm.SelectedNode != null && treeRealm.SelectedNode.Parent != null && RealmManager.Status != RealmsStatus.NEW)
+                UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
         }
     }
 }

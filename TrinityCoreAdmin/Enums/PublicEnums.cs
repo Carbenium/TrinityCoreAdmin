@@ -12,4 +12,11 @@
         MYSQLERROR_CAN_NOT_CONNECT = 0,
         MYSQLERROR_INV_USER_PASS = 1045
     }
+
+    public enum RealmsStatus
+    {
+        SAVED = 0,
+        CHANGED = 1,
+        NEW = 2
+    }
 }
