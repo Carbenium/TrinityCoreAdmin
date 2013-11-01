@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
 namespace TrinityCoreAdmin
 {
-    class WorldDatabase : MySQLConnection
+    internal class WorldDatabase : MySQLConnection
     {
         public WorldDatabase(MySqlConnectionStringBuilder stringBuild)
             : base(stringBuild)
         { }
+
+        private enum WorldDatabaseStatements : int
+        {
+        }
+
+        public void DoPrepareStatments()
+        {
+        }
     }
 }

@@ -17,9 +17,12 @@ namespace TrinityCoreAdmin
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string server = Settings1.Default.server;
-            string database = Settings1.Default.database;
-            string user = Settings1.Default.user;
+            //string server = Settings1.Default.server;
+            //string database = Settings1.Default.database;
+            //string user = Settings1.Default.user;
+            RealmManagerForm.LoadRealms();
+
+            MessageBox.Show(RealmManagerForm.realms[0].Name);
 
             //listViewUsers.Columns.Add("Benutzername", 100);
             //listViewUsers.Columns.Add("E-Mail");

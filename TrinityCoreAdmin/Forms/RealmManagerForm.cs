@@ -19,7 +19,7 @@ namespace TrinityCoreAdmin
             NEW = 2
         }
 
-        private RealmsStatus Status = RealmsStatus.SAVED;
+        private static RealmsStatus Status = RealmsStatus.SAVED;
 
         public RealmManagerForm()
         {
@@ -28,10 +28,10 @@ namespace TrinityCoreAdmin
 
         private void Settings_Load(object sender, EventArgs e)
         {
-            LoadRealms();
+            LoadRealmsToTree();
         }
 
-        private void LoadRealms()
+        private void LoadRealmsToTree()
         {
             FileInfo f = new FileInfo("D:\\config.xml");
             if (f.Exists)
@@ -57,8 +57,24 @@ namespace TrinityCoreAdmin
             }
             treeRealm.SelectedNode = node;
         }
+        public static void LoadRealms()
+        {
+            FileInfo f = new FileInfo("D:\\config.xml");
+            if (f.Exists)
+            {
+                using (FileStream fs = f.OpenRead())
+                {
+                    realms = DeserializeRealms(fs);
+                }
+            }
+            else
+            {
+                Save(true);
+            }
+ 
+        }
 
-        private void Save(bool reload = false)
+        private static void Save(bool reload = false)
         {
             try
             {
