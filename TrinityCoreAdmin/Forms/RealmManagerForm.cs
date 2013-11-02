@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace TrinityCoreAdmin
+namespace TrinityCoreAdmin.Forms
 {
     public partial class RealmManagerForm : Form
     {

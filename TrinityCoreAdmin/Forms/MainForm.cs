@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 //using MySql.Data.MySqlClient;
 
-namespace TrinityCoreAdmin
+namespace TrinityCoreAdmin.Forms
 {
     public partial class MainForm : Form
     {
@@ -74,9 +74,9 @@ namespace TrinityCoreAdmin
 
         private void realmmanagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RealmManagerForm frm_Settings = new RealmManagerForm();
-            frm_Settings.ShowInTaskbar = false;
-            frm_Settings.ShowDialog();
+            RealmManagerForm frmRealmManager = new RealmManagerForm();
+            frmRealmManager.ShowInTaskbar = false;
+            frmRealmManager.ShowDialog();
         }
 
         private void verbindenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,6 +129,13 @@ namespace TrinityCoreAdmin
         private void beendenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void einstellungenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm frmSettings = new SettingsForm();
+            frmSettings.ShowInTaskbar = false;
+            frmSettings.ShowDialog();
         }
 
     }

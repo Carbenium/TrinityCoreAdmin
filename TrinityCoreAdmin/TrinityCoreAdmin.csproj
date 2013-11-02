@@ -75,6 +75,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AuthDatabase.cs" />
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MySQLConnection.cs" />
     <Compile Include="Enums\PublicEnums.cs" />
     <Compile Include="Forms\MainForm.cs">

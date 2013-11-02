@@ -1,4 +1,4 @@
-﻿namespace TrinityCoreAdmin
+﻿namespace TrinityCoreAdmin.Forms
 {
     partial class RealmManagerForm
     {
