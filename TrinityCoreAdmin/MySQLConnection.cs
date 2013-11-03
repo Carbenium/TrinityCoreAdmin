@@ -64,6 +64,7 @@ namespace TrinityCoreAdmin
         protected void PrepareStatement(int index, string sql)
         {
             MySqlCommand stmt = new MySqlCommand(sql, conn);
+            stmt.Prepare();
 
             if (!stmt.IsPrepared)
             {

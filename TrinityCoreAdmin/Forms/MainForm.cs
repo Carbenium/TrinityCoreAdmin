@@ -23,6 +23,13 @@ namespace TrinityCoreAdmin.Forms
             RealmManager.LoadRealms();
 
             MessageBox.Show(RealmManager.realms[0].Name);
+            MySql.Data.MySqlClient.MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+            authString.Server = "localhost";
+            authString.Port = 3306;
+            authString.UserID = "root";
+
+            AuthDatabase auth = new AuthDatabase(authString);
+            auth.DoPrepareStatments();
 
             //listViewUsers.Columns.Add("Benutzername", 100);
             //listViewUsers.Columns.Add("E-Mail");
