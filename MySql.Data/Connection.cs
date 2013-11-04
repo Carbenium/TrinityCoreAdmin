@@ -73,7 +73,6 @@ namespace MySql.Data.MySqlClient
     /// <include file='docs/MySqlConnection.xml' path='docs/DefaultCtor/*'/>
     public MySqlConnection()
     {
-      //TODO: add event data to StateChange docs
       Settings = new MySqlConnectionStringBuilder();
       database = String.Empty;
     }
@@ -336,7 +335,7 @@ namespace MySql.Data.MySqlClient
     /// <include file='docs/MySqlConnection.xml' path='docs/BeginTransaction1/*'/>
     public new MySqlTransaction BeginTransaction(IsolationLevel iso)
     {
-      //TODO: check note in help
+
       if (State != ConnectionState.Open)
         Throw(new InvalidOperationException(Resources.ConnectionNotOpen));
 
@@ -525,7 +524,6 @@ namespace MySql.Data.MySqlClient
 #endif
 
       // if we are opening up inside a current transaction, then autoenlist
-      // TODO: control this with a connection string option
 #if !MONO && !CF && !RT
       if (Transaction.Current != null && Settings.AutoEnlist)
         EnlistTransaction(Transaction.Current);

@@ -2137,7 +2137,6 @@ namespace Renci.SshNet.Common
             }
             if (x.IsZero) return g;
 
-            // TODO: should we have something here if we can convert to long?
 
             //
             // Now we can just do it with single precision. I am using the binary gcd method,

@@ -124,7 +124,7 @@ namespace Renci.SshNet
             using (var stream = new NetworkStream(socket))
             {
                 var commandCode = stream.ReadByte();
-                //  TODO:   See what need to be done depends on the code
+
 
                 var portBuffer = new byte[2];
                 stream.Read(portBuffer, 0, portBuffer.Length);

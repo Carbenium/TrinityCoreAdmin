@@ -28,7 +28,6 @@ namespace Renci.SshNet.Messages.Connection
         /// Gets the address to bind to.
         /// </summary>
         public string AddressToBind { get; private set; }
-        //  TODO:   Extract AddressToBind property to be in different class and GlobalREquestMessage to be a base class fo it.
 
         /// <summary>
         /// Gets port number to bind to.

@@ -30,6 +30,12 @@ namespace TrinityCoreAdmin
 
         private string _worlddb;
 
+        [NonSerialized]
+        public AuthDatabase authDB;
+
+        [NonSerialized]
+        public WorldDatabase worldDB;
+
         public Realm()
         { }
 

@@ -768,7 +768,6 @@ namespace log4net.Core
 
 						try
 						{
-							// TODO: Support other types of configurator
 							XmlConfigurator.Configure(repository, repositoryConfigUri);
 						}
 						catch (Exception ex)

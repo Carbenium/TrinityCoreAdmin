@@ -206,7 +206,6 @@ namespace Renci.SshNet
                         throw new SshException(string.Format("Cipher method '{0}' is not supported.", cipherName));
                     }
 
-                    //  TODO:   Create two specific data types to avoid using SshDataReader class
 
                     reader = new SshDataReader(keyData);
 

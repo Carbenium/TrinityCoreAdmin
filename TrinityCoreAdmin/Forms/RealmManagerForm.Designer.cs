@@ -50,6 +50,7 @@
             this.lblDbId = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnConnect = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.panelRealm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDbId)).BeginInit();
@@ -252,7 +253,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(227, 343);
+            this.btnOK.Location = new System.Drawing.Point(285, 343);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 22;
@@ -262,7 +263,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(308, 343);
+            this.btnCancel.Location = new System.Drawing.Point(366, 343);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 23;
@@ -270,11 +271,22 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // btnConnect
+            // 
+            this.btnConnect.Location = new System.Drawing.Point(162, 343);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.TabIndex = 24;
+            this.btnConnect.Text = "Verbinden";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
             // RealmManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(583, 384);
+            this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.panelRealm);
@@ -316,6 +328,7 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.NumericUpDown numDbId;
         private System.Windows.Forms.Label lblDbId;
+        private System.Windows.Forms.Button btnConnect;
 
     }
 }

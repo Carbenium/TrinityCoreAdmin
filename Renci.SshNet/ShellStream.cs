@@ -518,7 +518,6 @@ namespace Renci.SshNet
         /// </returns>
         public string Expect(Regex regex, TimeSpan timeout)
         {
-            //  TODO:   Refactor this method, will deda lock
             var text = string.Empty;
 
             while (true)
@@ -719,7 +718,6 @@ namespace Renci.SshNet
 
         private void Channel_Closed(object sender, ChannelEventArgs e)
         {
-            //  TODO:   Do we need to call dispose here ??
             this.Dispose();
         }
 

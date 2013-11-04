@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
-using System.IO;
 
 namespace TrinityCoreAdmin
 {
-    static class RealmManager
+    internal static class RealmManager
     {
         public static List<Realm> realms = new List<Realm>();
-
-       
 
         public static RealmsStatus Status = RealmsStatus.SAVED;
 
@@ -32,7 +27,6 @@ namespace TrinityCoreAdmin
             {
                 Save(true);
             }
-
         }
 
         public static void Save(bool reload = false)
@@ -49,8 +43,6 @@ namespace TrinityCoreAdmin
                         realms = DeserializeRealms(fs);
                     }
                 }
-
-                
             }
             catch (SystemException e)
             {
@@ -70,9 +62,11 @@ namespace TrinityCoreAdmin
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                Logger.LOG_GENERAL.Error("Could not serialize realms: " + e.Message);
+
                 return false;
             }
+            Logger.LOG_GENERAL.Info(realms.Count + " realm(s) successfully saved.");
             return true;
         }
 
@@ -82,11 +76,14 @@ namespace TrinityCoreAdmin
             try
             {
                 List<Realm> l = (List<Realm>)serializer.ReadObject(stream);
+                Logger.LOG_GENERAL.Info(l.Count + " realm(s) successfully loaded.");
+
                 return l;
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                Logger.LOG_GENERAL.Error("Could not deserialize realms: " + e.Message);
+
                 return realms;
             }
         }

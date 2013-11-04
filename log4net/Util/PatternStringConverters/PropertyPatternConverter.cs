@@ -81,7 +81,6 @@ namespace log4net.Util.PatternStringConverters
 				compositeProperties.Add(threadProperties);
 			}
 
-			// TODO: Add Repository Properties
 			compositeProperties.Add(GlobalContext.Properties.GetReadOnlyProperties());
 
 			if (Option != null)

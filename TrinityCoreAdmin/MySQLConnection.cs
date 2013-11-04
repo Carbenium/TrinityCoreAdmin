@@ -1,21 +1,23 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
 namespace TrinityCoreAdmin
 {
-    internal class MySQLConnection
+    public class MySQLConnection
     {
         protected List<MySqlCommand> m_stmts = new List<MySqlCommand>();
-        private MySql.Data.MySqlClient.MySqlConnection conn;
+        protected static List<MySQLConnection> m_conn = new List<MySQLConnection>();
+        public MySql.Data.MySqlClient.MySqlConnection conn;
 
-        public MySQLConnection(MySqlConnectionStringBuilder connBuilder)
+        protected MySQLConnection(MySqlConnectionStringBuilder connBuilder)
         {
-            conn = new MySql.Data.MySqlClient.MySqlConnection(connBuilder.ToString());
+                conn = new MySql.Data.MySqlClient.MySqlConnection(connBuilder.ConnectionString);
         }
 
-        public MySQLConnection(string connString)
+        protected MySQLConnection(string connString)
         {
             conn = new MySql.Data.MySqlClient.MySqlConnection(connString);
         }
@@ -51,29 +53,61 @@ namespace TrinityCoreAdmin
             try
             {
                 conn.Open();
+
+                if (conn.State == ConnectionState.Open)
+                {
+                    m_conn.Add(this);
+                    Logger.LOG_DATABASE.Info("MySQL server ver: " + conn.ServerVersion);
+                    Logger.LOG_DATABASE.Info("Connected to MySQL database " + conn.Database + " at " + conn.DataSource);
+                }
             }
             catch (MySqlException e)
             {
-                MessageBox.Show(e.Message, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.LOG_DATABASE.Error("Could not connect to MySQL database at " + conn.DataSource + ": " + e.Message);
                 return false;
             }
 
             return true;
         }
 
+        private void Close()
+        {
+            conn.Close();
+            m_conn.Remove(this);
+
+            Logger.LOG_DATABASE.Info("Closed MySQL connection to database " + conn.Database + " at " + conn.DataSource);
+        }
+
+        public static void CloseConnections()
+        {
+            for (int i = m_conn.Count - 1; i >= 0; i--)
+            {
+                m_conn[i].Close();
+            }
+        }
+
         protected void PrepareStatement(int index, string sql)
         {
-            MySqlCommand stmt = new MySqlCommand(sql, conn);
-            stmt.Prepare();
+            try
+            {
+                MySqlCommand stmt = new MySqlCommand(sql, conn);
+                stmt.Prepare();
 
-            if (!stmt.IsPrepared)
-            {
-                MessageBox.Show("Fehler während PrepareStatement id: " + index.ToString() + " sql: " + sql, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                m_stmts.Insert(index, stmt);
             }
-            else
+            catch (Exception e)
             {
-                m_stmts[index] = stmt;
+                Logger.LOG_DATABASE.Error("Could not prepare statement. Id: " + index + ", sql: " + sql + e.Message);
             }
+        }
+
+        protected MySqlCommand GetPreparedStatement(int index)
+        {
+            MySqlCommand ret = m_stmts[index];
+            if (ret == null)
+                Logger.LOG_DATABASE.Error("Could not fetch prepared statement " + index.ToString() + " on database " + conn.Database.ToString() + ".");
+
+            return ret;
         }
     }
 }

@@ -419,7 +419,6 @@ namespace Renci.SshNet
         /// </summary>
         public void Connect()
         {
-            //   TODO: Add exception documentation for Proxy.
             if (this.ConnectionInfo == null)
             {
                 throw new ArgumentNullException("connectionInfo");
@@ -950,7 +949,6 @@ namespace Renci.SshNet
 
         private void HandleMessage(ServiceAcceptMessage message)
         {
-            //  TODO:   Refactor to avoid this method here
             this.OnServiceAcceptReceived(message);
 
             this._serviceAccepted.Set();

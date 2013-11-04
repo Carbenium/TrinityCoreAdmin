@@ -2,18 +2,24 @@
 
 namespace TrinityCoreAdmin
 {
-    internal class WorldDatabase : MySQLConnection
+    public class WorldDatabase : MySQLConnection
     {
         public WorldDatabase(MySqlConnectionStringBuilder stringBuild)
             : base(stringBuild)
         { }
 
-        private enum WorldDatabaseStatements : int
+
+        public enum WorldDatabaseStatements : int
         {
         }
 
         public void DoPrepareStatments()
         {
+        }
+
+        public MySqlCommand GetPreparedStatement(WorldDatabaseStatements index)
+        {
+            return base.GetPreparedStatement((int)index);
         }
     }
 }

@@ -1333,7 +1333,6 @@ namespace log4net.Core
 				m_compositeProperties.Add(threadProperties);
 			}
 
-			// TODO: Add Repository Properties
 
 			// event properties
 			PropertiesDictionary eventProperties = new PropertiesDictionary();

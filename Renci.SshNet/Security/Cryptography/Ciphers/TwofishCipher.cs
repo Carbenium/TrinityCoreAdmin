@@ -26,7 +26,7 @@ namespace Renci.SshNet.Security.Cryptography.Ciphers
             if (!(keySize == 128 || keySize == 192 || keySize == 256))
                 throw new ArgumentException(string.Format("KeySize '{0}' is not valid for this algorithm.", keySize));
 
-            //  TODO:   Refactor this algorithm
+
 
             // calculate the MDS matrix
             int[] m1 = new int[2];
@@ -446,11 +446,7 @@ namespace Renci.SshNet.Security.Cryptography.Ciphers
             */
         }
 
-        /*
-        * TODO:  This can be optimised and made cleaner by combining
-        * the functionality in this function and applying it appropriately
-        * to the creation of the subkeys during key setup.
-        */
+
         private int F32(int x, int[] k32)
         {
             int b0 = M_b0(x);

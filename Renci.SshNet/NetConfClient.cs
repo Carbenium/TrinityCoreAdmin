@@ -13,7 +13,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Renci.SshNet
 {
-    //  TODO:   Please help with documentation here, as I don't know the details, specially for the methods not documented.
+
     /// <summary>
     /// Contains operation for working with NetConf server.
     /// </summary>

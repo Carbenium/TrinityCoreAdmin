@@ -14,8 +14,6 @@ namespace Renci.SshNet.Sftp
     /// </summary>
     public class SftpFileStream : Stream
     {
-        //  TODO:   Add security method to set userid, groupid and other permission settings
-        // Internal state.
         private byte[] _handle;
         private FileAccess _access;
         private bool _ownsHandle;
@@ -504,7 +502,6 @@ namespace Renci.SshNet.Sftp
                         if (this._bufferLen < 0)
                         {
                             this._bufferLen = 0;
-                            //  TODO:   Add SFTP error code or message if possible
                             throw new IOException("Read operation failed.");
                         }
                         else if (this._bufferLen == 0)
@@ -571,7 +568,6 @@ namespace Renci.SshNet.Sftp
                     if (this._bufferLen < 0)
                     {
                         this._bufferLen = 0;
-                        //  TODO:   Add SFTP error code or message if possible
                         throw new IOException("Read operation failed.");
                     }
                     else if (this._bufferLen == 0)

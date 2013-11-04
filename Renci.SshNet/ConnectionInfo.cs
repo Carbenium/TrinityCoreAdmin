@@ -225,7 +225,6 @@ namespace Renci.SshNet
         {
         }
 
-        //  TODO: DOCS Add exception documentation for this class.
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionInfo" /> class.

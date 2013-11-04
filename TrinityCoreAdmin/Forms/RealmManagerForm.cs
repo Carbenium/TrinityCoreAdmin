@@ -188,5 +188,30 @@ namespace TrinityCoreAdmin.Forms
             if (treeRealm.SelectedNode != null && treeRealm.SelectedNode.Parent != null && RealmManager.Status != RealmsStatus.NEW)
                 UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
         }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
+
+            if (txtHost.Text != String.Empty && txtUser.Text != String.Empty)
+            {
+                if (txtAuthDB.Text != String.Empty)
+                {
+                    MySql.Data.MySqlClient.MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+                    authString.Server = txtHost.Text;
+                    authString.UserID = txtUser.Text;
+                    authString.Password = txtPassword.Text;
+                    authString.Database = txtAuthDB.Text;
+
+                    selectedRealm.authDB = new AuthDatabase(authString);
+                    selectedRealm.authDB.Open();
+                    selectedRealm.authDB.DoPrepareStatments();
+                }
+                else if (txtWorldDB.Text != String.Empty)
+                { 
+
+                }
+            }
+        }
     }
 }
