@@ -30,11 +30,9 @@ namespace TrinityCoreAdmin
 
         private string _worlddb;
 
-        [NonSerialized]
-        public AuthDatabase authDB;
+        public AuthDatabase authDBConn;
 
-        [NonSerialized]
-        public WorldDatabase worldDB;
+        public WorldDatabase worldDBConn;
 
         public Realm()
         { }
@@ -61,74 +59,49 @@ namespace TrinityCoreAdmin
 
         [DataMember]
         public string Authdb
-        {
-            get { return _authdb; }
-            set { _authdb = value; }
-        }
+        { get;  set; }
 
         [DataMember]
         public string Chardb
-        {
-            get { return _chardb; }
-            set { _chardb = value; }
-        }
+        { get;  set; }
 
         [DataMember]
         public int DbId
-        {
-            get { return _dbId; }
-            set { _dbId = value; }
-        }
+        { get;  set; }
 
         [DataMember]
         public string Entropy
-        {
-            get { return _entropy; }
-            set { _entropy = value; }
-        }
+
+            { get;  private set; }
+
 
         [DataMember]
         public string Host
-        {
-            get { return _host; }
-            set { _host = value; }
-        }
+        { get;  set; }
 
         [DataMember]
         public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        { get;  set; }
 
         public string Password
         {
-            get { return _encryptedPassword.DecryptString(Encoding.Unicode.GetBytes(_entropy)).ToInsecureString(); }
+            get { return _encryptedPassword.DecryptString(Encoding.Unicode.GetBytes(Entropy)).ToInsecureString(); }
             set
             {
-                _encryptedPassword = value.ToSecureString().EncryptString(Encoding.Unicode.GetBytes(_entropy));
+                _encryptedPassword = value.ToSecureString().EncryptString(Encoding.Unicode.GetBytes(Entropy));
             }
         }
 
         [DataMember]
         public int Port
-        {
-            get { return _port; }
-            set { _port = value; }
-        }
+        { get;  set; }
 
         [DataMember]
         public string User
-        {
-            get { return _user; }
-            set { _user = value; }
-        }
+        { get;  set; }
 
         [DataMember]
         public string Worlddb
-        {
-            get { return _worlddb; }
-            set { _worlddb = value; }
-        }
+        { get;  set; }
     }
 }

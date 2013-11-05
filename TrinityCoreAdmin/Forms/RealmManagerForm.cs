@@ -203,9 +203,9 @@ namespace TrinityCoreAdmin.Forms
                     authString.Password = txtPassword.Text;
                     authString.Database = txtAuthDB.Text;
 
-                    selectedRealm.authDB = new AuthDatabase(authString);
-                    selectedRealm.authDB.Open();
-                    selectedRealm.authDB.DoPrepareStatments();
+                    selectedRealm.authDBConn = new AuthDatabase(authString);
+                    selectedRealm.authDBConn.Open();
+                    selectedRealm.authDBConn.DoPrepareStatments();
                 }
                 else if (txtWorldDB.Text != String.Empty)
                 { 
