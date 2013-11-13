@@ -1,6 +1,6 @@
 ﻿namespace TrinityCoreAdmin
 {
-    public enum Expansion
+    public enum Expansion : int
     {
         EXPANSION_CLASSIC = 0,
         EXPANSION_TBC = 1,

@@ -18,13 +18,11 @@ namespace TrinityCoreAdmin.Forms
 
         public WorldDatabase worldDB;
         public AuthDatabase authDB;
-        private DataTable dt;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            RealmManager.LoadRealms();
+            ServerManager.LoadRealms();
             StartDB();
-            //MessageBox.Show(dt.Rows[1].ToString());
         }
 
         //private void lst_Accounts_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -46,6 +44,9 @@ namespace TrinityCoreAdmin.Forms
             RealmManagerForm frmRealmManager = new RealmManagerForm();
             frmRealmManager.ShowInTaskbar = false;
             frmRealmManager.ShowDialog();
+
+            if (frmRealmManager.connSuccess)
+                LoadAccounts();
         }
 
         private void verbindenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -111,6 +112,27 @@ namespace TrinityCoreAdmin.Forms
 
             //    listViewAccounts.Items.Add(item);
             //}
+        }
+
+        private void LoadAccounts()
+        {
+            foreach (Account acc in Account.accounts)
+            {
+                ListViewItem item = new ListViewItem(acc.id.ToString());
+                item.SubItems.Add(acc.username);
+                item.SubItems.Add(acc.reg_mail);
+                item.SubItems.Add(acc.email);
+                item.SubItems.Add(acc.joindate.ToShortDateString());
+                item.SubItems.Add(acc.last_ip);
+                item.SubItems.Add(acc.failed_logins.ToString());
+                item.SubItems.Add(acc.last_login.ToString());
+                item.SubItems.Add(acc.online.ToString());
+                item.SubItems.Add(acc.expansion.ToString());
+
+                listViewAccounts.Items.Add(item);
+            }
+
+            listViewAccounts.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void StopDB()

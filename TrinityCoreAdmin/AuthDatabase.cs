@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
 
 namespace TrinityCoreAdmin
@@ -21,7 +16,7 @@ namespace TrinityCoreAdmin
 
         public void DoPrepareStatments()
         {
-            PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail,joindate, last_ip, failed_logins, last_login, online, expansion FROM account WHERE username=@name");
+            PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail,joindate, last_ip, failed_logins, last_login, online, expansion FROM account");
         }
 
         private void PrepareStatement(AuthDatabaseStatements index, string sql)

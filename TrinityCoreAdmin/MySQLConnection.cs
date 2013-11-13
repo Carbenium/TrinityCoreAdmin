@@ -6,15 +6,30 @@ using System.Windows.Forms;
 
 namespace TrinityCoreAdmin
 {
-    public class MySQLConnection
+    public class MySQLConnection : IDisposable
     {
         protected List<MySqlCommand> m_stmts = new List<MySqlCommand>();
         protected static List<MySQLConnection> m_conn = new List<MySQLConnection>();
         public MySql.Data.MySqlClient.MySqlConnection conn;
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.conn.Close();
+                this.conn = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         protected MySQLConnection(MySqlConnectionStringBuilder connBuilder)
         {
-                conn = new MySql.Data.MySqlClient.MySqlConnection(connBuilder.ConnectionString);
+            conn = new MySql.Data.MySqlClient.MySqlConnection(connBuilder.ConnectionString);
         }
 
         protected MySQLConnection(string connString)
@@ -22,6 +37,7 @@ namespace TrinityCoreAdmin
             conn = new MySql.Data.MySqlClient.MySqlConnection(connString);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:SQL-Abfragen auf Sicherheitsrisiken überprüfen")]
         public DataTable Execute(string sql)
         {
             if (conn.State != System.Data.ConnectionState.Open)
@@ -40,12 +56,16 @@ namespace TrinityCoreAdmin
 
         public DataTable Execute(MySqlCommand stmt)
         {
-            using (MySqlDataReader reader = stmt.ExecuteReader())
+            if (conn.State == ConnectionState.Open)
             {
-                var dt = new DataTable();
-                dt.Load(reader);
-                return dt;
+                using (MySqlDataReader reader = stmt.ExecuteReader())
+                {
+                    var dt = new DataTable();
+                    dt.Load(reader);
+                    return dt;
+                }
             }
+            return null;
         }
 
         public bool Open()
@@ -53,18 +73,19 @@ namespace TrinityCoreAdmin
             try
             {
                 conn.Open();
-
-                if (conn.State == ConnectionState.Open)
-                {
-                    m_conn.Add(this);
-                    Logger.LOG_DATABASE.Info("MySQL server ver: " + conn.ServerVersion);
-                    Logger.LOG_DATABASE.Info("Connected to MySQL database " + conn.Database + " at " + conn.DataSource);
-                }
             }
             catch (MySqlException e)
             {
                 Logger.LOG_DATABASE.Error("Could not connect to MySQL database at " + conn.DataSource + ": " + e.Message);
+                MessageBox.Show("Konnte keine Verbindung zur MySQL-Datenbank herstellen. Bitte überprüfen Sie die Einstellungen.", "Verbindungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+
+            if (conn.State == ConnectionState.Open)
+            {
+                m_conn.Add(this);
+                Logger.LOG_DATABASE.Info("MySQL server ver: " + conn.ServerVersion);
+                Logger.LOG_DATABASE.Info("Connected to MySQL database " + conn.Database + " at " + conn.DataSource);
             }
 
             return true;
@@ -86,14 +107,18 @@ namespace TrinityCoreAdmin
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:SQL-Abfragen auf Sicherheitsrisiken überprüfen")]
         protected void PrepareStatement(int index, string sql)
         {
             try
             {
-                MySqlCommand stmt = new MySqlCommand(sql, conn);
-                stmt.Prepare();
+                if (conn.State == ConnectionState.Open)
+                {
+                    MySqlCommand stmt = new MySqlCommand(sql, conn);
+                    stmt.Prepare();
 
-                m_stmts.Insert(index, stmt);
+                    m_stmts.Insert(index, stmt);
+                }
             }
             catch (Exception e)
             {

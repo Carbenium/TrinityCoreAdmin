@@ -8,7 +8,6 @@ namespace TrinityCoreAdmin
             : base(stringBuild)
         { }
 
-
         public enum WorldDatabaseStatements : int
         {
         }

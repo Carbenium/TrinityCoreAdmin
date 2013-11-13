@@ -46,7 +46,7 @@
             this.bearbeitenToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(493, 24);
+            this.menuStrip.Size = new System.Drawing.Size(804, 24);
             this.menuStrip.TabIndex = 7;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -99,7 +99,7 @@
             this.listViewAccounts.AutoArrange = false;
             this.listViewAccounts.Location = new System.Drawing.Point(12, 27);
             this.listViewAccounts.Name = "listViewAccounts";
-            this.listViewAccounts.Size = new System.Drawing.Size(469, 234);
+            this.listViewAccounts.Size = new System.Drawing.Size(780, 227);
             this.listViewAccounts.TabIndex = 8;
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
@@ -107,7 +107,7 @@
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(493, 273);
+            this.ClientSize = new System.Drawing.Size(804, 321);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;

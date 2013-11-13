@@ -1,108 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace TrinityCoreAdmin.Forms
 {
     public partial class RealmManagerForm : Form
     {
+        public bool connSuccess = false;
 
         public RealmManagerForm()
         {
             InitializeComponent();
-        }
-
-        private void Settings_Load(object sender, EventArgs e)
-        {
-            LoadRealmsToTree();
-        }
-
-        private void LoadRealmsToTree()
-        {
-            FileInfo f = new FileInfo("D:\\config.xml");
-            if (f.Exists)
-            {
-                using (FileStream fs = f.OpenRead())
-                {
-                    //RealmManager.realms = DeserializeRealms(fs);
-                }
-            }
-            else
-            {
-                RealmManager.Save(true);
-            }
-
-            treeRealm.Nodes.Clear();
-            TreeNode node = treeRealm.Nodes.Add("Realms");
-
-
-            foreach (Realm r in RealmManager.realms)
-            {
-                treeRealm.Nodes[0].Nodes.Add(r.Name);
-                treeRealm.ExpandAll();
-            }
-            treeRealm.SelectedNode = node;
-        }
-        
-
-        private void UpdateRealm(Realm r)
-        {
-            r.DbId = XConverter.ToInt32(numDbId.Value);
-            r.Host = txtHost.Text;
-            r.Port = XConverter.ToInt32(numPort.Value);
-            r.User = txtUser.Text;
-            r.Password = txtPassword.Text;
-            r.Authdb = txtAuthDB.Text;
-            r.Chardb = txtCharDB.Text;
-            r.Worlddb = txtWorldDB.Text;
-            
-            RealmManager.Status = RealmsStatus.SAVED;
-        }
-
-        private void btnNewRealm_Click(object sender, EventArgs e)
-        {
-            
-
-            if (treeRealm.SelectedNode.Parent != null)
-                UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
-
-            ClearTextBoxes(panelRealm);
-            numPort.Value = 3306;
-            RealmManager.Status = RealmsStatus.NEW;
-
-            TreeNode newNode = new TreeNode("Neuer Realm");
-            TreeNode selectedNode = treeRealm.SelectedNode;
-
-            if (selectedNode.Parent != null)
-                selectedNode = selectedNode.Parent;
-
-            selectedNode.Nodes.Add(newNode);
-            treeRealm.SelectedNode = newNode;
-            newNode.BeginEdit();
-            SetEnabledControls(panelRealm, true);
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            if(treeRealm.SelectedNode.Parent != null)
-                UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
-
-            RealmManager.Save();
-            this.Close();
-        }
-
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            if (treeRealm.SelectedNode.Level != 0) //Root darf nicht gelöscht werden
-            {
-                Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
-                RealmManager.realms.Remove(selectedRealm);
-                treeRealm.SelectedNode.Remove();
-            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -110,58 +18,128 @@ namespace TrinityCoreAdmin.Forms
             this.Close();
         }
 
-        private void treeRealm_AfterSelect(object sender, TreeViewEventArgs e)
+        private void btnConnect_Click(object sender, EventArgs e)
         {
-            if (treeRealm.SelectedNode.Parent == null)
+            TreeNode selectedNode = treeServers.SelectedNode;
+
+            if (selectedNode.Tag.GetType() == typeof(Realm))
             {
-                ClearTextBoxes(panelRealm);
-                SetEnabledControls(panelRealm, false);
+                Server selectedServer = (Server)selectedNode.Parent.Tag;
+                Realm selectedRealm = (Realm)selectedNode.Tag;
 
-                numPort.Value = 3306;
-                treeRealm.LabelEdit = false; //Root-Element darf nicht editiert werden
+                if (selectedServer.Host != String.Empty && selectedServer.User != String.Empty)
+                {
+                    if (selectedServer.Authdb != String.Empty)
+                    {
+                        MySql.Data.MySqlClient.MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+                        authString.Server = selectedServer.Host;
+                        authString.UserID = selectedServer.User;
+                        authString.Password = selectedServer.Password;
+                        authString.Database = selectedServer.Authdb;
+
+                        selectedServer.authDBConn = new AuthDatabase(authString);
+                        connSuccess = selectedServer.authDBConn.Open();
+
+                        ServerManager.currServer = selectedServer;
+                        ServerManager.currRealm = selectedRealm;
+                        selectedServer.authDBConn.DoPrepareStatments();
+
+                        Account.LoadAccountsFromDB();
+                    }
+                }
             }
-            else
-            {
-                treeRealm.LabelEdit = true; //Nicht-Root-Elemente dürfen editiert werden
-
-                if (RealmManager.Status == RealmsStatus.NEW)
-                    return;
-
-                SetEnabledControls(panelRealm, true);
-                Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
-
-                numDbId.Value = selectedRealm.DbId;
-                treeRealm.SelectedNode.Text = selectedRealm.Name;
-                txtHost.Text = selectedRealm.Host;
-                numPort.Value = selectedRealm.Port;
-                txtUser.Text = selectedRealm.User;
-                txtPassword.Text = selectedRealm.Password;
-                txtAuthDB.Text = selectedRealm.Authdb;
-                txtCharDB.Text = selectedRealm.Chardb;
-                txtWorldDB.Text = selectedRealm.Worlddb;
-            }
-
+            if (connSuccess)
+                this.Close();
         }
 
-        private void treeRealm_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        private void btnNewRealm_Click(object sender, EventArgs e)
         {
-            if (RealmManager.Status == RealmsStatus.NEW)
+            TreeNode selectedNode = treeServers.SelectedNode;
+            Server parentServer;
+
+            if (selectedNode.Tag.GetType() == typeof(Realm))
             {
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    Realm r = new Realm(XConverter.ToInt32(numDbId.Value), treeRealm.SelectedNode.Text, txtHost.Text, XConverter.ToInt32(numPort.Value), txtUser.Text, txtPassword.Text, txtAuthDB.Text, txtCharDB.Text, txtWorldDB.Text);
-                    RealmManager.realms.Add(r);
-                    RealmManager.Status = RealmsStatus.SAVED;
-                });
+                parentServer = (Server)selectedNode.Parent.Tag;
+                selectedNode = selectedNode.Parent;
             }
             else
             {
-                Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    selectedRealm.Name = e.Node.Text;
-                });
+                parentServer = (Server)selectedNode.Tag;
             }
+
+            if (treeServers.SelectedNode.Tag.GetType() == typeof(Realm))
+                UpdateRealm((Realm)treeServers.SelectedNode.Tag);
+
+            if (treeServers.SelectedNode.Tag.GetType() == typeof(Server))
+                UpdateServer((Server)treeServers.SelectedNode.Tag);
+
+            ClearTextBoxes(panelRealm);
+            numPort.Value = 3306;
+            ServerManager.Status = RealmsStatus.NEW;
+
+            TreeNode newNode = new TreeNode("Neuer Realm");
+            Realm newRealm = new Realm();
+
+            newNode.Tag = newRealm;
+
+            parentServer.realms.Add(newRealm);
+            selectedNode.Nodes.Add(newNode);
+
+            treeServers.SelectedNode = newNode;
+            newNode.BeginEdit();
+            SetEnabledControls(panelRealm, true);
+        }
+
+        private void btnNewServer_Click(object sender, EventArgs e)
+        {
+            TreeNode newNode = new TreeNode("Neuer Server");
+            Server newServer = new Server();
+            newNode.Tag = newServer;
+
+            ServerManager.servers.Add(newServer);
+            treeServers.Nodes.Add(newNode);
+
+            treeServers.SelectedNode = newNode;
+            newNode.BeginEdit();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = treeServers.SelectedNode;
+            if (selectedNode != null)
+            {
+                if (selectedNode.Tag.GetType() == typeof(Realm))
+                {
+                    Realm r = (Realm)selectedNode.Tag;
+                    r.Name = selectedNode.Text;
+                    UpdateRealm((Realm)selectedNode.Tag);
+                }
+                else if (selectedNode.Tag.GetType() == typeof(Server))
+                {
+                    Server s = (Server)selectedNode.Tag;
+                    s.Name = selectedNode.Text;
+                    UpdateServer((Server)treeServers.SelectedNode.Tag);
+                }
+            }
+
+            ServerManager.Save();
+            this.Close();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = treeServers.SelectedNode;
+            if (selectedNode.Tag.GetType() == typeof(Realm))
+            {
+                Server s = (Server)selectedNode.Parent.Tag;
+                s.realms.Remove((Realm)selectedNode.Tag);
+            }
+            else if (selectedNode.Tag.GetType() == typeof(Server))
+            {
+                Server s = (Server)selectedNode.Tag;
+                ServerManager.servers.Remove(s);
+            }
+            treeServers.SelectedNode.Remove();
         }
 
         private void ClearTextBoxes(Panel p)
@@ -175,43 +153,144 @@ namespace TrinityCoreAdmin.Forms
             }
         }
 
+        private void LoadRealmsToTree()
+        {
+            FileInfo f = new FileInfo("D:\\config.xml");
+            if (!f.Exists)
+            {
+                ServerManager.Save(true);
+            }
+
+            treeServers.Nodes.Clear();
+
+            foreach (Server s in ServerManager.servers)
+            {
+                TreeNode sNode = new TreeNode(s.Name);
+                sNode.Tag = s;
+                treeServers.Nodes.Add(sNode);
+
+                foreach (Realm r in s.realms)
+                {
+                    TreeNode rNode = new TreeNode(r.Name);
+                    rNode.Tag = r;
+                    sNode.Nodes.Add(rNode);
+                }
+            }
+            treeServers.ExpandAll();
+        }
+
         private void SetEnabledControls(Panel p, bool enabled)
         {
-            for (int i = 0; i < p.Controls.Count; i++)
+            if (treeServers.SelectedNode.Tag.GetType() == typeof(Realm))
             {
-                p.Controls[i].Enabled = enabled;
+                Realm r = (Realm)treeServers.SelectedNode.Tag;
+                Server s = (Server)treeServers.SelectedNode.Parent.Tag;
+
+                txtHost.Enabled = false;
+                numPort.Enabled = false;
+                txtUser.Enabled = false;
+                txtPassword.Enabled = false;
+                txtAuthDB.Enabled = false;
+
+                txtCharDB.Enabled = true;
+                txtWorldDB.Enabled = true;
+                numDbId.Enabled = true;
+
+                txtHost.Text = s.Host;
+                numPort.Value = s.Port;
+                txtUser.Text = s.User;
+                txtPassword.Text = s.Password;
+                txtAuthDB.Text = s.Authdb;
+                numDbId.Value = r.DbId;
+                txtCharDB.Text = r.Chardb;
+                txtWorldDB.Text = r.Worlddb;
+            }
+            else if (treeServers.SelectedNode.Tag.GetType() == typeof(Server))
+            {
+                Server s = (Server)treeServers.SelectedNode.Tag;
+                txtHost.Enabled = true;
+                numPort.Enabled = true;
+                txtUser.Enabled = true;
+                txtPassword.Enabled = true;
+                txtAuthDB.Enabled = true;
+
+                txtCharDB.Enabled = false;
+                txtWorldDB.Enabled = false;
+                numDbId.Enabled = false;
+
+                numPort.Value = 3306;
+                txtHost.Text = s.Host;
+                numPort.Value = s.Port;
+                txtUser.Text = s.User;
+                txtPassword.Text = s.Password;
+                txtAuthDB.Text = s.Authdb;
             }
         }
 
-        private void treeRealm_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        private void Settings_Load(object sender, EventArgs e)
         {
-            if (treeRealm.SelectedNode != null && treeRealm.SelectedNode.Parent != null && RealmManager.Status != RealmsStatus.NEW)
-                UpdateRealm(RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index));
+            LoadRealmsToTree();
         }
 
-        private void btnConnect_Click(object sender, EventArgs e)
+        private void treeServers_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            Realm selectedRealm = RealmManager.realms.ElementAt(treeRealm.SelectedNode.Index);
-
-            if (txtHost.Text != String.Empty && txtUser.Text != String.Empty)
-            {
-                if (txtAuthDB.Text != String.Empty)
+            TreeNode selectedNode = e.Node;
+            this.BeginInvoke((MethodInvoker)delegate
                 {
-                    MySql.Data.MySqlClient.MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-                    authString.Server = txtHost.Text;
-                    authString.UserID = txtUser.Text;
-                    authString.Password = txtPassword.Text;
-                    authString.Database = txtAuthDB.Text;
+                    if (selectedNode.Tag.GetType() == typeof(Realm))
+                    {
+                        Realm r = (Realm)selectedNode.Tag;
+                        r.Name = e.Node.Text;
+                        UpdateRealm((Realm)selectedNode.Tag);
+                    }
+                    else if (selectedNode.Tag.GetType() == typeof(Server))
+                    {
+                        Server s = (Server)selectedNode.Tag;
+                        s.Name = e.Node.Text;
+                        UpdateServer((Server)treeServers.SelectedNode.Tag);
+                    }
+                });
+        }
 
-                    selectedRealm.authDBConn = new AuthDatabase(authString);
-                    selectedRealm.authDBConn.Open();
-                    selectedRealm.authDBConn.DoPrepareStatments();
+        private void treeServers_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            ClearTextBoxes(panelRealm);
+            SetEnabledControls(panelRealm, true);
+        }
+
+        private void treeServers_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            if (treeServers.SelectedNode != null && ServerManager.Status != RealmsStatus.NEW)
+            {
+                if (treeServers.SelectedNode.Tag.GetType() == typeof(Realm))
+                {
+                    UpdateRealm((Realm)treeServers.SelectedNode.Tag);
                 }
-                else if (txtWorldDB.Text != String.Empty)
-                { 
-
+                else if (treeServers.SelectedNode.Tag.GetType() == typeof(Server))
+                {
+                    UpdateServer((Server)treeServers.SelectedNode.Tag);
                 }
             }
+        }
+
+        private void UpdateRealm(Realm r)
+        {
+            r.DbId = XConverter.ToInt32(numDbId.Value);
+            r.Chardb = txtCharDB.Text;
+            r.Worlddb = txtWorldDB.Text;
+
+            ServerManager.Status = RealmsStatus.SAVED;
+        }
+
+        private void UpdateServer(Server s)
+        {
+            s.Host = txtHost.Text;
+            s.Port = XConverter.ToInt32(numPort.Value);
+            s.User = txtUser.Text;
+            s.Password = txtPassword.Text;
+            s.Authdb = txtAuthDB.Text;
+
+            ServerManager.Status = RealmsStatus.SAVED;
         }
     }
 }

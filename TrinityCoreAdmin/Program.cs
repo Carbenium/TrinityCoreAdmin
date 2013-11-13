@@ -1,8 +1,7 @@
-﻿using System;
+﻿using log4net.Config;
+using System;
 using System.Windows.Forms;
 using TrinityCoreAdmin.Forms;
-using log4net;
-using log4net.Config;
 
 namespace TrinityCoreAdmin
 {

@@ -7,9 +7,11 @@ using System.Xml;
 
 namespace TrinityCoreAdmin
 {
-    internal static class RealmManager
+    internal static class ServerManager
     {
-        public static List<Realm> realms = new List<Realm>();
+        public static List<Server> servers = new List<Server>();
+        public static Server currServer;
+        public static Realm currRealm;
 
         public static RealmsStatus Status = RealmsStatus.SAVED;
 
@@ -20,7 +22,7 @@ namespace TrinityCoreAdmin
             {
                 using (FileStream fs = f.OpenRead())
                 {
-                    realms = DeserializeRealms(fs);
+                    servers = DeserializeServers(fs);
                 }
             }
             else
@@ -35,12 +37,12 @@ namespace TrinityCoreAdmin
             {
                 using (FileStream fs = new FileStream("D:\\config.xml", System.IO.FileMode.Create))
                 {
-                    bool success = SerializeRealms(realms, fs);
+                    bool success = SerializeServers(servers, fs);
 
                     if (reload && success)
                     {
                         fs.Position = 0;
-                        realms = DeserializeRealms(fs);
+                        servers = DeserializeServers(fs);
                     }
                 }
             }
@@ -51,40 +53,40 @@ namespace TrinityCoreAdmin
             Status = RealmsStatus.SAVED;
         }
 
-        private static bool SerializeRealms(List<Realm> realms, FileStream stream)
+        private static bool SerializeServers(List<Server> s, FileStream stream)
         {
             try
             {
-                var serializer = new DataContractSerializer(typeof(List<Realm>));
+                var serializer = new DataContractSerializer(typeof(List<Server>));
                 var settings = new XmlWriterSettings { Indent = true };
                 using (var w = XmlWriter.Create(stream, settings))
-                    serializer.WriteObject(w, realms);
+                    serializer.WriteObject(w, s);
             }
             catch (Exception e)
             {
-                Logger.LOG_GENERAL.Error("Could not serialize realms: " + e.Message);
+                Logger.LOG_GENERAL.Error("Could not serialize server: " + e.Message);
 
                 return false;
             }
-            Logger.LOG_GENERAL.Info(realms.Count + " realm(s) successfully saved.");
+            Logger.LOG_GENERAL.Info(s.Count + " server(s) successfully saved.");
             return true;
         }
 
-        private static List<Realm> DeserializeRealms(FileStream stream)
+        private static List<Server> DeserializeServers(FileStream stream)
         {
-            var serializer = new DataContractSerializer(typeof(List<Realm>));
+            var serializer = new DataContractSerializer(typeof(List<Server>));
             try
             {
-                List<Realm> l = (List<Realm>)serializer.ReadObject(stream);
-                Logger.LOG_GENERAL.Info(l.Count + " realm(s) successfully loaded.");
+                List<Server> l = (List<Server>)serializer.ReadObject(stream);
+                Logger.LOG_GENERAL.Info(l.Count + " server(s) successfully loaded.");
 
                 return l;
             }
             catch (Exception e)
             {
-                Logger.LOG_GENERAL.Error("Could not deserialize realms: " + e.Message);
+                Logger.LOG_GENERAL.Error("Could not deserialize servers: " + e.Message);
 
-                return realms;
+                return servers;
             }
         }
     }

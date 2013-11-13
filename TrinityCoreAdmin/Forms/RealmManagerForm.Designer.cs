@@ -38,7 +38,7 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
             this.numPort = new System.Windows.Forms.NumericUpDown();
-            this.treeRealm = new System.Windows.Forms.TreeView();
+            this.treeServers = new System.Windows.Forms.TreeView();
             this.btnNewRealm = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.txtCharDB = new System.Windows.Forms.TextBox();
@@ -51,6 +51,7 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.btnNewServer = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.panelRealm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDbId)).BeginInit();
@@ -146,33 +147,33 @@
             0,
             0});
             // 
-            // treeRealm
+            // treeServers
             // 
-            this.treeRealm.HideSelection = false;
-            this.treeRealm.LabelEdit = true;
-            this.treeRealm.Location = new System.Drawing.Point(12, 12);
-            this.treeRealm.Name = "treeRealm";
-            this.treeRealm.ShowPlusMinus = false;
-            this.treeRealm.ShowRootLines = false;
-            this.treeRealm.Size = new System.Drawing.Size(133, 295);
-            this.treeRealm.TabIndex = 11;
-            this.treeRealm.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeRealm_AfterLabelEdit);
-            this.treeRealm.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeRealm_BeforeSelect);
-            this.treeRealm.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeRealm_AfterSelect);
+            this.treeServers.HideSelection = false;
+            this.treeServers.LabelEdit = true;
+            this.treeServers.Location = new System.Drawing.Point(12, 12);
+            this.treeServers.Name = "treeServers";
+            this.treeServers.ShowPlusMinus = false;
+            this.treeServers.ShowRootLines = false;
+            this.treeServers.Size = new System.Drawing.Size(147, 295);
+            this.treeServers.TabIndex = 11;
+            this.treeServers.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeServers_AfterLabelEdit);
+            this.treeServers.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeServers_BeforeSelect);
+            this.treeServers.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeServers_AfterSelect);
             // 
             // btnNewRealm
             // 
-            this.btnNewRealm.Location = new System.Drawing.Point(13, 314);
+            this.btnNewRealm.Location = new System.Drawing.Point(12, 343);
             this.btnNewRealm.Name = "btnNewRealm";
-            this.btnNewRealm.Size = new System.Drawing.Size(63, 23);
+            this.btnNewRealm.Size = new System.Drawing.Size(78, 23);
             this.btnNewRealm.TabIndex = 12;
-            this.btnNewRealm.Text = "Neu";
+            this.btnNewRealm.Text = "Neuer Realm";
             this.btnNewRealm.UseVisualStyleBackColor = true;
             this.btnNewRealm.Click += new System.EventHandler(this.btnNewRealm_Click);
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(82, 314);
+            this.btnRemove.Location = new System.Drawing.Point(96, 314);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(63, 23);
             this.btnRemove.TabIndex = 14;
@@ -230,7 +231,7 @@
             this.panelRealm.Controls.Add(this.lblPassword);
             this.panelRealm.Controls.Add(this.lblUser);
             this.panelRealm.Controls.Add(this.lblHost);
-            this.panelRealm.Location = new System.Drawing.Point(151, 12);
+            this.panelRealm.Location = new System.Drawing.Point(165, 12);
             this.panelRealm.Name = "panelRealm";
             this.panelRealm.Size = new System.Drawing.Size(290, 278);
             this.panelRealm.TabIndex = 21;
@@ -253,7 +254,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(285, 343);
+            this.btnOK.Location = new System.Drawing.Point(299, 343);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 22;
@@ -263,7 +264,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(366, 343);
+            this.btnCancel.Location = new System.Drawing.Point(380, 343);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 23;
@@ -273,7 +274,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(162, 343);
+            this.btnConnect.Location = new System.Drawing.Point(175, 343);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 24;
@@ -281,18 +282,29 @@
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
+            // btnNewServer
+            // 
+            this.btnNewServer.Location = new System.Drawing.Point(12, 314);
+            this.btnNewServer.Name = "btnNewServer";
+            this.btnNewServer.Size = new System.Drawing.Size(78, 23);
+            this.btnNewServer.TabIndex = 25;
+            this.btnNewServer.Text = "Neuer Server";
+            this.btnNewServer.UseVisualStyleBackColor = true;
+            this.btnNewServer.Click += new System.EventHandler(this.btnNewServer_Click);
+            // 
             // RealmManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(583, 384);
+            this.Controls.Add(this.btnNewServer);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.panelRealm);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnNewRealm);
-            this.Controls.Add(this.treeRealm);
+            this.Controls.Add(this.treeServers);
             this.Name = "RealmManagerForm";
             this.Text = "Realmmanager";
             this.Load += new System.EventHandler(this.Settings_Load);
@@ -316,7 +328,7 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lblPort;
         private System.Windows.Forms.NumericUpDown numPort;
-        private System.Windows.Forms.TreeView treeRealm;
+        private System.Windows.Forms.TreeView treeServers;
         private System.Windows.Forms.Button btnNewRealm;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.TextBox txtCharDB;
@@ -329,6 +341,7 @@
         private System.Windows.Forms.NumericUpDown numDbId;
         private System.Windows.Forms.Label lblDbId;
         private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.Button btnNewServer;
 
     }
 }

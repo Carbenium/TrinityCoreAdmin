@@ -87,7 +87,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Realm.cs" />
-    <Compile Include="RealmManager.cs" />
+    <Compile Include="ServerManager.cs" />
     <Compile Include="SecurityExtensions.cs" />
     <Compile Include="Forms\RealmManagerForm.cs">
       <SubType>Form</SubType>
@@ -95,6 +95,7 @@
     <Compile Include="Forms\RealmManagerForm.Designer.cs">
       <DependentUpon>RealmManagerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Server.cs" />
     <Compile Include="WorldDatabase.cs" />
     <Compile Include="XConverter.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
