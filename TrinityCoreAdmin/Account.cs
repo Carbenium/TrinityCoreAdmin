@@ -59,6 +59,8 @@ namespace TrinityCoreAdmin
 
         public static void LoadAccountsFromDB()
         {
+            accounts.Clear();
+
             MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
 
             DataTable dt = ServerManager.currServer.authDBConn.Execute(stmt);

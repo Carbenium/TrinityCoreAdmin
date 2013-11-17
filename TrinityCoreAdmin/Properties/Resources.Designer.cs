@@ -59,5 +59,15 @@ namespace TrinityCoreAdmin.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        /// </summary>
+        internal static System.Drawing.Icon TrinityCore {
+            get {
+                object obj = ResourceManager.GetObject("TrinityCore", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

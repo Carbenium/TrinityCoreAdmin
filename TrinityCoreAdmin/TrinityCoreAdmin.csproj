@@ -40,6 +40,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -50,6 +52,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>1</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\TrinityCore.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -68,6 +73,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AuthDatabase.cs" />
+    <Compile Include="BaseConnection.cs" />
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,9 +90,11 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ListViewColumnSorter.cs" />
+    <Compile Include="OnConnectionStateEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Realm.cs" />
+    <Compile Include="RealmManager.cs" />
     <Compile Include="ServerManager.cs" />
     <Compile Include="SecurityExtensions.cs" />
     <Compile Include="Forms\RealmManagerForm.cs">
@@ -96,6 +104,7 @@
       <DependentUpon>RealmManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Server.cs" />
+    <Compile Include="SshConnection.cs" />
     <Compile Include="WorldDatabase.cs" />
     <Compile Include="XConverter.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
@@ -155,6 +164,9 @@
       <Project>{2f5f8c90-0bd1-424f-997c-7bc6280919d1}</Project>
       <Name>Renci.SshNet</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TrinityCore.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

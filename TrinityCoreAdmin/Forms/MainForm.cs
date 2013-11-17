@@ -1,56 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
-
-//using MySql.Data.MySqlClient;
 
 namespace TrinityCoreAdmin.Forms
 {
     public partial class MainForm : Form
     {
+        private ListViewColumnSorter lvwColumnSorter;
+
         public MainForm()
         {
             InitializeComponent();
-        }
 
-        private List<string> accountData = new List<string>();
-
-        public WorldDatabase worldDB;
-        public AuthDatabase authDB;
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            ServerManager.LoadRealms();
-            StartDB();
-        }
-
-        //private void lst_Accounts_ColumnClick(object sender, ColumnClickEventArgs e)
-        //{
-        //    if (listViewUsers.Sorting == SortOrder.Ascending)
-        //    {
-        //        listViewUsers.Sorting = SortOrder.Descending;
-        //        listViewUsers.ListViewItemSorter = new ListViewComparer(e.Column, SortOrder.Descending);
-        //    }
-        //    else
-        //    {
-        //        listViewUsers.Sorting = SortOrder.Ascending;
-        //        listViewUsers.ListViewItemSorter = new ListViewComparer(e.Column, SortOrder.Ascending);
-        //    }
-        //}
-
-        private void realmmanagerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RealmManagerForm frmRealmManager = new RealmManagerForm();
-            frmRealmManager.ShowInTaskbar = false;
-            frmRealmManager.ShowDialog();
-
-            if (frmRealmManager.connSuccess)
-                LoadAccounts();
-        }
-
-        private void verbindenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+            // Create an instance of a ListView column sorter and assign it
+            // to the ListView control.
+            lvwColumnSorter = new ListViewColumnSorter();
+            this.listViewAccounts.ListViewItemSorter = lvwColumnSorter;
         }
 
         private void beendenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -65,57 +31,42 @@ namespace TrinityCoreAdmin.Forms
             frmSettings.ShowDialog();
         }
 
-        private void StartDB()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            //MySql.Data.MySqlClient.MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-            //authString.Server = "localhost";
-            //authString.UserID = "root";
-            //authString.Password = "";
-            //authString.Database = "auth";
+            ServerManager.LoadRealms();
+        }
 
-            //authDB = new AuthDatabase(authString);
-            //authDB.Open();
-            //authDB.DoPrepareStatments();
+        private void listViewAccounts_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == lvwColumnSorter.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (lvwColumnSorter.Order == SortOrder.Ascending)
+                {
+                    lvwColumnSorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    lvwColumnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                lvwColumnSorter.SortColumn = e.Column;
+                lvwColumnSorter.Order = SortOrder.Ascending;
+            }
 
-            //MySql.Data.MySqlClient.MySqlConnectionStringBuilder worldString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-            //worldString.Server = "192.168.2.10";
-            //worldString.Port = 3306;
-            //worldString.UserID = "root";
-            //worldString.Database = "world";
-
-            //worldDB = new WorldDatabase(worldString);
-            //worldDB.Open();
-            //worldDB.DoPrepareStatments();
-
-            //MySql.Data.MySqlClient.MySqlCommand stmt =  authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
-
-            //stmt.Parameters.AddWithValue("@name", "d-sat");
-
-            //try
-            //{
-            //    dt = authDB.Execute(stmt);
-            //}
-            //catch (MySql.Data.MySqlClient.MySqlException e)
-            //{
-
-            //    MessageBox.Show(e.Message);
-            //}
-            
-
-            //foreach (DataRow row in dt.Rows)
-            //{
-            //    ListViewItem item = new ListViewItem(row[0].ToString());
-            //    for (int i = 1; i < dt.Columns.Count; i++)
-            //    {
-            //        item.SubItems.Add(row[i].ToString());
-            //    }
-
-            //    listViewAccounts.Items.Add(item);
-            //}
+            // Perform the sort with these new sort options.
+            this.listViewAccounts.Sort();
         }
 
         private void LoadAccounts()
         {
+            listViewAccounts.Items.Clear();
+            listViewAccounts.Update();
+
             foreach (Account acc in Account.accounts)
             {
                 ListViewItem item = new ListViewItem(acc.id.ToString());
@@ -135,14 +86,31 @@ namespace TrinityCoreAdmin.Forms
             listViewAccounts.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private void StopDB()
-        {
-            MySQLConnection.CloseConnections();
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            StopDB();
+            MySQLConnection.CloseConnections();
+            SshConnection.CloseConnections();
+        }
+
+        private void realmmanagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RealmManagerForm frmRealmManager = new RealmManagerForm(this);
+            frmRealmManager.ShowInTaskbar = false;
+            frmRealmManager.ShowDialog();
+
+            if (frmRealmManager.connSuccess)
+                LoadAccounts();
+        }
+
+        private void verbindenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void toolStripCloseConnections_Click(object sender, EventArgs e)
+        {
+            MySQLConnection.CloseConnections();
+            SshConnection.CloseConnections();
+            Account.accounts.Clear();
         }
     }
 }

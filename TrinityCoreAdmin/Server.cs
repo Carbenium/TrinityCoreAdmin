@@ -8,75 +8,132 @@ using TrinityCoreAdmin.Security;
 namespace TrinityCoreAdmin
 {
     [DataContract]
-    //[KnownType(typeof(List<Realm>))]
     internal class Server
     {
+        public AuthDatabase authDBConn;
+
+        public SshConnection sshConn;
+
         [DataMember]
         public List<Realm> realms = new List<Realm>();
 
-        public AuthDatabase authDBConn;
+        [DataMember]
+        private string _encryptedSqlPassword;
 
         [DataMember]
-        private string _encryptedPassword;
+        private string _encryptedSshPassword;
 
-        //private string _entropy;
+        public Server()
+        {
+            this.name = String.Empty;
+
+            this.sqlHost = String.Empty;
+            this.sqlPort = 3306;
+            this.sqlUser = String.Empty;
+            this.sqlPassword = String.Empty;
+
+            this.sshHost = String.Empty;
+            this.sshPort = 22;
+            this.sshUser = String.Empty;
+            this.sshPassword = String.Empty;
+            this.useSSHTunnel = false;
+
+            RNGCryptoServiceProvider sqlRng = new RNGCryptoServiceProvider();
+            byte[] sqlBuffer = new byte[1024];
+
+            sqlRng.GetBytes(sqlBuffer);
+            this.sqlEntropy = BitConverter.ToString(sqlBuffer);
+            sqlRng.Dispose();
+
+            RNGCryptoServiceProvider sshRng = new RNGCryptoServiceProvider();
+            byte[] sshBuffer = new byte[1024];
+
+            sshRng.GetBytes(sshBuffer);
+            this.sshEntropy = BitConverter.ToString(sshBuffer);
+            sshRng.Dispose();
+
+            this._encryptedSqlPassword = String.Empty;
+            this._encryptedSshPassword = String.Empty;
+        }
 
         [DataMember]
-        public string Authdb
+        public string name
         { get; set; }
 
         [DataMember]
-        public string Host
-        { get; set; }
+        public string sqlEntropy
+        { get; private set; }
 
         [DataMember]
-        public string Name
+        public string sqlHost
         { get; set; }
 
-        [DataMember]
-        public int Port
-        { get; set; }
-
-        [DataMember]
-        public string User
-        { get; set; }
-
-        public string Password
+        public string sqlPassword
         {
             get
             {
-                if (_encryptedPassword == String.Empty)
+                if (_encryptedSqlPassword == null || _encryptedSqlPassword == String.Empty)
                     return String.Empty;
                 else
-                    return _encryptedPassword.DecryptString(Encoding.Unicode.GetBytes(Entropy)).ToInsecureString();
+                    return _encryptedSqlPassword.DecryptString(Encoding.Unicode.GetBytes(sqlEntropy)).ToInsecureString();
             }
             set
             {
                 if (value != String.Empty)
-                    _encryptedPassword = value.ToSecureString().EncryptString(Encoding.Unicode.GetBytes(Entropy));
+                    _encryptedSqlPassword = value.ToSecureString().EncryptString(Encoding.Unicode.GetBytes(sqlEntropy));
             }
         }
 
         [DataMember]
-        public string Entropy
+        public uint sqlPort
+        { get; set; }
 
-        { get; private set; }
+        [DataMember]
+        public string sqlUser
+        { get; set; }
 
-        public Server()
+        [DataMember]
+        public string authdb
+        { get; set; }
+
+        [DataMember]
+        public string sshHost
+        { get; set; }
+
+        [DataMember]
+        public int sshPort
+        { get; set; }
+
+        [DataMember]
+        public uint sshForwardedPort
+        { get; set; }
+
+        [DataMember]
+        public string sshUser
+        { get; set; }
+
+        public string sshPassword
         {
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buffer = new byte[1024];
-
-            rng.GetBytes(buffer);
-            Entropy = BitConverter.ToString(buffer);
-            rng.Dispose();
-
-            _encryptedPassword = String.Empty;
-            Host = String.Empty;
-            Name = String.Empty;
-            Port = 0;
-            User = String.Empty;
-            Password = String.Empty;
+            get
+            {
+                if (_encryptedSshPassword == String.Empty)
+                    return String.Empty;
+                else
+                    return _encryptedSshPassword.DecryptString(Encoding.Unicode.GetBytes(sshEntropy)).ToInsecureString();
+            }
+            set
+            {
+                if (value != String.Empty)
+                    _encryptedSshPassword = value.ToSecureString().EncryptString(Encoding.Unicode.GetBytes(sshEntropy));
+            }
         }
+
+        [DataMember]
+        public bool useSSHTunnel
+        { get; set; }
+
+        [DataMember]
+        public string sshEntropy
+        { get; private set; }
     }
 }

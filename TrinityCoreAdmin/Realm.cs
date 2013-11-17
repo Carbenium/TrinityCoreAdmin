@@ -5,37 +5,37 @@ namespace TrinityCoreAdmin
     [DataContract]
     public class Realm
     {
-        public WorldDatabase worldDBConn;
-
-        public static Realm currRealm;
-
         public Realm()
         { }
 
         public Realm(int dbId, string name, string chardb, string worlddb)
         {
-            DbId = dbId;
-            Name = name;
-            Chardb = chardb;
-            Worlddb = worlddb;
-
-            currRealm = this;
+            this.dbId = dbId;
+            this.name = name;
+            this.chardb = chardb;
+            this.worlddb = worlddb;
         }
 
         [DataMember]
-        public string Chardb
+        public string chardb
         { get; set; }
 
         [DataMember]
-        public int DbId
+        public int dbId
         { get; set; }
 
         [DataMember]
-        public string Name
+        public string name
         { get; set; }
 
         [DataMember]
-        public string Worlddb
+        public string worlddb
+        { get; set; }
+
+        public WorldDatabase worldDBConn
+        { get; set; }
+
+        public AuthDatabase authDBConn
         { get; set; }
     }
 }

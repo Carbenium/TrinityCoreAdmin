@@ -31,12 +31,19 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.dateiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.realmmanagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCloseConnections = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.beendenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bearbeitenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.einstellungenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusStripSSH = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripAuth = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripChar = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripWorld = new System.Windows.Forms.ToolStripStatusLabel();
             this.listViewAccounts = new TrinityCoreAdmin.AccountListView();
             this.menuStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -54,6 +61,7 @@
             // 
             this.dateiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.realmmanagerToolStripMenuItem,
+            this.toolStripCloseConnections,
             this.toolStripSeparator,
             this.beendenToolStripMenuItem});
             this.dateiToolStripMenuItem.Name = "dateiToolStripMenuItem";
@@ -66,6 +74,13 @@
             this.realmmanagerToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.realmmanagerToolStripMenuItem.Text = "Realmmanager";
             this.realmmanagerToolStripMenuItem.Click += new System.EventHandler(this.realmmanagerToolStripMenuItem_Click);
+            // 
+            // toolStripCloseConnections
+            // 
+            this.toolStripCloseConnections.Name = "toolStripCloseConnections";
+            this.toolStripCloseConnections.Size = new System.Drawing.Size(154, 22);
+            this.toolStripCloseConnections.Text = "Trennen";
+            this.toolStripCloseConnections.Click += new System.EventHandler(this.toolStripCloseConnections_Click);
             // 
             // toolStripSeparator
             // 
@@ -94,6 +109,51 @@
             this.einstellungenToolStripMenuItem.Text = "Einstellungen";
             this.einstellungenToolStripMenuItem.Click += new System.EventHandler(this.einstellungenToolStripMenuItem_Click);
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripSSH,
+            this.statusStripAuth,
+            this.statusStripChar,
+            this.statusStripWorld});
+            this.statusStrip.Location = new System.Drawing.Point(0, 299);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(804, 22);
+            this.statusStrip.TabIndex = 9;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // statusStripSSH
+            // 
+            this.statusStripSSH.ForeColor = System.Drawing.Color.Red;
+            this.statusStripSSH.Name = "statusStripSSH";
+            this.statusStripSSH.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.statusStripSSH.Size = new System.Drawing.Size(38, 17);
+            this.statusStripSSH.Text = "SSH";
+            // 
+            // statusStripAuth
+            // 
+            this.statusStripAuth.ForeColor = System.Drawing.Color.Red;
+            this.statusStripAuth.Name = "statusStripAuth";
+            this.statusStripAuth.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.statusStripAuth.Size = new System.Drawing.Size(58, 17);
+            this.statusStripAuth.Text = "AuthDB";
+            // 
+            // statusStripChar
+            // 
+            this.statusStripChar.ForeColor = System.Drawing.Color.Red;
+            this.statusStripChar.Name = "statusStripChar";
+            this.statusStripChar.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.statusStripChar.Size = new System.Drawing.Size(57, 17);
+            this.statusStripChar.Text = "CharDB";
+            // 
+            // statusStripWorld
+            // 
+            this.statusStripWorld.ForeColor = System.Drawing.Color.Red;
+            this.statusStripWorld.Name = "statusStripWorld";
+            this.statusStripWorld.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.statusStripWorld.Size = new System.Drawing.Size(64, 17);
+            this.statusStripWorld.Text = "WorldDB";
+            // 
             // listViewAccounts
             // 
             this.listViewAccounts.AutoArrange = false;
@@ -103,20 +163,25 @@
             this.listViewAccounts.TabIndex = 8;
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
+            this.listViewAccounts.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAccounts_ColumnClick);
             // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.ClientSize = new System.Drawing.Size(804, 321);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
+            this.Icon = Properties.Resources.TrinityCore;
             this.Name = "MainForm";
             this.Text = "TrinityAdmin";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,6 +197,12 @@
         private System.Windows.Forms.ToolStripMenuItem realmmanagerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bearbeitenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem einstellungenToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        public System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
+        public System.Windows.Forms.ToolStripStatusLabel statusStripSSH;
+        public System.Windows.Forms.ToolStripStatusLabel statusStripChar;
+        public System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCloseConnections;
     }
 }
 

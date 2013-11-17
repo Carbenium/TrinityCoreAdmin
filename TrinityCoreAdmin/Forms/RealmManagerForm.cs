@@ -1,16 +1,45 @@
 ﻿using System;
+using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace TrinityCoreAdmin.Forms
 {
     public partial class RealmManagerForm : Form
     {
         public bool connSuccess = false;
+        private MainForm mainForm;
 
-        public RealmManagerForm()
+        public RealmManagerForm(MainForm mainForm)
         {
             InitializeComponent();
+            this.mainForm = mainForm;
+        }
+
+        private void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
+        {
+            if (e.connState == ConnectionState.Open)
+            {
+                mainForm.statusStripChar.ForeColor = Color.Green;
+            }
+            else if (e.connState == ConnectionState.Closed)
+            {
+                mainForm.statusStripChar.ForeColor = Color.Red;
+            }
+        }
+
+        private void sshConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
+        {
+            if (e.connState == ConnectionState.Open)
+            {
+                mainForm.statusStripSSH.ForeColor = Color.Green;
+            }
+            else if (e.connState == ConnectionState.Closed)
+            {
+                mainForm.statusStripSSH.ForeColor = Color.Red;
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -26,30 +55,53 @@ namespace TrinityCoreAdmin.Forms
             {
                 Server selectedServer = (Server)selectedNode.Parent.Tag;
                 Realm selectedRealm = (Realm)selectedNode.Tag;
+                ServerManager.currServer = selectedServer;
+                RealmManager.currRealm = selectedRealm;
 
-                if (selectedServer.Host != String.Empty && selectedServer.User != String.Empty)
+                if (selectedServer.useSSHTunnel)
                 {
-                    if (selectedServer.Authdb != String.Empty)
+                    if (selectedServer.sshHost != String.Empty && selectedServer.sshUser != String.Empty)
                     {
-                        MySql.Data.MySqlClient.MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-                        authString.Server = selectedServer.Host;
-                        authString.UserID = selectedServer.User;
-                        authString.Password = selectedServer.Password;
-                        authString.Database = selectedServer.Authdb;
+                        SshConnection.CloseConnections();
+                        selectedServer.sshConn = new SshConnection(selectedServer.sshHost, selectedServer.sshPort, selectedServer.sshUser, selectedServer.sshPassword);
+                        ServerManager.currServer.sshConn.OnToggleConnectionStateHandler += sshConn_OnToggleConnectionStateHandler;
 
-                        selectedServer.authDBConn = new AuthDatabase(authString);
-                        connSuccess = selectedServer.authDBConn.Open();
-
-                        ServerManager.currServer = selectedServer;
-                        ServerManager.currRealm = selectedRealm;
-                        selectedServer.authDBConn.DoPrepareStatments();
-
-                        Account.LoadAccountsFromDB();
+                        selectedServer.sshConn.Open();
+                        selectedServer.sshConn.AddForwardedPort(selectedServer.sshForwardedPort, selectedServer.sqlHost, selectedServer.sqlPort);
                     }
                 }
+
+                if (selectedServer.sqlHost != String.Empty && selectedServer.sqlUser != String.Empty)
+                {
+                    MySQLConnection.CloseConnections();
+
+                    if (selectedServer.authdb != String.Empty)
+                    {
+                        MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+                        authString.Server = selectedServer.sqlHost;
+                        authString.Port = selectedServer.sqlPort;
+                        authString.UserID = selectedServer.sqlUser;
+                        authString.Password = selectedServer.sqlPassword;
+                        authString.Database = selectedServer.authdb;
+
+                        selectedServer.authDBConn = new AuthDatabase(authString);
+
+                        RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += authDBConn_OnToggleConnectionStateHandler;
+
+                        
+
+                        connSuccess = selectedServer.authDBConn.Open();
+
+                        selectedServer.authDBConn.DoPrepareStatments();
+                    }
+                } 
             }
             if (connSuccess)
+            {
+                Account.LoadAccountsFromDB();
+                ServerManager.Save();
                 this.Close();
+            }
         }
 
         private void btnNewRealm_Click(object sender, EventArgs e)
@@ -73,8 +125,8 @@ namespace TrinityCoreAdmin.Forms
             if (treeServers.SelectedNode.Tag.GetType() == typeof(Server))
                 UpdateServer((Server)treeServers.SelectedNode.Tag);
 
-            ClearTextBoxes(panelRealm);
-            numPort.Value = 3306;
+            ClearTextBoxes(panelSQL);
+            numSQLPort.Value = 3306;
             ServerManager.Status = RealmsStatus.NEW;
 
             TreeNode newNode = new TreeNode("Neuer Realm");
@@ -87,7 +139,7 @@ namespace TrinityCoreAdmin.Forms
 
             treeServers.SelectedNode = newNode;
             newNode.BeginEdit();
-            SetEnabledControls(panelRealm, true);
+            SetEnabledControls(panelSQL, true);
         }
 
         private void btnNewServer_Click(object sender, EventArgs e)
@@ -111,13 +163,13 @@ namespace TrinityCoreAdmin.Forms
                 if (selectedNode.Tag.GetType() == typeof(Realm))
                 {
                     Realm r = (Realm)selectedNode.Tag;
-                    r.Name = selectedNode.Text;
+                    r.name = selectedNode.Text;
                     UpdateRealm((Realm)selectedNode.Tag);
                 }
                 else if (selectedNode.Tag.GetType() == typeof(Server))
                 {
                     Server s = (Server)selectedNode.Tag;
-                    s.Name = selectedNode.Text;
+                    s.name = selectedNode.Text;
                     UpdateServer((Server)treeServers.SelectedNode.Tag);
                 }
             }
@@ -165,13 +217,13 @@ namespace TrinityCoreAdmin.Forms
 
             foreach (Server s in ServerManager.servers)
             {
-                TreeNode sNode = new TreeNode(s.Name);
+                TreeNode sNode = new TreeNode(s.name);
                 sNode.Tag = s;
                 treeServers.Nodes.Add(sNode);
 
                 foreach (Realm r in s.realms)
                 {
-                    TreeNode rNode = new TreeNode(r.Name);
+                    TreeNode rNode = new TreeNode(r.name);
                     rNode.Tag = r;
                     sNode.Nodes.Add(rNode);
                 }
@@ -186,44 +238,67 @@ namespace TrinityCoreAdmin.Forms
                 Realm r = (Realm)treeServers.SelectedNode.Tag;
                 Server s = (Server)treeServers.SelectedNode.Parent.Tag;
 
-                txtHost.Enabled = false;
-                numPort.Enabled = false;
-                txtUser.Enabled = false;
-                txtPassword.Enabled = false;
+                txtSQLHost.Enabled = false;
+                numSQLPort.Enabled = false;
+                txtSQLUser.Enabled = false;
+                txtSQLPassword.Enabled = false;
                 txtAuthDB.Enabled = false;
+                txtSSHHost.Enabled = false;
+                txtSSHUser.Enabled = false;
+                txtSSSHPassword.Enabled = false;
+                numSSHPort.Enabled = false;
+                numLocalSSHPort.Enabled = false;
+                chkUseSSH.Enabled = false;
 
                 txtCharDB.Enabled = true;
                 txtWorldDB.Enabled = true;
-                numDbId.Enabled = true;
+                numRealmId.Enabled = true;
+                btnConnect.Enabled = true;
 
-                txtHost.Text = s.Host;
-                numPort.Value = s.Port;
-                txtUser.Text = s.User;
-                txtPassword.Text = s.Password;
-                txtAuthDB.Text = s.Authdb;
-                numDbId.Value = r.DbId;
-                txtCharDB.Text = r.Chardb;
-                txtWorldDB.Text = r.Worlddb;
+                txtSQLHost.Text = s.sqlHost;
+                numSQLPort.Value = s.sqlPort;
+                txtSQLUser.Text = s.sqlUser;
+                txtSQLPassword.Text = s.sqlPassword;
+                txtAuthDB.Text = s.authdb;
+                numRealmId.Value = r.dbId;
+                txtCharDB.Text = r.chardb;
+                txtWorldDB.Text = r.worlddb;
+                txtSSHHost.Text = s.sshHost;
+                txtSSHUser.Text = s.sshUser;
+                txtSSSHPassword.Text = s.sshPassword;
+                numLocalSSHPort.Value = s.sshForwardedPort;
+                chkUseSSH.Checked = s.useSSHTunnel;
             }
             else if (treeServers.SelectedNode.Tag.GetType() == typeof(Server))
             {
                 Server s = (Server)treeServers.SelectedNode.Tag;
-                txtHost.Enabled = true;
-                numPort.Enabled = true;
-                txtUser.Enabled = true;
-                txtPassword.Enabled = true;
+                txtSQLHost.Enabled = true;
+                numSQLPort.Enabled = true;
+                txtSQLUser.Enabled = true;
+                txtSQLPassword.Enabled = true;
                 txtAuthDB.Enabled = true;
+                txtSSHHost.Enabled = true;
+                txtSSHUser.Enabled = true;
+                txtSSSHPassword.Enabled = true;
+                numSSHPort.Enabled = true;
+                numLocalSSHPort.Enabled = true;
+                chkUseSSH.Enabled = true;
 
                 txtCharDB.Enabled = false;
                 txtWorldDB.Enabled = false;
-                numDbId.Enabled = false;
+                numRealmId.Enabled = false;
+                btnConnect.Enabled = false;
 
-                numPort.Value = 3306;
-                txtHost.Text = s.Host;
-                numPort.Value = s.Port;
-                txtUser.Text = s.User;
-                txtPassword.Text = s.Password;
-                txtAuthDB.Text = s.Authdb;
+                txtSQLHost.Text = s.sqlHost;
+                numSQLPort.Value = s.sqlPort;
+                txtSQLUser.Text = s.sqlUser;
+                txtSQLPassword.Text = s.sqlPassword;
+                txtAuthDB.Text = s.authdb;
+                txtSSHHost.Text = s.sshHost;
+                txtSSHUser.Text = s.sshUser;
+                txtSSSHPassword.Text = s.sshPassword;
+                numLocalSSHPort.Value = s.sshForwardedPort;
+                chkUseSSH.Checked = s.useSSHTunnel;
             }
         }
 
@@ -240,13 +315,13 @@ namespace TrinityCoreAdmin.Forms
                     if (selectedNode.Tag.GetType() == typeof(Realm))
                     {
                         Realm r = (Realm)selectedNode.Tag;
-                        r.Name = e.Node.Text;
+                        r.name = e.Node.Text;
                         UpdateRealm((Realm)selectedNode.Tag);
                     }
                     else if (selectedNode.Tag.GetType() == typeof(Server))
                     {
                         Server s = (Server)selectedNode.Tag;
-                        s.Name = e.Node.Text;
+                        s.name = e.Node.Text;
                         UpdateServer((Server)treeServers.SelectedNode.Tag);
                     }
                 });
@@ -254,8 +329,8 @@ namespace TrinityCoreAdmin.Forms
 
         private void treeServers_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ClearTextBoxes(panelRealm);
-            SetEnabledControls(panelRealm, true);
+            ClearTextBoxes(panelSQL);
+            SetEnabledControls(panelSQL, true);
         }
 
         private void treeServers_BeforeSelect(object sender, TreeViewCancelEventArgs e)
@@ -275,20 +350,27 @@ namespace TrinityCoreAdmin.Forms
 
         private void UpdateRealm(Realm r)
         {
-            r.DbId = XConverter.ToInt32(numDbId.Value);
-            r.Chardb = txtCharDB.Text;
-            r.Worlddb = txtWorldDB.Text;
+            r.dbId = XConverter.ToInt32(numRealmId.Value);
+            r.chardb = txtCharDB.Text;
+            r.worlddb = txtWorldDB.Text;
 
             ServerManager.Status = RealmsStatus.SAVED;
         }
 
         private void UpdateServer(Server s)
         {
-            s.Host = txtHost.Text;
-            s.Port = XConverter.ToInt32(numPort.Value);
-            s.User = txtUser.Text;
-            s.Password = txtPassword.Text;
-            s.Authdb = txtAuthDB.Text;
+            s.sqlHost = txtSQLHost.Text;
+            s.sqlPort = XConverter.ToUInt32(numSQLPort.Value);
+            s.sqlUser = txtSQLUser.Text;
+            s.sqlPassword = txtSQLPassword.Text;
+            s.authdb = txtAuthDB.Text;
+
+            s.sshHost = txtSSHHost.Text;
+            s.sshPort = XConverter.ToInt32(numSSHPort.Value);
+            s.sshUser = txtSSHUser.Text;
+            s.sshPassword = txtSSSHPassword.Text;
+            s.sshForwardedPort = XConverter.ToUInt32(numLocalSSHPort.Value);
+            s.useSSHTunnel = chkUseSSH.Checked;
 
             ServerManager.Status = RealmsStatus.SAVED;
         }

@@ -11,7 +11,6 @@ namespace TrinityCoreAdmin
     {
         public static List<Server> servers = new List<Server>();
         public static Server currServer;
-        public static Realm currRealm;
 
         public static RealmsStatus Status = RealmsStatus.SAVED;
 
