@@ -209,7 +209,6 @@ namespace TrinityCoreAdmin
                 {
                     Logger.LOG_DATABASE.Error("Could not execute prepared statement " + stmt.ToString() + " as scalar. " + e.Message);
                     return null;
-                    throw;
                 }
             }
             return null;
