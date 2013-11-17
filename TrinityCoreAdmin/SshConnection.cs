@@ -94,7 +94,7 @@ namespace TrinityCoreAdmin
         {
             try
             {
-                var dPort = new ForwardedPortLocal("127.0.0.1", localPort, host, 3306);
+                var dPort = new ForwardedPortLocal("127.0.0.1", localPort, host, port);
                 conn.AddForwardedPort(dPort);
                 dPort.Start();
             }
@@ -114,6 +114,11 @@ namespace TrinityCoreAdmin
             {
                 m_conn[i].Close();
             }
+        }
+
+        public bool isConnected
+        {
+            get { return conn.IsConnected; }
         }
     }
 }

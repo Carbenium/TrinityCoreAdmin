@@ -1,9 +1,9 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace TrinityCoreAdmin.Forms
 {
@@ -79,7 +79,16 @@ namespace TrinityCoreAdmin.Forms
                     {
                         MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
                         authString.Server = selectedServer.sqlHost;
-                        authString.Port = selectedServer.sqlPort;
+
+                        if (selectedServer.sshConn.isConnected)
+                        {
+                            authString.Port = selectedServer.sshForwardedPort;
+                        }
+                        else
+                        {
+                            authString.Port = selectedServer.sqlPort;
+                        }
+
                         authString.UserID = selectedServer.sqlUser;
                         authString.Password = selectedServer.sqlPassword;
                         authString.Database = selectedServer.authdb;
@@ -88,13 +97,11 @@ namespace TrinityCoreAdmin.Forms
 
                         RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += authDBConn_OnToggleConnectionStateHandler;
 
-                        
-
                         connSuccess = selectedServer.authDBConn.Open();
 
                         selectedServer.authDBConn.DoPrepareStatments();
                     }
-                } 
+                }
             }
             if (connSuccess)
             {
