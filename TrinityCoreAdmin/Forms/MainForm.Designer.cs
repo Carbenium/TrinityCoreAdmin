@@ -41,7 +41,16 @@
             this.statusStripAuth = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripChar = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripWorld = new System.Windows.Forms.ToolStripStatusLabel();
-            this.listViewAccounts = new TrinityCoreAdmin.AccountListView();
+            this.listViewAccounts = new System.Windows.Forms.ListView();
+            this.id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.username = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.reg_mail = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.email = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.joindate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.last_ip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.failed_logins = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.last_login = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.expansion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -157,6 +166,16 @@
             // listViewAccounts
             // 
             this.listViewAccounts.AutoArrange = false;
+            this.listViewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.id,
+            this.username,
+            this.reg_mail,
+            this.email,
+            this.joindate,
+            this.last_ip,
+            this.failed_logins,
+            this.last_login,
+            this.expansion});
             this.listViewAccounts.Location = new System.Drawing.Point(12, 27);
             this.listViewAccounts.Name = "listViewAccounts";
             this.listViewAccounts.Size = new System.Drawing.Size(780, 227);
@@ -165,6 +184,51 @@
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
             this.listViewAccounts.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAccounts_ColumnClick);
             // 
+            // id
+            // 
+            this.id.Text = "ID";
+            this.id.Width = 31;
+            // 
+            // username
+            // 
+            this.username.Text = "Username";
+            this.username.Width = 67;
+            // 
+            // reg_mail
+            // 
+            this.reg_mail.Text = "Reg. Email";
+            this.reg_mail.Width = 135;
+            // 
+            // email
+            // 
+            this.email.Text = "Email";
+            this.email.Width = 139;
+            // 
+            // joindate
+            // 
+            this.joindate.Text = "Erstellungsdatum";
+            this.joindate.Width = 94;
+            // 
+            // last_ip
+            // 
+            this.last_ip.Text = "Letzte IP";
+            this.last_ip.Width = 79;
+            // 
+            // failed_logins
+            // 
+            this.failed_logins.Text = "Loginvers.";
+            this.failed_logins.Width = 64;
+            // 
+            // last_login
+            // 
+            this.last_login.Text = "Letztes Login";
+            this.last_login.Width = 83;
+            // 
+            // expansion
+            // 
+            this.expansion.Text = "Erweiterung";
+            this.expansion.Width = 78;
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -172,8 +236,8 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip);
+            this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCore;
             this.MainMenuStrip = this.menuStrip;
-            this.Icon = Properties.Resources.TrinityCore;
             this.Name = "MainForm";
             this.Text = "TrinityAdmin";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -192,7 +256,6 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripMenuItem beendenToolStripMenuItem;
-        private AccountListView listViewAccounts;
         private System.Windows.Forms.ToolStripMenuItem dateiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem realmmanagerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bearbeitenToolStripMenuItem;
@@ -203,6 +266,16 @@
         public System.Windows.Forms.ToolStripStatusLabel statusStripChar;
         public System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
         private System.Windows.Forms.ToolStripMenuItem toolStripCloseConnections;
+        private System.Windows.Forms.ListView listViewAccounts;
+        private System.Windows.Forms.ColumnHeader id;
+        private System.Windows.Forms.ColumnHeader username;
+        private System.Windows.Forms.ColumnHeader reg_mail;
+        private System.Windows.Forms.ColumnHeader email;
+        private System.Windows.Forms.ColumnHeader joindate;
+        private System.Windows.Forms.ColumnHeader last_ip;
+        private System.Windows.Forms.ColumnHeader failed_logins;
+        private System.Windows.Forms.ColumnHeader last_login;
+        private System.Windows.Forms.ColumnHeader expansion;
     }
 }
 

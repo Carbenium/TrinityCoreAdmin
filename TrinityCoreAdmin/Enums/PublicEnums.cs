@@ -2,9 +2,9 @@
 {
     public enum Expansion : int
     {
-        EXPANSION_CLASSIC = 0,
-        EXPANSION_TBC = 1,
-        EXPANSION_WOTLK = 2
+        CLASSIC = 0,
+        TBC = 1,
+        WOTLK = 2
     }
 
     public enum MySQLError

@@ -70,6 +70,13 @@ namespace TrinityCoreAdmin.Forms
             foreach (Account acc in Account.accounts)
             {
                 ListViewItem item = new ListViewItem(acc.id.ToString());
+                item.UseItemStyleForSubItems = false;
+
+                if (acc.online)
+                    item.SubItems[0].BackColor = Color.Green;
+                else
+                    item.SubItems[0].BackColor = Color.Red;
+
                 item.SubItems.Add(acc.username);
                 item.SubItems.Add(acc.reg_mail);
                 item.SubItems.Add(acc.email);
@@ -77,13 +84,10 @@ namespace TrinityCoreAdmin.Forms
                 item.SubItems.Add(acc.last_ip);
                 item.SubItems.Add(acc.failed_logins.ToString());
                 item.SubItems.Add(acc.last_login.ToString());
-                item.SubItems.Add(acc.online.ToString());
                 item.SubItems.Add(acc.expansion.ToString());
 
                 listViewAccounts.Items.Add(item);
             }
-
-            listViewAccounts.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

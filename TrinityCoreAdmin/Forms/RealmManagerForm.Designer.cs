@@ -91,6 +91,7 @@
             this.treeServers.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeServers_AfterLabelEdit);
             this.treeServers.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeServers_BeforeSelect);
             this.treeServers.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeServers_AfterSelect);
+            this.treeServers.DoubleClick += new System.EventHandler(this.treeServers_DoubleClick);
             // 
             // btnNewRealm
             // 

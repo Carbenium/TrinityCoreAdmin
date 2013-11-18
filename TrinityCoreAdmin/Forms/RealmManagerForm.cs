@@ -18,6 +18,37 @@ namespace TrinityCoreAdmin.Forms
             this.mainForm = mainForm;
         }
 
+        private void Settings_Load(object sender, EventArgs e)
+        {
+            LoadRealmsToTree();
+        }
+
+        private void LoadRealmsToTree()
+        {
+            FileInfo f = new FileInfo("D:\\config.xml");
+            if (!f.Exists)
+            {
+                ServerManager.Save(true);
+            }
+
+            treeServers.Nodes.Clear();
+
+            foreach (Server s in ServerManager.servers)
+            {
+                TreeNode sNode = new TreeNode(s.name);
+                sNode.Tag = s;
+                treeServers.Nodes.Add(sNode);
+
+                foreach (Realm r in s.realms)
+                {
+                    TreeNode rNode = new TreeNode(r.name);
+                    rNode.Tag = r;
+                    sNode.Nodes.Add(rNode);
+                }
+            }
+            treeServers.ExpandAll();
+        }
+
         private void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
         {
             if (e.connState == ConnectionState.Open)
@@ -49,66 +80,12 @@ namespace TrinityCoreAdmin.Forms
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            TreeNode selectedNode = treeServers.SelectedNode;
+            Connect();
+        }
 
-            if (selectedNode.Tag.GetType() == typeof(Realm))
-            {
-                Server selectedServer = (Server)selectedNode.Parent.Tag;
-                Realm selectedRealm = (Realm)selectedNode.Tag;
-                ServerManager.currServer = selectedServer;
-                RealmManager.currRealm = selectedRealm;
-
-                if (selectedServer.useSSHTunnel)
-                {
-                    if (selectedServer.sshHost != String.Empty && selectedServer.sshUser != String.Empty)
-                    {
-                        SshConnection.CloseConnections();
-                        selectedServer.sshConn = new SshConnection(selectedServer.sshHost, selectedServer.sshPort, selectedServer.sshUser, selectedServer.sshPassword);
-                        ServerManager.currServer.sshConn.OnToggleConnectionStateHandler += sshConn_OnToggleConnectionStateHandler;
-
-                        selectedServer.sshConn.Open();
-                        selectedServer.sshConn.AddForwardedPort(selectedServer.sshForwardedPort, selectedServer.sqlHost, selectedServer.sqlPort);
-                    }
-                }
-
-                if (selectedServer.sqlHost != String.Empty && selectedServer.sqlUser != String.Empty)
-                {
-                    MySQLConnection.CloseConnections();
-
-                    if (selectedServer.authdb != String.Empty)
-                    {
-                        MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-                        authString.Server = selectedServer.sqlHost;
-
-                        if (selectedServer.sshConn.isConnected)
-                        {
-                            authString.Port = selectedServer.sshForwardedPort;
-                        }
-                        else
-                        {
-                            authString.Port = selectedServer.sqlPort;
-                        }
-
-                        authString.UserID = selectedServer.sqlUser;
-                        authString.Password = selectedServer.sqlPassword;
-                        authString.Database = selectedServer.authdb;
-
-                        selectedServer.authDBConn = new AuthDatabase(authString);
-
-                        RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += authDBConn_OnToggleConnectionStateHandler;
-
-                        connSuccess = selectedServer.authDBConn.Open();
-
-                        selectedServer.authDBConn.DoPrepareStatments();
-                    }
-                }
-            }
-            if (connSuccess)
-            {
-                Account.LoadAccountsFromDB();
-                ServerManager.Save();
-                this.Close();
-            }
+        private void treeServers_DoubleClick(object sender, EventArgs e)
+        {
+            Connect();
         }
 
         private void btnNewRealm_Click(object sender, EventArgs e)
@@ -200,44 +177,6 @@ namespace TrinityCoreAdmin.Forms
             }
             treeServers.SelectedNode.Remove();
         }
-
-        private void ClearTextBoxes(Panel p)
-        {
-            for (int i = 0; i < p.Controls.Count; i++)
-            {
-                if (p.Controls[i].GetType() == typeof(TextBox))
-                {
-                    p.Controls[i].Text = string.Empty;
-                }
-            }
-        }
-
-        private void LoadRealmsToTree()
-        {
-            FileInfo f = new FileInfo("D:\\config.xml");
-            if (!f.Exists)
-            {
-                ServerManager.Save(true);
-            }
-
-            treeServers.Nodes.Clear();
-
-            foreach (Server s in ServerManager.servers)
-            {
-                TreeNode sNode = new TreeNode(s.name);
-                sNode.Tag = s;
-                treeServers.Nodes.Add(sNode);
-
-                foreach (Realm r in s.realms)
-                {
-                    TreeNode rNode = new TreeNode(r.name);
-                    rNode.Tag = r;
-                    sNode.Nodes.Add(rNode);
-                }
-            }
-            treeServers.ExpandAll();
-        }
-
         private void SetEnabledControls(Panel p, bool enabled)
         {
             if (treeServers.SelectedNode.Tag.GetType() == typeof(Realm))
@@ -308,12 +247,6 @@ namespace TrinityCoreAdmin.Forms
                 chkUseSSH.Checked = s.useSSHTunnel;
             }
         }
-
-        private void Settings_Load(object sender, EventArgs e)
-        {
-            LoadRealmsToTree();
-        }
-
         private void treeServers_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             TreeNode selectedNode = e.Node;
@@ -355,6 +288,17 @@ namespace TrinityCoreAdmin.Forms
             }
         }
 
+        private void ClearTextBoxes(Panel p)
+        {
+            for (int i = 0; i < p.Controls.Count; i++)
+            {
+                if (p.Controls[i].GetType() == typeof(TextBox))
+                {
+                    p.Controls[i].Text = string.Empty;
+                }
+            }
+        }
+
         private void UpdateRealm(Realm r)
         {
             r.dbId = XConverter.ToInt32(numRealmId.Value);
@@ -380,6 +324,69 @@ namespace TrinityCoreAdmin.Forms
             s.useSSHTunnel = chkUseSSH.Checked;
 
             ServerManager.Status = RealmsStatus.SAVED;
+        }
+        private void Connect()
+        {
+            TreeNode selectedNode = treeServers.SelectedNode;
+
+            if (selectedNode.Tag.GetType() == typeof(Realm))
+            {
+                Server selectedServer = (Server)selectedNode.Parent.Tag;
+                Realm selectedRealm = (Realm)selectedNode.Tag;
+                ServerManager.currServer = selectedServer;
+                RealmManager.currRealm = selectedRealm;
+
+                if (selectedServer.useSSHTunnel)
+                {
+                    if (selectedServer.sshHost != String.Empty && selectedServer.sshUser != String.Empty)
+                    {
+                        SshConnection.CloseConnections();
+                        selectedServer.sshConn = new SshConnection(selectedServer.sshHost, selectedServer.sshPort, selectedServer.sshUser, selectedServer.sshPassword);
+                        ServerManager.currServer.sshConn.OnToggleConnectionStateHandler += sshConn_OnToggleConnectionStateHandler;
+
+                        selectedServer.sshConn.Open();
+                        selectedServer.sshConn.AddForwardedPort(selectedServer.sshForwardedPort, selectedServer.sqlHost, selectedServer.sqlPort);
+                    }
+                }
+
+                if (selectedServer.sqlHost != String.Empty && selectedServer.sqlUser != String.Empty)
+                {
+                    MySQLConnection.CloseConnections();
+
+                    if (selectedServer.authdb != String.Empty)
+                    {
+                        MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+                        authString.Server = selectedServer.sqlHost;
+
+                        if (selectedServer.sshConn.isConnected)
+                        {
+                            authString.Port = selectedServer.sshForwardedPort;
+                        }
+                        else
+                        {
+                            authString.Port = selectedServer.sqlPort;
+                        }
+
+                        authString.UserID = selectedServer.sqlUser;
+                        authString.Password = selectedServer.sqlPassword;
+                        authString.Database = selectedServer.authdb;
+
+                        selectedServer.authDBConn = new AuthDatabase(authString);
+
+                        RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += authDBConn_OnToggleConnectionStateHandler;
+
+                        connSuccess = selectedServer.authDBConn.Open();
+
+                        selectedServer.authDBConn.DoPrepareStatments();
+                    }
+                }
+            }
+            if (connSuccess)
+            {
+                Account.LoadAccountsFromDB();
+                ServerManager.Save();
+                this.Close();
+            }
         }
     }
 }

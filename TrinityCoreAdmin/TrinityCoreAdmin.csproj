@@ -69,9 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
-    <Compile Include="AccountListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="AuthDatabase.cs" />
     <Compile Include="BaseConnection.cs" />
     <Compile Include="Forms\SettingsForm.cs">
