@@ -16,7 +16,7 @@ namespace TrinityCoreAdmin
 
         public static void LoadRealms()
         {
-            FileInfo f = new FileInfo("D:\\config.xml");
+            FileInfo f = new FileInfo(Properties.Settings.Default.ServerSettingsSavePath);
             if (f.Exists)
             {
                 using (FileStream fs = f.OpenRead())
@@ -34,7 +34,7 @@ namespace TrinityCoreAdmin
         {
             try
             {
-                using (FileStream fs = new FileStream("D:\\config.xml", System.IO.FileMode.Create))
+                using (FileStream fs = new FileStream(Properties.Settings.Default.ServerSettingsSavePath, System.IO.FileMode.Create))
                 {
                     bool success = SerializeServers(servers, fs);
 

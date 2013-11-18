@@ -101,11 +101,16 @@
       <DependentUpon>RealmManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Server.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SshConnection.cs" />
     <Compile Include="WorldDatabase.cs" />
     <Compile Include="XConverter.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

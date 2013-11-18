@@ -8,5 +8,27 @@ namespace TrinityCoreAdmin.Forms
         {
             InitializeComponent();
         }
+
+        private void SettingsForm_Load(object sender, System.EventArgs e)
+        {
+            txtSettingsFolder.Text = Properties.Settings.Default.ServerSettingsSavePath;
+        }
+
+        private void btnOK_Click(object sender, System.EventArgs e)
+        {
+            Properties.Settings.Default.ServerSettingsSavePath = txtSettingsFolder.Text;
+            Properties.Settings.Default.Save();
+            this.Close();
+        }
+
+        private void btnSelSettingsFolder_Click(object sender, System.EventArgs e)
+        {
+            if (folderSettings.ShowDialog() == DialogResult.OK)
+            {
+                txtSettingsFolder.Text = folderSettings.SelectedPath + "config.xml";
+            }
+        }
+
+
     }
 }

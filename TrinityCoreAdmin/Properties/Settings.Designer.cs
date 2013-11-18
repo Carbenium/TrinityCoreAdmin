@@ -22,5 +22,29 @@ namespace TrinityCoreAdmin.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerSettingsSavePath {
+            get {
+                return ((string)(this["ServerSettingsSavePath"]));
+            }
+            set {
+                this["ServerSettingsSavePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool firstStart {
+            get {
+                return ((bool)(this["firstStart"]));
+            }
+            set {
+                this["firstStart"] = value;
+            }
+        }
     }
 }

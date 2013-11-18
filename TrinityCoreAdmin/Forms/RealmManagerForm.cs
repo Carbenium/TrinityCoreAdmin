@@ -25,7 +25,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void LoadRealmsToTree()
         {
-            FileInfo f = new FileInfo("D:\\config.xml");
+            FileInfo f = new FileInfo(Properties.Settings.Default.ServerSettingsSavePath);
             if (!f.Exists)
             {
                 ServerManager.Save(true);
