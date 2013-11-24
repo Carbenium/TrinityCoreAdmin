@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.dateiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.realmmanagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripCloseConnections = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.beendenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bearbeitenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.einstellungenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateiMenuStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.realmmanagerMenuStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trennenMenuStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.beendenMenuStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bearbeitenMenuStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.einstellungenMenuStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusStripSSH = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripAuth = new System.Windows.Forms.ToolStripStatusLabel();
@@ -51,72 +51,75 @@
             this.failed_logins = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.last_login = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.expansion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dateiToolStripMenuItem,
-            this.bearbeitenToolStripMenuItem});
+            this.dateiMenuStripMenuItem,
+            this.bearbeitenMenuStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(804, 24);
             this.menuStrip.TabIndex = 7;
             this.menuStrip.Text = "menuStrip1";
             // 
-            // dateiToolStripMenuItem
+            // dateiMenuStripMenuItem
             // 
-            this.dateiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.realmmanagerToolStripMenuItem,
-            this.toolStripCloseConnections,
-            this.toolStripSeparator,
-            this.beendenToolStripMenuItem});
-            this.dateiToolStripMenuItem.Name = "dateiToolStripMenuItem";
-            this.dateiToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-            this.dateiToolStripMenuItem.Text = "Datei";
+            this.dateiMenuStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.realmmanagerMenuStripMenuItem,
+            this.trennenMenuStripMenuItem,
+            this.MenuStripSeparator,
+            this.beendenMenuStripMenuItem});
+            this.dateiMenuStripMenuItem.Name = "dateiMenuStripMenuItem";
+            this.dateiMenuStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.dateiMenuStripMenuItem.Text = "Datei";
             // 
-            // realmmanagerToolStripMenuItem
+            // realmmanagerMenuStripMenuItem
             // 
-            this.realmmanagerToolStripMenuItem.Name = "realmmanagerToolStripMenuItem";
-            this.realmmanagerToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.realmmanagerToolStripMenuItem.Text = "Realmmanager";
-            this.realmmanagerToolStripMenuItem.Click += new System.EventHandler(this.realmmanagerToolStripMenuItem_Click);
+            this.realmmanagerMenuStripMenuItem.Name = "realmmanagerMenuStripMenuItem";
+            this.realmmanagerMenuStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.realmmanagerMenuStripMenuItem.Text = "Realmmanager";
+            this.realmmanagerMenuStripMenuItem.Click += new System.EventHandler(this.realmmanagerToolStripMenuItem_Click);
             // 
-            // toolStripCloseConnections
+            // trennenMenuStripMenuItem
             // 
-            this.toolStripCloseConnections.Name = "toolStripCloseConnections";
-            this.toolStripCloseConnections.Size = new System.Drawing.Size(154, 22);
-            this.toolStripCloseConnections.Text = "Trennen";
-            this.toolStripCloseConnections.Click += new System.EventHandler(this.toolStripCloseConnections_Click);
+            this.trennenMenuStripMenuItem.Name = "trennenMenuStripMenuItem";
+            this.trennenMenuStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.trennenMenuStripMenuItem.Text = "Trennen";
+            this.trennenMenuStripMenuItem.Click += new System.EventHandler(this.toolStripCloseConnections_Click);
             // 
-            // toolStripSeparator
+            // MenuStripSeparator
             // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(151, 6);
+            this.MenuStripSeparator.Name = "MenuStripSeparator";
+            this.MenuStripSeparator.Size = new System.Drawing.Size(151, 6);
             // 
-            // beendenToolStripMenuItem
+            // beendenMenuStripMenuItem
             // 
-            this.beendenToolStripMenuItem.Name = "beendenToolStripMenuItem";
-            this.beendenToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.beendenToolStripMenuItem.Text = "Beenden";
-            this.beendenToolStripMenuItem.Click += new System.EventHandler(this.beendenToolStripMenuItem_Click);
+            this.beendenMenuStripMenuItem.Name = "beendenMenuStripMenuItem";
+            this.beendenMenuStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.beendenMenuStripMenuItem.Text = "Beenden";
+            this.beendenMenuStripMenuItem.Click += new System.EventHandler(this.beendenToolStripMenuItem_Click);
             // 
-            // bearbeitenToolStripMenuItem
+            // bearbeitenMenuStripMenuItem
             // 
-            this.bearbeitenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.einstellungenToolStripMenuItem});
-            this.bearbeitenToolStripMenuItem.Name = "bearbeitenToolStripMenuItem";
-            this.bearbeitenToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
-            this.bearbeitenToolStripMenuItem.Text = "Bearbeiten";
+            this.bearbeitenMenuStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.einstellungenMenuStripMenuItem});
+            this.bearbeitenMenuStripMenuItem.Name = "bearbeitenMenuStripMenuItem";
+            this.bearbeitenMenuStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.bearbeitenMenuStripMenuItem.Text = "Bearbeiten";
             // 
-            // einstellungenToolStripMenuItem
+            // einstellungenMenuStripMenuItem
             // 
-            this.einstellungenToolStripMenuItem.Name = "einstellungenToolStripMenuItem";
-            this.einstellungenToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.einstellungenToolStripMenuItem.Text = "Einstellungen";
-            this.einstellungenToolStripMenuItem.Click += new System.EventHandler(this.einstellungenToolStripMenuItem_Click);
+            this.einstellungenMenuStripMenuItem.Name = "einstellungenMenuStripMenuItem";
+            this.einstellungenMenuStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.einstellungenMenuStripMenuItem.Text = "Einstellungen";
+            this.einstellungenMenuStripMenuItem.Click += new System.EventHandler(this.einstellungenToolStripMenuItem_Click);
             // 
             // statusStrip
             // 
@@ -176,7 +179,7 @@
             this.failed_logins,
             this.last_login,
             this.expansion});
-            this.listViewAccounts.Location = new System.Drawing.Point(12, 27);
+            this.listViewAccounts.Location = new System.Drawing.Point(12, 52);
             this.listViewAccounts.Name = "listViewAccounts";
             this.listViewAccounts.Size = new System.Drawing.Size(780, 227);
             this.listViewAccounts.TabIndex = 8;
@@ -221,7 +224,7 @@
             // 
             // last_login
             // 
-            this.last_login.Text = "Letztes Login";
+            this.last_login.Text = "Letzter Login";
             this.last_login.Width = 83;
             // 
             // expansion
@@ -229,10 +232,32 @@
             this.expansion.Text = "Erweiterung";
             this.expansion.Width = 78;
             // 
+            // toolStrip
+            // 
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripBtnDisconnect});
+            this.toolStrip.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(804, 25);
+            this.toolStrip.TabIndex = 10;
+            this.toolStrip.Text = "toolStrip";
+            // 
+            // toolStripBtnDisconnect
+            // 
+            this.toolStripBtnDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripBtnDisconnect.Image = global::TrinityCoreAdmin.Properties.Resources.network_offline_2;
+            this.toolStripBtnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnDisconnect.Name = "toolStripBtnDisconnect";
+            this.toolStripBtnDisconnect.Size = new System.Drawing.Size(23, 22);
+            this.toolStripBtnDisconnect.Text = "Trennen";
+            this.toolStripBtnDisconnect.Click += new System.EventHandler(this.toolStripBtnDisconnect_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.ClientSize = new System.Drawing.Size(804, 321);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip);
@@ -246,6 +271,8 @@
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,18 +281,18 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
-        private System.Windows.Forms.ToolStripMenuItem beendenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dateiToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem realmmanagerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bearbeitenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem einstellungenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator MenuStripSeparator;
+        private System.Windows.Forms.ToolStripMenuItem beendenMenuStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dateiMenuStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem realmmanagerMenuStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bearbeitenMenuStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem einstellungenMenuStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trennenMenuStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
         public System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
         public System.Windows.Forms.ToolStripStatusLabel statusStripSSH;
         public System.Windows.Forms.ToolStripStatusLabel statusStripChar;
         public System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
-        private System.Windows.Forms.ToolStripMenuItem toolStripCloseConnections;
         private System.Windows.Forms.ListView listViewAccounts;
         private System.Windows.Forms.ColumnHeader id;
         private System.Windows.Forms.ColumnHeader username;
@@ -276,6 +303,8 @@
         private System.Windows.Forms.ColumnHeader failed_logins;
         private System.Windows.Forms.ColumnHeader last_login;
         private System.Windows.Forms.ColumnHeader expansion;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripBtnDisconnect;
     }
 }
 

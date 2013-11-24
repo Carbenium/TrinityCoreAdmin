@@ -119,5 +119,12 @@ namespace TrinityCoreAdmin.Forms
             SshConnection.CloseConnections();
             Account.accounts.Clear();
         }
+
+        private void toolStripBtnDisconnect_Click(object sender, EventArgs e)
+        {
+            MySQLConnection.CloseConnections();
+            SshConnection.CloseConnections();
+            Account.accounts.Clear();
+        }
     }
 }

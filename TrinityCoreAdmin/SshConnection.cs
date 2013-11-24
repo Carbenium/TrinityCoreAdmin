@@ -102,7 +102,6 @@ namespace TrinityCoreAdmin
             {
                 Logger.LOG_SSH.Error(e.Message);
             }
-            Logger.LOG_SSH.Debug(conn.ForwardedPorts.ToString());
         }
 
         /// <summary>
@@ -112,7 +111,7 @@ namespace TrinityCoreAdmin
         {
             for (int i = m_conn.Count - 1; i >= 0; i--)
             {
-                m_conn[i].Close();
+                m_conn[i].Dispose(true);
             }
         }
 
