@@ -25,7 +25,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void LoadRealmsToTree()
         {
-            FileInfo f = new FileInfo(Properties.Settings.Default.ServerSettingsSavePath);
+            FileInfo f = new FileInfo(Properties.Settings.Default.ServerSettingsSavePath + Path.DirectorySeparatorChar + Properties.Settings.Default.ServerSettingsFile);
             if (!f.Exists)
             {
                 ServerManager.Save(true);

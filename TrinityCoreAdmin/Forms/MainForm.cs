@@ -17,6 +17,9 @@ namespace TrinityCoreAdmin.Forms
             // to the ListView control.
             lvwColumnSorter = new ListViewColumnSorter();
             this.listViewAccounts.ListViewItemSorter = lvwColumnSorter;
+
+            if (Properties.Settings.Default.firstStart)
+                new FirstStartForm().ShowDialog();
         }
 
         private void beendenToolStripMenuItem_Click(object sender, EventArgs e)

@@ -46,5 +46,17 @@ namespace TrinityCoreAdmin.Properties {
                 this["firstStart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("servers.xml")]
+        public string ServerSettingsFile {
+            get {
+                return ((string)(this["ServerSettingsFile"]));
+            }
+            set {
+                this["ServerSettingsFile"] = value;
+            }
+        }
     }
 }

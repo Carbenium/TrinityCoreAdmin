@@ -13,7 +13,7 @@
             //
             // this.SettingChanging += this.SettingChangingEventHandler;
             //
-            // this.SettingsSaving += this.SettingsSavingEventHandler;
+             this.SettingsSaving += this.SettingsSavingEventHandler;
             //
         }
         
@@ -23,6 +23,7 @@
         
         private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
             // Fügen Sie hier Code zum Behandeln des SettingsSaving-Ereignisses hinzu.
+            ServerManager.LoadRealms();
         }
     }
 }

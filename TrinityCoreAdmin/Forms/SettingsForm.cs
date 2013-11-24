@@ -23,9 +23,10 @@ namespace TrinityCoreAdmin.Forms
 
         private void btnSelSettingsFolder_Click(object sender, System.EventArgs e)
         {
+            folderSettings.SelectedPath = Properties.Settings.Default.ServerSettingsSavePath;
             if (folderSettings.ShowDialog() == DialogResult.OK)
             {
-                txtSettingsFolder.Text = folderSettings.SelectedPath + "config.xml";
+                txtSettingsFolder.Text = folderSettings.SelectedPath;
             }
         }
 

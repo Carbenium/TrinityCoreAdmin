@@ -16,7 +16,7 @@ namespace TrinityCoreAdmin
 
         public static void LoadRealms()
         {
-            FileInfo f = new FileInfo(Properties.Settings.Default.ServerSettingsSavePath);
+            FileInfo f = new FileInfo(Properties.Settings.Default.ServerSettingsSavePath + Path.DirectorySeparatorChar + Properties.Settings.Default.ServerSettingsFile);
             if (f.Exists)
             {
                 using (FileStream fs = f.OpenRead())
@@ -34,7 +34,7 @@ namespace TrinityCoreAdmin
         {
             try
             {
-                using (FileStream fs = new FileStream(Properties.Settings.Default.ServerSettingsSavePath, System.IO.FileMode.Create))
+                using (FileStream fs = new FileStream(Properties.Settings.Default.ServerSettingsSavePath + Path.DirectorySeparatorChar  + Properties.Settings.Default.ServerSettingsFile, System.IO.FileMode.Create))
                 {
                     bool success = SerializeServers(servers, fs);
 

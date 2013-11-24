@@ -67,6 +67,7 @@
             // 
             // txtSettingsFolder
             // 
+            this.txtSettingsFolder.Enabled = false;
             this.txtSettingsFolder.Location = new System.Drawing.Point(85, 19);
             this.txtSettingsFolder.Name = "txtSettingsFolder";
             this.txtSettingsFolder.Size = new System.Drawing.Size(307, 20);
@@ -74,9 +75,9 @@
             // 
             // btnSelSettingsFolder
             // 
-            this.btnSelSettingsFolder.Location = new System.Drawing.Point(398, 16);
+            this.btnSelSettingsFolder.Location = new System.Drawing.Point(398, 19);
             this.btnSelSettingsFolder.Name = "btnSelSettingsFolder";
-            this.btnSelSettingsFolder.Size = new System.Drawing.Size(32, 23);
+            this.btnSelSettingsFolder.Size = new System.Drawing.Size(32, 20);
             this.btnSelSettingsFolder.TabIndex = 2;
             this.btnSelSettingsFolder.Text = "...";
             this.btnSelSettingsFolder.UseVisualStyleBackColor = true;
@@ -112,6 +113,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(393, 204);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -130,7 +132,6 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.tabSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCore;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingsForm";

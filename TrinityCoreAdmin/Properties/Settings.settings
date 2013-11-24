@@ -8,5 +8,8 @@
     <Setting Name="firstStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="ServerSettingsFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">servers.xml</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
