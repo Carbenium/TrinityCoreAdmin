@@ -124,7 +124,6 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FirstStartForm";
-            this.ShowInTaskbar = false;
             this.Text = "Erster Start";
             this.Load += new System.EventHandler(this.FirstStartForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
