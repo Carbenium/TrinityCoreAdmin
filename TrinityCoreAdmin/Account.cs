@@ -5,36 +5,38 @@ using System.Data;
 
 namespace TrinityCoreAdmin
 {
-    internal class Account
+    public class Account
     {
-        public static List<Account> accounts = new List<Account>();
+        private static List<Account> accounts = new List<Account>();
 
-        public Account(int Id, string Username, string Reg_mail, string Email, DateTime Joindate, string Last_ip, int Failed_logins, DateTime Last_login, bool Online, Expansion Expansion)
+        public Account(int id, string username, string reg_mail, string email, DateTime joindate, string last_ip, int failed_logins, DateTime last_login, bool online, Expansion expansion, bool locked)
         {
-            id = Id;
-            username = Username;
-            reg_mail = Reg_mail;
-            email = Email;
-            joindate = Joindate;
-            last_ip = Last_ip;
-            failed_logins = Failed_logins;
-            last_login = Last_login;
-            online = Online;
-            expansion = Expansion;
+            this.id = id;
+            this.username = username;
+            this.reg_mail = reg_mail;
+            this.email = email;
+            this.joindate = joindate;
+            this.last_ip = last_ip;
+            this.failed_logins = failed_logins;
+            this.last_login = last_login;
+            this.online = online;
+            this.expansion = expansion;
+            this.locked = locked;
         }
 
-        public Account(object Id, object Username, object Reg_mail, object Email, object Joindate, object Last_ip, object Failed_logins, object Last_login, object Online, object Expansion)
+        public Account(object id, object username, object reg_mail, object email, object joindate, object last_ip, object failed_logins, object last_login, object online, object expansion, object locked)
         {
-            id = XConverter.ToInt32(Id);
-            username = Username.ToString();
-            reg_mail = Reg_mail.ToString();
-            email = Email.ToString();
-            joindate = (DateTime)Joindate;
-            last_ip = Last_ip.ToString();
-            failed_logins = XConverter.ToInt32(Failed_logins);
-            last_login = (DateTime)Last_login;
-            online = Convert.ToBoolean(Online);
-            expansion = (Expansion)Enum.ToObject(typeof(Expansion), Expansion);
+            this.id = XConverter.ToInt32(id);
+            this.username = Convert.ToString(username);
+            this.reg_mail = Convert.ToString(reg_mail);
+            this.email = Convert.ToString(email);
+            this.joindate = (DateTime)joindate;
+            this.last_ip = Convert.ToString(last_ip);
+            this.failed_logins = XConverter.ToInt32(failed_logins);
+            this.last_login = (DateTime)last_login;
+            this.online = Convert.ToBoolean(online);
+            this.expansion = (Expansion)Enum.ToObject(typeof(Expansion), expansion);
+            this.locked = Convert.ToBoolean(locked);
         }
 
         public int id { get; set; }
@@ -57,6 +59,8 @@ namespace TrinityCoreAdmin
 
         public Expansion expansion { get; set; }
 
+        public bool locked { get; set; }
+
         public static void LoadAccountsFromDB()
         {
             accounts.Clear();
@@ -67,10 +71,43 @@ namespace TrinityCoreAdmin
 
             foreach (DataRow row in dt.Rows)
             {
-                Account acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]);
+                Account acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]);
 
                 accounts.Add(acc);
             }
+        }
+
+        public static Account GetAccount(int id)
+        {
+            return accounts.Find((e) => { return (e.id == id); });
+        }
+
+        public static int GetMaxID()
+        {
+            if (accounts.Count == 0)
+            {
+                throw new InvalidOperationException("Empty accounts list.");
+            }
+            int maxId = int.MinValue;
+
+            foreach (Account acc in accounts)
+            {
+                if (acc.id > maxId)
+                {
+                    maxId = acc.id;
+                }
+            }
+            return maxId;
+        }
+
+        public static List<Account> GetAccounts()
+        {
+            return accounts;
+        }
+
+        public static void ClearAccounts()
+        {
+            accounts.Clear();
         }
     }
 }

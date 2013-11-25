@@ -61,12 +61,15 @@ namespace TrinityCoreAdmin
         /// </summary>
         public override void Close()
         {
-            conn.Disconnect();
+            conn.Dispose();
 
-            OnConnectionStateEventArgs e = new OnConnectionStateEventArgs(this, ConnectionState.Closed);
-            OnToggleConnectionState(e);
+            if (!conn.IsConnected)
+            {
+                m_conn.Remove(this);
 
-            m_conn.Remove(this);
+                OnConnectionStateEventArgs e = new OnConnectionStateEventArgs(this, ConnectionState.Closed);
+                OnToggleConnectionState(e);
+            }
         }
 
         /// <summary>
@@ -78,13 +81,13 @@ namespace TrinityCoreAdmin
             if (!conn.IsConnected)
             {
                 conn.Connect();
-
-                OnConnectionStateEventArgs e = new OnConnectionStateEventArgs(this, ConnectionState.Open);
-                OnToggleConnectionState(e);
             }
+
             if (conn.IsConnected)
             {
                 m_conn.Add(this);
+                OnConnectionStateEventArgs e = new OnConnectionStateEventArgs(this, ConnectionState.Open);
+                OnToggleConnectionState(e);
                 return true;
             }
             return false;
@@ -111,7 +114,7 @@ namespace TrinityCoreAdmin
         {
             for (int i = m_conn.Count - 1; i >= 0; i--)
             {
-                m_conn[i].Dispose(true);
+                m_conn[i].Close();
             }
         }
 

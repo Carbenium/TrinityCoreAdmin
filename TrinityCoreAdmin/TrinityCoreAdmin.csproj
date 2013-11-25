@@ -69,8 +69,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
-    <Compile Include="AuthDatabase.cs" />
+    <Compile Include="Database\AuthDatabase.cs" />
     <Compile Include="BaseConnection.cs" />
+    <Compile Include="Forms\EditAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditAccountForm.Designer.cs">
+      <DependentUpon>EditAccountForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FirstStartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,7 +90,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
-    <Compile Include="MySQLConnection.cs" />
+    <Compile Include="Database\MySQLConnection.cs" />
     <Compile Include="Enums\PublicEnums.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -109,8 +115,11 @@
     <Compile Include="Server.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SshConnection.cs" />
-    <Compile Include="WorldDatabase.cs" />
+    <Compile Include="Database\WorldDatabase.cs" />
     <Compile Include="XConverter.cs" />
+    <EmbeddedResource Include="Forms\EditAccountForm.resx">
+      <DependentUpon>EditAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FirstStartForm.resx">
       <DependentUpon>FirstStartForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -181,6 +190,10 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Resources\network-offline-2.png" />
+    <None Include="Resources\arrow-right-3.png" />
+    <None Include="Resources\arrow-left-3.png" />
+    <None Include="Resources\dialog-cancel-5.png" />
+    <None Include="Resources\dialog-accept-2.png" />
     <Content Include="TrinityCore.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

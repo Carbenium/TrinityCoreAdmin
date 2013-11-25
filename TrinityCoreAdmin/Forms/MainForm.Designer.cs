@@ -136,7 +136,7 @@
             // 
             // statusStripSSH
             // 
-            this.statusStripSSH.ForeColor = System.Drawing.Color.Red;
+            this.statusStripSSH.ForeColor = System.Drawing.Color.Gray;
             this.statusStripSSH.Name = "statusStripSSH";
             this.statusStripSSH.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.statusStripSSH.Size = new System.Drawing.Size(38, 17);
@@ -144,7 +144,7 @@
             // 
             // statusStripAuth
             // 
-            this.statusStripAuth.ForeColor = System.Drawing.Color.Red;
+            this.statusStripAuth.ForeColor = System.Drawing.Color.Gray;
             this.statusStripAuth.Name = "statusStripAuth";
             this.statusStripAuth.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.statusStripAuth.Size = new System.Drawing.Size(58, 17);
@@ -152,7 +152,7 @@
             // 
             // statusStripChar
             // 
-            this.statusStripChar.ForeColor = System.Drawing.Color.Red;
+            this.statusStripChar.ForeColor = System.Drawing.Color.Gray;
             this.statusStripChar.Name = "statusStripChar";
             this.statusStripChar.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.statusStripChar.Size = new System.Drawing.Size(57, 17);
@@ -160,7 +160,7 @@
             // 
             // statusStripWorld
             // 
-            this.statusStripWorld.ForeColor = System.Drawing.Color.Red;
+            this.statusStripWorld.ForeColor = System.Drawing.Color.Gray;
             this.statusStripWorld.Name = "statusStripWorld";
             this.statusStripWorld.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.statusStripWorld.Size = new System.Drawing.Size(64, 17);
@@ -179,6 +179,7 @@
             this.failed_logins,
             this.last_login,
             this.expansion});
+            this.listViewAccounts.FullRowSelect = true;
             this.listViewAccounts.Location = new System.Drawing.Point(12, 52);
             this.listViewAccounts.Name = "listViewAccounts";
             this.listViewAccounts.Size = new System.Drawing.Size(780, 227);
@@ -186,6 +187,7 @@
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
             this.listViewAccounts.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAccounts_ColumnClick);
+            this.listViewAccounts.DoubleClick += new System.EventHandler(this.listViewAccounts_DoubleClick);
             // 
             // id
             // 

@@ -31,7 +31,7 @@ namespace TrinityCoreAdmin
         /// </summary>
         public void DoPrepareStatments()
         {
-            PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail,joindate, last_ip, failed_logins, last_login, online, expansion FROM account");
+            PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail, joindate, last_ip, failed_logins, last_login, online, expansion, locked FROM account");
         }
 
         private void PrepareStatement(AuthDatabaseStatements index, string sql)
@@ -48,34 +48,5 @@ namespace TrinityCoreAdmin
         {
             return base.GetPreparedStatement((int)i);
         }
-
-        /// <summary>
-        /// Execute a prepared statement on the Auth database
-        /// </summary>
-        /// <param name="stmt"></param>
-        /// <returns>Returns the fetched data as DataTable</returns>
-        //public DataTable Execute(MySqlCommand stmt)
-        //{
-        //    return base.Execute(stmt);
-        //}
-
-        ///// <summary>
-        ///// Open the connection to the Auth database
-        ///// </summary>
-        ///// <returns>Returns true if connection is successfully established</returns>
-        //public override bool Open()
-        //{
-        //    return base.Open();
-        //}
-
-        ///// <summary>
-        ///// Closes the connection to the Auth database
-        ///// </summary>
-        //public override void Close()
-        //{
-        //    //OnConnectionStateSQLEventArgs e = new OnConnectionStateSQLEventArgs(this, ConnectionState.Closed);
-        //    //OnToggleConnectionState(e);
-        //    base.Close();
-        //}
     }
 }

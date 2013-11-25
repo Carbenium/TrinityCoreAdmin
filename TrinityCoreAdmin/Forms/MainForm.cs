@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Data;
 
 namespace TrinityCoreAdmin.Forms
 {
@@ -65,12 +66,36 @@ namespace TrinityCoreAdmin.Forms
             this.listViewAccounts.Sort();
         }
 
+        public void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
+        {
+            if (e.connState == ConnectionState.Open)
+            {
+                this.statusStripChar.ForeColor = Color.Green;
+            }
+            else if (e.connState == ConnectionState.Closed)
+            {
+                this.statusStripChar.ForeColor = Color.Red;
+            }
+        }
+
+        public void sshConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
+        {
+            if (e.connState == ConnectionState.Open)
+            {
+                this.statusStripSSH.ForeColor = Color.Green;
+            }
+            else if (e.connState == ConnectionState.Closed)
+            {
+                this.statusStripSSH.ForeColor = Color.Red;
+            }
+        }
+
         private void LoadAccounts()
         {
             listViewAccounts.Items.Clear();
             listViewAccounts.Update();
 
-            foreach (Account acc in Account.accounts)
+            foreach (Account acc in Account.GetAccounts())
             {
                 ListViewItem item = new ListViewItem(acc.id.ToString());
                 item.UseItemStyleForSubItems = false;
@@ -88,6 +113,8 @@ namespace TrinityCoreAdmin.Forms
                 item.SubItems.Add(acc.failed_logins.ToString());
                 item.SubItems.Add(acc.last_login.ToString());
                 item.SubItems.Add(acc.expansion.ToString());
+
+                item.Tag = acc;
 
                 listViewAccounts.Items.Add(item);
             }
@@ -117,14 +144,19 @@ namespace TrinityCoreAdmin.Forms
         {
             MySQLConnection.CloseConnections();
             SshConnection.CloseConnections();
-            Account.accounts.Clear();
+            Account.ClearAccounts();
         }
 
         private void toolStripBtnDisconnect_Click(object sender, EventArgs e)
         {
             MySQLConnection.CloseConnections();
             SshConnection.CloseConnections();
-            Account.accounts.Clear();
+            Account.ClearAccounts();
+        }
+
+        private void listViewAccounts_DoubleClick(object sender, EventArgs e)
+        {
+            new EditAccountForm((Account)listViewAccounts.SelectedItems[0].Tag).Show();
         }
     }
 }

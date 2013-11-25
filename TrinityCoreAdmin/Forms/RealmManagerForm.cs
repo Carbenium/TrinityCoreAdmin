@@ -49,29 +49,7 @@ namespace TrinityCoreAdmin.Forms
             treeServers.ExpandAll();
         }
 
-        private void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
-        {
-            if (e.connState == ConnectionState.Open)
-            {
-                mainForm.statusStripChar.ForeColor = Color.Green;
-            }
-            else if (e.connState == ConnectionState.Closed)
-            {
-                mainForm.statusStripChar.ForeColor = Color.Red;
-            }
-        }
-
-        private void sshConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
-        {
-            if (e.connState == ConnectionState.Open)
-            {
-                mainForm.statusStripSSH.ForeColor = Color.Green;
-            }
-            else if (e.connState == ConnectionState.Closed)
-            {
-                mainForm.statusStripSSH.ForeColor = Color.Red;
-            }
-        }
+        
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -342,7 +320,7 @@ namespace TrinityCoreAdmin.Forms
                     {
                         SshConnection.CloseConnections();
                         selectedServer.sshConn = new SshConnection(selectedServer.sshHost, selectedServer.sshPort, selectedServer.sshUser, selectedServer.sshPassword);
-                        ServerManager.currServer.sshConn.OnToggleConnectionStateHandler += sshConn_OnToggleConnectionStateHandler;
+                        ServerManager.currServer.sshConn.OnToggleConnectionStateHandler += mainForm.sshConn_OnToggleConnectionStateHandler;
 
                         selectedServer.sshConn.Open();
                         selectedServer.sshConn.AddForwardedPort(selectedServer.sshForwardedPort, selectedServer.sqlHost, selectedServer.sqlPort);
@@ -358,13 +336,16 @@ namespace TrinityCoreAdmin.Forms
                         MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
                         authString.Server = selectedServer.sqlHost;
 
-                        if (selectedServer.sshConn.isConnected)
+                        if (selectedServer.sshConn != null)
                         {
-                            authString.Port = selectedServer.sshForwardedPort;
-                        }
-                        else
-                        {
-                            authString.Port = selectedServer.sqlPort;
+                            if (selectedServer.sshConn.isConnected)
+                            {
+                                authString.Port = selectedServer.sshForwardedPort;
+                            }
+                            else
+                            {
+                                authString.Port = selectedServer.sqlPort;
+                            }
                         }
 
                         authString.UserID = selectedServer.sqlUser;
@@ -373,7 +354,7 @@ namespace TrinityCoreAdmin.Forms
 
                         selectedServer.authDBConn = new AuthDatabase(authString);
 
-                        RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += authDBConn_OnToggleConnectionStateHandler;
+                        RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += mainForm.authDBConn_OnToggleConnectionStateHandler;
 
                         connSuccess = selectedServer.authDBConn.Open();
 
