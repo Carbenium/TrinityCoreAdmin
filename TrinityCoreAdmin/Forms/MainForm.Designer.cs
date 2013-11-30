@@ -291,10 +291,6 @@
         private System.Windows.Forms.ToolStripMenuItem einstellungenMenuStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trennenMenuStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
-        public System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
-        public System.Windows.Forms.ToolStripStatusLabel statusStripSSH;
-        public System.Windows.Forms.ToolStripStatusLabel statusStripChar;
-        public System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
         private System.Windows.Forms.ListView listViewAccounts;
         private System.Windows.Forms.ColumnHeader id;
         private System.Windows.Forms.ColumnHeader username;
@@ -307,6 +303,10 @@
         private System.Windows.Forms.ColumnHeader expansion;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripBtnDisconnect;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripSSH;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripChar;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
     }
 }
 

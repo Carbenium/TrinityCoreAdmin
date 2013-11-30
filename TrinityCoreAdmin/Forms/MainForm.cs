@@ -158,5 +158,13 @@ namespace TrinityCoreAdmin.Forms
         {
             new EditAccountForm((Account)listViewAccounts.SelectedItems[0].Tag).Show();
         }
+
+        public void ResetStatusStripColors()
+        {
+            statusStripAuth.ForeColor = Color.Gray;
+            statusStripChar.ForeColor = Color.Gray;
+            statusStripWorld.ForeColor = Color.Gray;
+            statusStripSSH.ForeColor = Color.Gray;
+        }
     }
 }

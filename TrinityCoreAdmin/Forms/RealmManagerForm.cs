@@ -49,8 +49,6 @@ namespace TrinityCoreAdmin.Forms
             treeServers.ExpandAll();
         }
 
-        
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -366,6 +364,7 @@ namespace TrinityCoreAdmin.Forms
             {
                 Account.LoadAccountsFromDB();
                 ServerManager.Save();
+                mainForm.ResetStatusStripColors();
                 this.Close();
             }
         }
