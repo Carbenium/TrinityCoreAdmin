@@ -142,7 +142,7 @@ namespace TrinityCoreAdmin.Forms
             for (int i = 0; i < 1; i++)
             {
                 int index = indexes[i];
-                new EditAccountForm((Account)this.listViewAccounts.Items[index].Tag).Show();
+                new EditAccountForm((Account)this.listViewAccounts.Items[index].Tag).ShowDialog();
             }
         }
 
