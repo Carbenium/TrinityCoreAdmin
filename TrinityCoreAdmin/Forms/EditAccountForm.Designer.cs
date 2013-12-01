@@ -176,7 +176,7 @@
             this.toolStripBtnPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnPrevious.Name = "toolStripBtnPrevious";
             this.toolStripBtnPrevious.Size = new System.Drawing.Size(23, 22);
-            this.toolStripBtnPrevious.Text = "toolStripButton1";
+            this.toolStripBtnPrevious.Text = "Vorheriger Account";
             this.toolStripBtnPrevious.Click += new System.EventHandler(this.toolStripBtnPrevious_Click);
             // 
             // toolStripBtnNext
@@ -186,7 +186,7 @@
             this.toolStripBtnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnNext.Name = "toolStripBtnNext";
             this.toolStripBtnNext.Size = new System.Drawing.Size(23, 22);
-            this.toolStripBtnNext.Text = "toolStripButton2";
+            this.toolStripBtnNext.Text = "Nächster Account";
             this.toolStripBtnNext.Click += new System.EventHandler(this.toolStripBtnNext_Click);
             // 
             // toolStripSeparator1
@@ -201,7 +201,7 @@
             this.toolStripBtnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnCancel.Name = "toolStripBtnCancel";
             this.toolStripBtnCancel.Size = new System.Drawing.Size(23, 22);
-            this.toolStripBtnCancel.Text = "toolStripButton3";
+            this.toolStripBtnCancel.Text = "Abbrechen";
             this.toolStripBtnCancel.Click += new System.EventHandler(this.toolStripBtnCancel_Click);
             // 
             // toolStripBtnOK
@@ -211,7 +211,7 @@
             this.toolStripBtnOK.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnOK.Name = "toolStripBtnOK";
             this.toolStripBtnOK.Size = new System.Drawing.Size(23, 22);
-            this.toolStripBtnOK.Text = "toolStripButton4";
+            this.toolStripBtnOK.Text = "Speichern";
             // 
             // txtRegMail
             // 
