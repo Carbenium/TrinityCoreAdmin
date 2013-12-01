@@ -42,6 +42,7 @@
             this.statusStripChar = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripWorld = new System.Windows.Forms.ToolStripStatusLabel();
             this.listViewAccounts = new System.Windows.Forms.ListView();
+            this.online = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.username = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.reg_mail = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -53,7 +54,6 @@
             this.expansion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
-            this.online = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -194,6 +194,11 @@
             this.listViewAccounts.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.listViewAccounts_RetrieveVirtualItem);
             this.listViewAccounts.DoubleClick += new System.EventHandler(this.listViewAccounts_DoubleClick);
             // 
+            // online
+            // 
+            this.online.Text = "";
+            this.online.Width = 10;
+            // 
             // id
             // 
             this.id.Text = "ID";
@@ -260,11 +265,6 @@
             this.toolStripBtnDisconnect.Text = "Trennen";
             this.toolStripBtnDisconnect.Click += new System.EventHandler(this.toolStripBtnDisconnect_Click);
             // 
-            // online
-            // 
-            this.online.Text = "";
-            this.online.Width = 10;
-            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -276,7 +276,7 @@
             this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCore;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
-            this.Text = "TrinityAdmin";
+            this.Text = "TrinityCoreAdmin";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip.ResumeLayout(false);
