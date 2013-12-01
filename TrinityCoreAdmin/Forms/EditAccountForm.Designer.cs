@@ -312,11 +312,13 @@
             this.Controls.Add(this.lblRegMail);
             this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.lblId);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "EditAccountForm";
             this.ShowIcon = false;
             this.Text = "Account bearbeiten";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditAccountForm_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
