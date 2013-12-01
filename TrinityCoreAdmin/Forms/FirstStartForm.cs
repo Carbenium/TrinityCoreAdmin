@@ -5,6 +5,7 @@ namespace TrinityCoreAdmin.Forms
 {
     public partial class FirstStartForm : Form
     {
+        private bool okClicked = false;
         public FirstStartForm()
         {
             InitializeComponent();
@@ -26,15 +27,26 @@ namespace TrinityCoreAdmin.Forms
             Properties.Settings.Default.ServerSettingsSavePath = txtSettingsFolder.Text;
             Properties.Settings.Default.firstStart = false;
             Properties.Settings.Default.Save();
+            okClicked = true;
             this.Close();
         }
 
         private void btnSelSettingsFolder_Click(object sender, EventArgs e)
         {
             if (folderSettings.ShowDialog() == DialogResult.OK)
-            {
                 txtSettingsFolder.Text = folderSettings.SelectedPath + "config.xml";
-            }
+        }
+
+        private void FirstStartForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                this.Close();
+        }
+
+        private void FirstStartForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing && !okClicked)
+                Application.Exit();
         }
     }
 }

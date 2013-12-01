@@ -121,11 +121,14 @@
             this.Controls.Add(this.lblWelcome);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FirstStartForm";
             this.Text = "Erster Start";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FirstStartForm_FormClosed);
             this.Load += new System.EventHandler(this.FirstStartForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FirstStartForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
