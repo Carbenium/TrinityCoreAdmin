@@ -40,30 +40,52 @@ namespace TrinityCoreAdmin.Forms
             ServerManager.LoadRealms();
         }
 
+        private Dictionary<int, SortOrder> SortOrderMap = new Dictionary<int, SortOrder>
+        {
+            {0, SortOrder.None},
+            {1, SortOrder.None},
+            {2, SortOrder.None},
+            {3, SortOrder.None},
+            {4, SortOrder.None},
+            {5, SortOrder.None},
+            {6, SortOrder.None},
+            {7, SortOrder.None},
+            {8, SortOrder.None},
+            {9, SortOrder.None}
+        };
+
+        private Dictionary<int, Comparison<Account>> SortComparers = new Dictionary<int, Comparison<Account>>
+
+        {
+            {0, (a,b) => a.online.CompareTo(b.online)},
+            {1, (a,b) => a.id.CompareTo(b.id)},
+            {2, (a,b) => a.username.CompareTo(b.username)},
+            {3, (a,b) => a.reg_mail.CompareTo(b.reg_mail)},
+            {4, (a,b) => a.email.CompareTo(b.email)},
+            {5, (a,b) => a.joindate.CompareTo(b.joindate)},
+            {6, (a,b) => a.last_ip.CompareTo(b.last_ip)},
+            {7, (a,b) => a.failed_logins.CompareTo(b.failed_logins)},
+            {8, (a,b) => a.last_login.CompareTo(b.last_login)},
+            {9, (a,b) => a.expansion.CompareTo(b.expansion)}
+        };
+
+        // State transitions from one sort order to another
+
+        Dictionary<SortOrder, SortOrder> SortToggle = new Dictionary<SortOrder, SortOrder>
+        {
+            {SortOrder.None, SortOrder.Ascending },
+            {SortOrder.Ascending, SortOrder.Descending},
+            {SortOrder.Descending, SortOrder.Ascending}
+
+        };
         private void listViewAccounts_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            // Determine if clicked column is already the column that is being sorted.
-            if (e.Column == lvwColumnSorter.SortColumn)
-            {
-                // Reverse the current sort direction for this column.
-                if (lvwColumnSorter.Order == SortOrder.Ascending)
-                {
-                    lvwColumnSorter.Order = SortOrder.Descending;
-                }
-                else
-                {
-                    lvwColumnSorter.Order = SortOrder.Ascending;
-                }
-            }
-            else
-            {
-                // Set the column number that is to be sorted; default to ascending.
-                lvwColumnSorter.SortColumn = e.Column;
-                lvwColumnSorter.Order = SortOrder.Ascending;
-            }
+            var newSortOrder = SortToggle[SortOrderMap[e.Column]];
+            SortOrderMap[e.Column] = newSortOrder;     // Store sort order for current column
 
-            // Perform the sort with these new sort options.
-            this.listViewAccounts.Sort();
+            //// Perform the sort with these new sort options.
+            Account.SortBy(newSortOrder, SortComparers[e.Column]);
+            this.listViewAccounts.Refresh();
         }
 
         public void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
@@ -90,36 +112,6 @@ namespace TrinityCoreAdmin.Forms
             }
         }
 
-        private void LoadAccounts()
-        {
-            listViewAccounts.Items.Clear();
-            listViewAccounts.Update();
-
-            foreach (Account acc in Account.GetAccounts())
-            {
-                ListViewItem item = new ListViewItem(acc.id.ToString());
-                item.UseItemStyleForSubItems = false;
-
-                if (acc.online)
-                    item.SubItems[0].BackColor = Color.Green;
-                else
-                    item.SubItems[0].BackColor = Color.Red;
-
-                item.SubItems.Add(acc.username);
-                item.SubItems.Add(acc.reg_mail);
-                item.SubItems.Add(acc.email);
-                item.SubItems.Add(acc.joindate.ToShortDateString());
-                item.SubItems.Add(acc.last_ip);
-                item.SubItems.Add(acc.failed_logins.ToString());
-                item.SubItems.Add(acc.last_login.ToString());
-                item.SubItems.Add(acc.expansion.ToString());
-
-                item.Tag = acc;
-
-                listViewAccounts.Items.Add(item);
-            }
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             MySQLConnection.CloseConnections();
@@ -133,11 +125,7 @@ namespace TrinityCoreAdmin.Forms
             frmRealmManager.ShowDialog();
 
             if (frmRealmManager.connSuccess)
-                LoadAccounts();
-        }
-
-        private void verbindenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+                listViewAccounts.VirtualListSize = Account.GetAccounts().Count;
         }
 
         private void toolStripCloseConnections_Click(object sender, EventArgs e)
@@ -156,7 +144,13 @@ namespace TrinityCoreAdmin.Forms
 
         private void listViewAccounts_DoubleClick(object sender, EventArgs e)
         {
-            new EditAccountForm((Account)listViewAccounts.SelectedItems[0].Tag).Show();
+            ListView.SelectedIndexCollection indexes = this.listViewAccounts.SelectedIndices;
+
+            for (int i = 0; i < 1; i++)
+            {
+                int index = indexes[i];
+                new EditAccountForm((Account)this.listViewAccounts.Items[index].Tag).Show();
+            }
         }
 
         public void ResetStatusStripColors()
@@ -165,6 +159,42 @@ namespace TrinityCoreAdmin.Forms
             statusStripChar.ForeColor = Color.Gray;
             statusStripWorld.ForeColor = Color.Gray;
             statusStripSSH.ForeColor = Color.Gray;
+        }
+
+        private void listViewAccounts_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+        {
+            var acc = Account.GetAccounts()[e.ItemIndex];
+
+                ListViewItem item = new ListViewItem();
+                item.UseItemStyleForSubItems = false;
+
+                if (acc.online)
+                    item.SubItems[0].BackColor = Color.Green;
+                else
+                    item.SubItems[0].BackColor = Color.Red;
+
+                item.SubItems.Add(acc.id.ToString());
+                item.SubItems.Add(acc.username);
+                item.SubItems.Add(acc.reg_mail);
+                item.SubItems.Add(acc.email);
+                item.SubItems.Add(acc.joindate.ToShortDateString());
+                item.SubItems.Add(acc.last_ip);
+                item.SubItems.Add(acc.failed_logins.ToString());
+                item.SubItems.Add(acc.last_login.ToString());
+                item.SubItems.Add(acc.expansion.ToString());
+
+                item.Tag = acc;
+
+                e.Item = item;
+        }
+
+        private void listViewAccounts_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                e.Cancel = true;
+                e.NewWidth = this.listViewAccounts.Columns[e.ColumnIndex].Width;
+            }
         }
     }
 }

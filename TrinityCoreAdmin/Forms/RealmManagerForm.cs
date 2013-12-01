@@ -303,6 +303,7 @@ namespace TrinityCoreAdmin.Forms
         }
         private void Connect()
         {
+            mainForm.ResetStatusStripColors();
             TreeNode selectedNode = treeServers.SelectedNode;
 
             if (selectedNode.Tag.GetType() == typeof(Realm))
@@ -364,7 +365,6 @@ namespace TrinityCoreAdmin.Forms
             {
                 Account.LoadAccountsFromDB();
                 ServerManager.Save();
-                mainForm.ResetStatusStripColors();
                 this.Close();
             }
         }

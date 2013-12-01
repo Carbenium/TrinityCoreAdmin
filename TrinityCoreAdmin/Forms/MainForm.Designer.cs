@@ -53,6 +53,7 @@
             this.expansion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.online = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -170,6 +171,7 @@
             // 
             this.listViewAccounts.AutoArrange = false;
             this.listViewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.online,
             this.id,
             this.username,
             this.reg_mail,
@@ -186,7 +188,10 @@
             this.listViewAccounts.TabIndex = 8;
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
+            this.listViewAccounts.VirtualMode = true;
             this.listViewAccounts.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAccounts_ColumnClick);
+            this.listViewAccounts.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewAccounts_ColumnWidthChanging);
+            this.listViewAccounts.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.listViewAccounts_RetrieveVirtualItem);
             this.listViewAccounts.DoubleClick += new System.EventHandler(this.listViewAccounts_DoubleClick);
             // 
             // id
@@ -232,7 +237,7 @@
             // expansion
             // 
             this.expansion.Text = "Erweiterung";
-            this.expansion.Width = 78;
+            this.expansion.Width = 70;
             // 
             // toolStrip
             // 
@@ -254,6 +259,11 @@
             this.toolStripBtnDisconnect.Size = new System.Drawing.Size(23, 22);
             this.toolStripBtnDisconnect.Text = "Trennen";
             this.toolStripBtnDisconnect.Click += new System.EventHandler(this.toolStripBtnDisconnect_Click);
+            // 
+            // online
+            // 
+            this.online.Text = "";
+            this.online.Width = 10;
             // 
             // MainForm
             // 
@@ -307,6 +317,7 @@
         private System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
         private System.Windows.Forms.ToolStripStatusLabel statusStripChar;
         private System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
+        private System.Windows.Forms.ColumnHeader online;
     }
 }
 

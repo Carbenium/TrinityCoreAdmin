@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 
 namespace TrinityCoreAdmin
 {
@@ -64,15 +65,12 @@ namespace TrinityCoreAdmin
         public static void LoadAccountsFromDB()
         {
             accounts.Clear();
-
             MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
-
             DataTable dt = ServerManager.currServer.authDBConn.Execute(stmt);
 
             foreach (DataRow row in dt.Rows)
             {
                 Account acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]);
-
                 accounts.Add(acc);
             }
         }
@@ -108,6 +106,20 @@ namespace TrinityCoreAdmin
         public static void ClearAccounts()
         {
             accounts.Clear();
+        }
+
+        public static void SortBy(SortOrder order, Comparison<Account> comparer)
+        {
+            accounts.Sort((a, b) =>
+            {
+                int lret = comparer(a, b); // Do the actual comparison
+
+                if (order == SortOrder.Descending) // reverse when necessary
+                {
+                    lret *= -1;
+                }
+                return lret;
+            });
         }
     }
 }
