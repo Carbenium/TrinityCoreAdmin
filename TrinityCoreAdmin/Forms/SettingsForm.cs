@@ -29,7 +29,5 @@ namespace TrinityCoreAdmin.Forms
                 txtSettingsFolder.Text = folderSettings.SelectedPath;
             }
         }
-
-
     }
 }

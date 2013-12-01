@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 
 namespace TrinityCoreAdmin.Forms
 {
     public partial class MainForm : Form
     {
-        private ListViewColumnSorter lvwColumnSorter;
-
         public MainForm()
         {
             InitializeComponent();
-
-            // Create an instance of a ListView column sorter and assign it
-            // to the ListView control.
-            lvwColumnSorter = new ListViewColumnSorter();
-            this.listViewAccounts.ListViewItemSorter = lvwColumnSorter;
 
             if (Properties.Settings.Default.firstStart)
                 new FirstStartForm().ShowDialog();
@@ -55,7 +48,6 @@ namespace TrinityCoreAdmin.Forms
         };
 
         private Dictionary<int, Comparison<Account>> SortComparers = new Dictionary<int, Comparison<Account>>
-
         {
             {0, (a,b) => a.online.CompareTo(b.online)},
             {1, (a,b) => a.id.CompareTo(b.id)},
@@ -69,21 +61,22 @@ namespace TrinityCoreAdmin.Forms
             {9, (a,b) => a.expansion.CompareTo(b.expansion)}
         };
 
-        // State transitions from one sort order to another
-
-        Dictionary<SortOrder, SortOrder> SortToggle = new Dictionary<SortOrder, SortOrder>
+        /// <summary>
+        /// State transitions from one sort order to another
+        /// </summary>
+        private Dictionary<SortOrder, SortOrder> SortToggle = new Dictionary<SortOrder, SortOrder>
         {
             {SortOrder.None, SortOrder.Ascending },
             {SortOrder.Ascending, SortOrder.Descending},
             {SortOrder.Descending, SortOrder.Ascending}
-
         };
+
         private void listViewAccounts_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var newSortOrder = SortToggle[SortOrderMap[e.Column]];
             SortOrderMap[e.Column] = newSortOrder;     // Store sort order for current column
 
-            //// Perform the sort with these new sort options.
+            // Perform the sort with these new sort options.
             Account.SortBy(newSortOrder, SortComparers[e.Column]);
             this.listViewAccounts.Refresh();
         }
@@ -165,27 +158,27 @@ namespace TrinityCoreAdmin.Forms
         {
             var acc = Account.GetAccounts()[e.ItemIndex];
 
-                ListViewItem item = new ListViewItem();
-                item.UseItemStyleForSubItems = false;
+            ListViewItem item = new ListViewItem();
+            item.UseItemStyleForSubItems = false;
 
-                if (acc.online)
-                    item.SubItems[0].BackColor = Color.Green;
-                else
-                    item.SubItems[0].BackColor = Color.Red;
+            if (acc.online)
+                item.SubItems[0].BackColor = Color.Green;
+            else
+                item.SubItems[0].BackColor = Color.Red;
 
-                item.SubItems.Add(acc.id.ToString());
-                item.SubItems.Add(acc.username);
-                item.SubItems.Add(acc.reg_mail);
-                item.SubItems.Add(acc.email);
-                item.SubItems.Add(acc.joindate.ToShortDateString());
-                item.SubItems.Add(acc.last_ip);
-                item.SubItems.Add(acc.failed_logins.ToString());
-                item.SubItems.Add(acc.last_login.ToString());
-                item.SubItems.Add(acc.expansion.ToString());
+            item.SubItems.Add(acc.id.ToString());
+            item.SubItems.Add(acc.username);
+            item.SubItems.Add(acc.reg_mail);
+            item.SubItems.Add(acc.email);
+            item.SubItems.Add(acc.joindate.ToShortDateString());
+            item.SubItems.Add(acc.last_ip);
+            item.SubItems.Add(acc.failed_logins.ToString());
+            item.SubItems.Add(acc.last_login.ToString());
+            item.SubItems.Add(acc.expansion.ToString());
 
-                item.Tag = acc;
+            item.Tag = acc;
 
-                e.Item = item;
+            e.Item = item;
         }
 
         private void listViewAccounts_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)

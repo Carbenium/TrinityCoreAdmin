@@ -34,7 +34,7 @@ namespace TrinityCoreAdmin
         {
             try
             {
-                using (FileStream fs = new FileStream(Properties.Settings.Default.ServerSettingsSavePath + Path.DirectorySeparatorChar  + Properties.Settings.Default.ServerSettingsFile, System.IO.FileMode.Create))
+                using (FileStream fs = new FileStream(Properties.Settings.Default.ServerSettingsSavePath + Path.DirectorySeparatorChar + Properties.Settings.Default.ServerSettingsFile, System.IO.FileMode.Create))
                 {
                     bool success = SerializeServers(servers, fs);
 

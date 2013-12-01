@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace TrinityCoreAdmin.Forms
 {
     public partial class EditAccountForm : Form
     {
-        Account currAcc;
+        private Account currAcc;
+
         public EditAccountForm(Account acc)
         {
             this.currAcc = acc;
@@ -50,6 +45,7 @@ namespace TrinityCoreAdmin.Forms
             SetData(nextAcc);
             currAcc = nextAcc;
         }
+
         private void toolStripBtnPrevious_Click(object sender, EventArgs e)
         {
             int id = currAcc.id;

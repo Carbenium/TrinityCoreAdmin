@@ -1,7 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -153,6 +151,7 @@ namespace TrinityCoreAdmin.Forms
             }
             treeServers.SelectedNode.Remove();
         }
+
         private void SetEnabledControls(Panel p, bool enabled)
         {
             if (treeServers.SelectedNode.Tag.GetType() == typeof(Realm))
@@ -223,6 +222,7 @@ namespace TrinityCoreAdmin.Forms
                 chkUseSSH.Checked = s.useSSHTunnel;
             }
         }
+
         private void treeServers_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             TreeNode selectedNode = e.Node;
@@ -301,6 +301,7 @@ namespace TrinityCoreAdmin.Forms
 
             ServerManager.Status = RealmsStatus.SAVED;
         }
+
         private void Connect()
         {
             mainForm.ResetStatusStripColors();
