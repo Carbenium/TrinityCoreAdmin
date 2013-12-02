@@ -54,6 +54,8 @@
             this.expansion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.txtSearch = new System.Windows.Forms.ToolStripTextBox();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -182,7 +184,7 @@
             this.last_login,
             this.expansion});
             this.listViewAccounts.FullRowSelect = true;
-            this.listViewAccounts.Location = new System.Drawing.Point(12, 52);
+            this.listViewAccounts.Location = new System.Drawing.Point(12, 56);
             this.listViewAccounts.Name = "listViewAccounts";
             this.listViewAccounts.Size = new System.Drawing.Size(780, 227);
             this.listViewAccounts.TabIndex = 8;
@@ -246,12 +248,16 @@
             // 
             // toolStrip
             // 
+            this.toolStrip.AutoSize = false;
+            this.toolStrip.BackColor = System.Drawing.SystemColors.Control;
             this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripBtnDisconnect});
+            this.toolStripBtnDisconnect,
+            this.toolStripSeparator1,
+            this.txtSearch});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(804, 25);
+            this.toolStrip.Size = new System.Drawing.Size(804, 29);
             this.toolStrip.TabIndex = 10;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -260,10 +266,28 @@
             this.toolStripBtnDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripBtnDisconnect.Image = global::TrinityCoreAdmin.Properties.Resources.network_offline_2;
             this.toolStripBtnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnDisconnect.Margin = new System.Windows.Forms.Padding(12, 3, 0, 2);
             this.toolStripBtnDisconnect.Name = "toolStripBtnDisconnect";
-            this.toolStripBtnDisconnect.Size = new System.Drawing.Size(23, 22);
+            this.toolStripBtnDisconnect.Size = new System.Drawing.Size(23, 24);
             this.toolStripBtnDisconnect.Text = "Trennen";
             this.toolStripBtnDisconnect.Click += new System.EventHandler(this.toolStripBtnDisconnect_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(1, 3, 12, 0);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(150, 26);
+            this.txtSearch.Text = "Suche...";
+            this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
+            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // MainForm
             // 
@@ -318,6 +342,8 @@
         private System.Windows.Forms.ToolStripStatusLabel statusStripChar;
         private System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
         private System.Windows.Forms.ColumnHeader online;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripTextBox txtSearch;
     }
 }
 

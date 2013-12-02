@@ -73,6 +73,12 @@ namespace TrinityCoreAdmin
                 Account acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]);
                 accounts.Add(acc);
             }
+
+            // Debug purpose only
+            /*for (int i = 2; i < 10000; i++)
+            {
+                accounts.Add(new Account(i, "user" + i.ToString(),"","",DateTime.Today,"123.456.789.000",0, DateTime.Today,true,Expansion.CLASSIC,false));
+            }*/
         }
 
         public static Account GetAccount(int id)

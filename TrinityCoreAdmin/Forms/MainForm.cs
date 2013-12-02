@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace TrinityCoreAdmin.Forms
 {
     public partial class MainForm : Form
     {
+        private List<Account> filteredAccounts = new List<Account>();
+
         public MainForm()
         {
             InitializeComponent();
@@ -118,7 +121,10 @@ namespace TrinityCoreAdmin.Forms
             frmRealmManager.ShowDialog();
 
             if (frmRealmManager.connSuccess)
-                listViewAccounts.VirtualListSize = Account.GetAccounts().Count;
+            {
+                filteredAccounts = new List<Account>(Account.GetAccounts());
+                listViewAccounts.VirtualListSize = filteredAccounts.Count;
+            }
         }
 
         private void toolStripCloseConnections_Click(object sender, EventArgs e)
@@ -156,7 +162,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void listViewAccounts_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
-            var acc = Account.GetAccounts()[e.ItemIndex];
+            var acc = filteredAccounts[e.ItemIndex];
 
             ListViewItem item = new ListViewItem();
             item.UseItemStyleForSubItems = false;
@@ -187,6 +193,49 @@ namespace TrinityCoreAdmin.Forms
             {
                 e.Cancel = true;
                 e.NewWidth = this.listViewAccounts.Columns[e.ColumnIndex].Width;
+            }
+        }
+
+        private void listViewAccounts_SearchForVirtualItem(object sender, SearchForVirtualItemEventArgs e)
+        {
+        }
+
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            if (txtSearch.Text == "Suche...")
+                txtSearch.Text = "";
+        }
+
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            if (txtSearch.Text != "")
+                return;
+
+            txtSearch.Text = "Suche...";
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string s = txtSearch.Text;
+            List<Account> accs = Account.GetAccounts();
+
+            if (s != "Suche...")
+            {
+                filteredAccounts.Clear();
+
+                foreach (var acc in accs.Where(acc => (acc.id.ToString().IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.username.IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.reg_mail.IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.email.IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.joindate.ToString().IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.last_ip.ToString().IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.last_login.ToString().IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                                  acc.expansion.ToString().IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0)))
+                {
+                    filteredAccounts.Add(acc);
+                }
+                listViewAccounts.VirtualListSize = filteredAccounts.Count;
+                listViewAccounts.Invalidate();
             }
         }
     }
