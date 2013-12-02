@@ -498,7 +498,8 @@ namespace log4net.Appender
 				mailMessage.SubjectEncoding = m_subjectEncoding;
                 mailMessage.Priority = m_mailPriority;
 
-
+                // TODO: Consider using SendAsync to send the message without blocking. This would be a change in
+                // behaviour compared to .NET 1.x. We would need a SendCompletedCallback to log errors.
                 smtpClient.Send(mailMessage);
             }
 #else
@@ -590,8 +591,8 @@ namespace log4net.Appender
 		private string m_from;
 		private string m_subject;
 		private string m_smtpHost;
-		private Encoding m_subjectEncoding = Encoding.Default;
-		private Encoding m_bodyEncoding = Encoding.Default;
+		private Encoding m_subjectEncoding = Encoding.UTF8;
+		private Encoding m_bodyEncoding = Encoding.UTF8;
 
 		// authentication fields
 		private SmtpAuthentication m_authentication = SmtpAuthentication.None;

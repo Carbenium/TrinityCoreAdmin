@@ -1,3 +1,4 @@
+#if !NETCF
 #region Apache License
 //
 // Licensed to the Apache Software Foundation (ASF) under one or more 
@@ -29,9 +30,7 @@ namespace log4net.Core
     /// as that would require that the containing assembly is loaded.
     /// </summary>
     /// 
-#if !NETCF
     [Serializable]
-#endif
     public class StackFrameItem
     {
         #region Public Instance Constructors
@@ -58,7 +57,8 @@ namespace log4net.Core
 				MethodBase method = frame.GetMethod();
 				if (method != null)
 				{
-					m_className = method.DeclaringType.FullName;
+					if(method.DeclaringType != null)
+						m_className = method.DeclaringType.FullName;
 					m_method = new MethodItem(method);
 				}
 			}
@@ -193,3 +193,4 @@ namespace log4net.Core
         #endregion Private Static Fields
     }
 }
+#endif
