@@ -17,9 +17,17 @@ namespace TrinityCoreAdmin
             // TODO: Convert to XmlConfigurator
             BasicConfigurator.Configure();
 
+            Application.ApplicationExit += Application_ApplicationExit;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+        static void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            MySQLConnection.CloseConnections();
+            SshConnection.CloseConnections();
         }
     }
 }

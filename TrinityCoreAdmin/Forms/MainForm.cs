@@ -108,12 +108,6 @@ namespace TrinityCoreAdmin.Forms
             }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MySQLConnection.CloseConnections();
-            SshConnection.CloseConnections();
-        }
-
         private void realmmanagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RealmManagerForm frmRealmManager = new RealmManagerForm(this);
