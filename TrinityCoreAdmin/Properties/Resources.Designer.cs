@@ -103,6 +103,16 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap document_save_6 {
+            get {
+                object obj = ResourceManager.GetObject("document-save-6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap network_offline_2 {
             get {
                 object obj = ResourceManager.GetObject("network-offline-2", resourceCulture);
