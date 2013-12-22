@@ -115,6 +115,23 @@ namespace TrinityCoreAdmin
             accounts.Clear();
         }
 
+        /// <summary>
+        /// Saves an account to the database.
+        /// </summary>
+        /// <returns>True if succesful, otherwise false.</returns>
+        public bool SaveAccountToDB()
+        {
+            MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
+            stmt.Parameters.AddWithValue("@username", this.username);
+            stmt.Parameters.AddWithValue("@email",this.email);
+            stmt.Parameters.AddWithValue("@reg_mail",this.reg_mail);
+            stmt.Parameters.AddWithValue("@locked",this.locked);
+            stmt.Parameters.AddWithValue("@id",this.id);
+
+            int result = ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
+            return result == 1;
+        }
+
         public static void SortBy(SortOrder order, Comparison<Account> comparer)
         {
             accounts.Sort((a, b) =>

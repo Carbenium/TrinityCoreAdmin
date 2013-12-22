@@ -43,17 +43,16 @@
             this.toolStripBtnPrevious = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnNext = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripBtnCancel = new System.Windows.Forms.ToolStripButton();
-            this.toolStripBtnOK = new System.Windows.Forms.ToolStripButton();
+            this.toolStripBtnSave = new System.Windows.Forms.ToolStripButton();
             this.txtRegMail = new System.Windows.Forms.TextBox();
             this.txtEmail = new System.Windows.Forms.TextBox();
-            this.dateTimePickerJoinDate = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePickerLastLogin = new System.Windows.Forms.DateTimePicker();
             this.chkLocked = new System.Windows.Forms.CheckBox();
             this.lblIdData = new System.Windows.Forms.Label();
             this.lblLastIpData = new System.Windows.Forms.Label();
             this.lblFailedLoginsData = new System.Windows.Forms.Label();
             this.lblExpansionData = new System.Windows.Forms.Label();
+            this.lblLastLoginData = new System.Windows.Forms.Label();
+            this.lblJoinDateData = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -153,6 +152,7 @@
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(116, 20);
             this.txtUsername.TabIndex = 11;
+            this.txtUsername.TextChanged += new System.EventHandler(this.OnDataChanged);
             // 
             // toolStrip1
             // 
@@ -161,8 +161,7 @@
             this.toolStripBtnPrevious,
             this.toolStripBtnNext,
             this.toolStripSeparator1,
-            this.toolStripBtnCancel,
-            this.toolStripBtnOK});
+            this.toolStripBtnSave});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(428, 25);
@@ -194,24 +193,15 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripBtnCancel
+            // toolStripBtnSave
             // 
-            this.toolStripBtnCancel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripBtnCancel.Image = global::TrinityCoreAdmin.Properties.Resources.dialog_cancel_5;
-            this.toolStripBtnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripBtnCancel.Name = "toolStripBtnCancel";
-            this.toolStripBtnCancel.Size = new System.Drawing.Size(23, 22);
-            this.toolStripBtnCancel.Text = "Abbrechen";
-            this.toolStripBtnCancel.Click += new System.EventHandler(this.toolStripBtnCancel_Click);
-            // 
-            // toolStripBtnOK
-            // 
-            this.toolStripBtnOK.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripBtnOK.Image = global::TrinityCoreAdmin.Properties.Resources.dialog_accept_2;
-            this.toolStripBtnOK.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripBtnOK.Name = "toolStripBtnOK";
-            this.toolStripBtnOK.Size = new System.Drawing.Size(23, 22);
-            this.toolStripBtnOK.Text = "Speichern";
+            this.toolStripBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripBtnSave.Image = global::TrinityCoreAdmin.Properties.Resources.document_save_6;
+            this.toolStripBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnSave.Name = "toolStripBtnSave";
+            this.toolStripBtnSave.Size = new System.Drawing.Size(23, 22);
+            this.toolStripBtnSave.Text = "Speichern";
+            this.toolStripBtnSave.Click += new System.EventHandler(this.toolStripBtnSave_Click);
             // 
             // txtRegMail
             // 
@@ -219,6 +209,7 @@
             this.txtRegMail.Name = "txtRegMail";
             this.txtRegMail.Size = new System.Drawing.Size(200, 20);
             this.txtRegMail.TabIndex = 13;
+            this.txtRegMail.TextChanged += new System.EventHandler(this.txtRegMail_TextChanged);
             // 
             // txtEmail
             // 
@@ -226,20 +217,7 @@
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(200, 20);
             this.txtEmail.TabIndex = 14;
-            // 
-            // dateTimePickerJoinDate
-            // 
-            this.dateTimePickerJoinDate.Location = new System.Drawing.Point(117, 139);
-            this.dateTimePickerJoinDate.Name = "dateTimePickerJoinDate";
-            this.dateTimePickerJoinDate.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePickerJoinDate.TabIndex = 18;
-            // 
-            // dateTimePickerLastLogin
-            // 
-            this.dateTimePickerLastLogin.Location = new System.Drawing.Point(117, 165);
-            this.dateTimePickerLastLogin.Name = "dateTimePickerLastLogin";
-            this.dateTimePickerLastLogin.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePickerLastLogin.TabIndex = 19;
+            this.txtEmail.TextChanged += new System.EventHandler(this.OnDataChanged);
             // 
             // chkLocked
             // 
@@ -249,6 +227,7 @@
             this.chkLocked.Size = new System.Drawing.Size(15, 14);
             this.chkLocked.TabIndex = 20;
             this.chkLocked.UseVisualStyleBackColor = true;
+            this.chkLocked.Click += new System.EventHandler(this.OnDataChanged);
             // 
             // lblIdData
             // 
@@ -286,18 +265,36 @@
             this.lblExpansionData.TabIndex = 24;
             this.lblExpansionData.Text = "label4";
             // 
+            // lblLastLoginData
+            // 
+            this.lblLastLoginData.AutoSize = true;
+            this.lblLastLoginData.Location = new System.Drawing.Point(114, 171);
+            this.lblLastLoginData.Name = "lblLastLoginData";
+            this.lblLastLoginData.Size = new System.Drawing.Size(35, 13);
+            this.lblLastLoginData.TabIndex = 25;
+            this.lblLastLoginData.Text = "label2";
+            // 
+            // lblJoinDateData
+            // 
+            this.lblJoinDateData.AutoSize = true;
+            this.lblJoinDateData.Location = new System.Drawing.Point(114, 145);
+            this.lblJoinDateData.Name = "lblJoinDateData";
+            this.lblJoinDateData.Size = new System.Drawing.Size(35, 13);
+            this.lblJoinDateData.TabIndex = 26;
+            this.lblJoinDateData.Text = "label2";
+            // 
             // EditAccountForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(428, 307);
+            this.Controls.Add(this.lblJoinDateData);
+            this.Controls.Add(this.lblLastLoginData);
             this.Controls.Add(this.lblExpansionData);
             this.Controls.Add(this.lblFailedLoginsData);
             this.Controls.Add(this.lblLastIpData);
             this.Controls.Add(this.lblIdData);
             this.Controls.Add(this.chkLocked);
-            this.Controls.Add(this.dateTimePickerLastLogin);
-            this.Controls.Add(this.dateTimePickerJoinDate);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.txtRegMail);
             this.Controls.Add(this.toolStrip1);
@@ -318,6 +315,7 @@
             this.Name = "EditAccountForm";
             this.ShowIcon = false;
             this.Text = "Account bearbeiten";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditAccountForm_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditAccountForm_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -342,8 +340,6 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.TextBox txtRegMail;
         private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.DateTimePicker dateTimePickerJoinDate;
-        private System.Windows.Forms.DateTimePicker dateTimePickerLastLogin;
         private System.Windows.Forms.CheckBox chkLocked;
         private System.Windows.Forms.Label lblIdData;
         private System.Windows.Forms.Label lblLastIpData;
@@ -351,8 +347,9 @@
         private System.Windows.Forms.Label lblExpansionData;
         private System.Windows.Forms.ToolStripButton toolStripBtnPrevious;
         private System.Windows.Forms.ToolStripButton toolStripBtnNext;
-        private System.Windows.Forms.ToolStripButton toolStripBtnCancel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripBtnOK;
+        private System.Windows.Forms.ToolStripButton toolStripBtnSave;
+        private System.Windows.Forms.Label lblLastLoginData;
+        private System.Windows.Forms.Label lblJoinDateData;
     }
 }

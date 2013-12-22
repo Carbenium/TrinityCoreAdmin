@@ -6,6 +6,8 @@ namespace TrinityCoreAdmin.Forms
     public partial class EditAccountForm : Form
     {
         private Account currAcc;
+        private bool dataChanged;
+        private bool regEmailChanged;
 
         public EditAccountForm(Account acc)
         {
@@ -20,12 +22,15 @@ namespace TrinityCoreAdmin.Forms
             this.txtUsername.Text = acc.username;
             this.txtRegMail.Text = acc.reg_mail;
             this.txtEmail.Text = acc.email;
-            this.dateTimePickerJoinDate.Value = acc.joindate;
-            this.dateTimePickerLastLogin.Value = acc.last_login;
+            this.lblJoinDateData.Text = acc.joindate.ToString();
+            this.lblLastLoginData.Text = acc.last_login.ToString(); ;
             this.lblLastIpData.Text = acc.last_ip;
             this.lblFailedLoginsData.Text = acc.failed_logins.ToString();
             this.lblExpansionData.Text = acc.expansion.ToString();
             this.chkLocked.Checked = acc.locked;
+
+            this.dataChanged = false;
+            this.regEmailChanged = false;
         }
 
         private void toolStripBtnNext_Click(object sender, EventArgs e)
@@ -36,11 +41,6 @@ namespace TrinityCoreAdmin.Forms
         private void toolStripBtnPrevious_Click(object sender, EventArgs e)
         {
             PrevAccount();
-        }
-
-        private void toolStripBtnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void EditAccountForm_KeyDown(object sender, KeyEventArgs e)
@@ -61,6 +61,21 @@ namespace TrinityCoreAdmin.Forms
 
         private void NextAccount()
         {
+            if (dataChanged)
+            {
+                switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
+                {
+                    case DialogResult.Yes:
+                        Save();
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                    case DialogResult.No:
+                        break;
+                    default:
+                        break;
+                } 
+            }
             int id = currAcc.id;
             Account nextAcc;
 
@@ -79,6 +94,21 @@ namespace TrinityCoreAdmin.Forms
 
         private void PrevAccount()
         {
+            if (dataChanged)
+            {
+                switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
+                {
+                    case DialogResult.Yes:
+                        Save();
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                    case DialogResult.No:
+                       break;
+                    default:
+                        break;
+                } 
+            }
             int id = currAcc.id;
             Account prevAcc;
 
@@ -93,6 +123,58 @@ namespace TrinityCoreAdmin.Forms
 
             SetData(prevAcc);
             currAcc = prevAcc;
+        }
+
+        private void OnDataChanged(object sender, EventArgs e)
+        {
+            dataChanged = true;
+        }
+
+        private void Save()
+        {
+            if (dataChanged)
+            {
+                currAcc.username = txtUsername.Text;
+                currAcc.email = txtEmail.Text;
+                currAcc.locked = chkLocked.Checked;
+
+                if (regEmailChanged && (MessageBox.Show("Wollen Sie die Registrations-Email wirklich ändern?", "Registrations-Email ändern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes))
+                    currAcc.reg_mail = txtRegMail.Text;
+
+                if (currAcc.SaveAccountToDB())
+                    dataChanged = false;
+                else
+                    MessageBox.Show("Beim Speichern des Accounts ist ein Fehler aufgetreten.", "Fehler beim Speichern", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+            }
+        }
+
+        private void toolStripBtnSave_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void EditAccountForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (dataChanged)
+            {
+                switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+                {
+                    case DialogResult.Yes:
+                        Save();
+                        return;
+                    case DialogResult.No:
+                        return;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void txtRegMail_TextChanged(object sender, EventArgs e)
+        {
+            regEmailChanged = true;
+            OnDataChanged(sender, e);
         }
     }
 }

@@ -23,7 +23,8 @@ namespace TrinityCoreAdmin
         /// </summary>
         public enum AuthDatabaseStatements
         {
-            AUTH_SEL_ACCOUNTS
+            AUTH_SEL_ACCOUNTS,
+            AUTH_UPD_ACCOUNT
         }
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace TrinityCoreAdmin
         public void DoPrepareStatments()
         {
             PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail, joindate, last_ip, failed_logins, last_login, online, expansion, locked FROM account");
+            PrepareStatement(AuthDatabaseStatements.AUTH_UPD_ACCOUNT, "UPDATE account SET username=@username, email=@email, reg_mail=@reg_mail, locked=@locked WHERE id=@id");
         }
 
         private void PrepareStatement(AuthDatabaseStatements index, string sql)
