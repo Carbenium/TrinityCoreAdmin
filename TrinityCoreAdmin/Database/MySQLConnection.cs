@@ -185,33 +185,54 @@ namespace TrinityCoreAdmin
         /// <returns></returns>
         public DataTable Execute(MySqlCommand stmt)
         {
+            DataTable result = null;
             if (connState == ConnectionState.Open)
             {
                 using (MySqlDataReader reader = stmt.ExecuteReader())
                 {
                     var dt = new DataTable();
                     dt.Load(reader);
-                    return dt;
+                    result  = dt;
                 }
             }
-            return null;
+            stmt.Parameters.Clear();
+            return result;
         }
 
         public object ExecuteScalar(MySqlCommand stmt)
         {
+            object result = null;
             if (connState == ConnectionState.Open)
             {
                 try
                 {
-                    return stmt.ExecuteScalar();
+                    result = stmt.ExecuteScalar();
                 }
                 catch (MySqlException e)
                 {
                     Logger.LOG_DATABASE.Error("Could not execute prepared statement " + stmt.ToString() + " as scalar. " + e.Message);
-                    return null;
                 }
             }
-            return null;
+            stmt.Parameters.Clear();
+            return result;
+        }
+
+        public int ExecuteNonQuery(MySqlCommand stmt)
+        {
+            int result = 0;
+            if (connState == ConnectionState.Open)
+            {
+                try
+                {
+                    result = stmt.ExecuteNonQuery();
+                }
+                catch (MySqlException e)
+                {
+                    Logger.LOG_DATABASE.Error("Could not execute prepared statement " + stmt.ToString() + " as NonQuery. " + e.Message);
+                }
+            }
+            stmt.Parameters.Clear();
+            return result;
         }
 
         /// <summary>
@@ -243,6 +264,7 @@ namespace TrinityCoreAdmin
         {
             try
             {
+                isPrepared = false;
                 if (connState == ConnectionState.Open && !isPrepared)
                 {
                     MySqlCommand stmt = new MySqlCommand(sql, sqlConn);
