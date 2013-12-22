@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows.Forms;
 
@@ -104,9 +105,9 @@ namespace TrinityCoreAdmin
             return maxId;
         }
 
-        public static List<Account> GetAccounts()
+        public static ReadOnlyCollection<Account> GetAccounts()
         {
-            return accounts;
+            return accounts.AsReadOnly();
         }
 
         public static void ClearAccounts()
@@ -129,3 +130,4 @@ namespace TrinityCoreAdmin
         }
     }
 }
+

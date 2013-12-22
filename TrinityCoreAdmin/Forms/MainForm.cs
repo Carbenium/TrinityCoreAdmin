@@ -211,7 +211,7 @@ namespace TrinityCoreAdmin.Forms
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             string s = txtSearch.Text;
-            List<Account> accs = Account.GetAccounts();
+            List<Account> accs = Account.GetAccounts().ToList();
 
             if (s != "Suche...")
             {
