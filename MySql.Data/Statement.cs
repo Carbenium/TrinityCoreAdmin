@@ -139,6 +139,8 @@ namespace MySql.Data.MySqlClient
           InternalBindParameters(text, batchedCmd.Parameters, packet);
           if ((packet.Length - 4) > Connection.driver.MaxPacketSize)
           {
+            //TODO
+            //stream.InternalBuffer.SetLength(originalLength);
             parameters = batchedCmd.Parameters;
             break;
           }

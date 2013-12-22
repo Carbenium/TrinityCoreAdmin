@@ -614,7 +614,7 @@ namespace MySql.Data.MySqlClient
         warnings += packet.ReadInteger(2);
         if (packet.HasMoreData)
         {
-          packet.ReadLenString();
+          packet.ReadLenString(); //TODO: server message
         }
       }
       return fieldCount;
@@ -791,6 +791,7 @@ namespace MySql.Data.MySqlClient
 
     public int PrepareStatement(string sql, ref MySqlField[] parameters)
     {
+      //TODO: check this
       //ClearFetchedRow();
 
       packet.Length = sql.Length * 4 + 5;
@@ -809,6 +810,7 @@ namespace MySql.Data.MySqlClient
       int statementId = packet.ReadInteger(4);
       int numCols = packet.ReadInteger(2);
       int numParams = packet.ReadInteger(2);
+      //TODO: find out what this is needed for
       packet.ReadInteger(3);
       if (numParams > 0)
       {
@@ -824,6 +826,7 @@ namespace MySql.Data.MySqlClient
         while (numCols-- > 0)
         {
           packet = stream.ReadPacket();
+          //TODO: handle streaming packets
         }
 
         ReadEOF();
@@ -836,7 +839,7 @@ namespace MySql.Data.MySqlClient
     //		{
     //			if (lastCommandResult == 0) return;
 
-    //
+    //TODO
     /*			CommandResult result = (CommandResult)commandResults[lastCommandResult];
                 result.ReadRemainingColumns();
 

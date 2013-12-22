@@ -132,6 +132,7 @@ namespace MySql.Data.MySqlClient
         return;
       }
 
+      //TODO: support long data here
       // create our null bitmap
 
       // we check this because Mono doesn't ignore the case where nullMapBytes
@@ -148,6 +149,7 @@ namespace MySql.Data.MySqlClient
       //if (parameters != null && parameters.Count > 0)
       //else
       //	packet.WriteByte( 0 );
+      //TODO:  only send rebound if parms change
 
       // now write out all non-null values
       packet.Position = dataPosition;
