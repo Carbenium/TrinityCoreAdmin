@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TrinityCoreAdmin
@@ -63,11 +64,14 @@ namespace TrinityCoreAdmin
 
         public bool locked { get; set; }
 
-        public static void LoadAccountsFromDB()
+        /// <summary>
+        /// Loads the accounts from the database.
+        /// </summary>
+        public static async Task LoadAccountsFromDB()
         {
             accounts.Clear();
             MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
-            DataTable dt = ServerManager.currServer.authDBConn.Execute(stmt);
+            DataTable dt = await ServerManager.currServer.authDBConn.Execute(stmt);
 
             foreach (DataRow row in dt.Rows)
             {
@@ -82,11 +86,20 @@ namespace TrinityCoreAdmin
             }*/
         }
 
+        /// <summary>
+        /// Gets the account with the specified id.
+        /// </summary>
+        /// <param name="id">Id of the account.</param>
+        /// <returns>Returns the account with the specified id.</returns>
         public static Account GetAccount(int id)
         {
             return accounts.Find((e) => { return (e.id == id); });
         }
 
+        /// <summary>
+        /// Returns the highest account id.
+        /// </summary>
+        /// <returns></returns>
         public static int GetMaxID()
         {
             if (accounts.Count == 0)
@@ -110,6 +123,9 @@ namespace TrinityCoreAdmin
             return accounts.AsReadOnly();
         }
 
+        /// <summary>
+        /// Clears the account list.
+        /// </summary>
         public static void ClearAccounts()
         {
             accounts.Clear();
@@ -119,19 +135,28 @@ namespace TrinityCoreAdmin
         /// Saves an account to the database.
         /// </summary>
         /// <returns>True if succesful, otherwise false.</returns>
-        public bool SaveAccountToDB()
+        public async Task<bool> SaveAccountToDB()
         {
             MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
-            stmt.Parameters.AddWithValue("@username", this.username);
-            stmt.Parameters.AddWithValue("@email",this.email);
-            stmt.Parameters.AddWithValue("@reg_mail",this.reg_mail);
-            stmt.Parameters.AddWithValue("@locked",this.locked);
-            stmt.Parameters.AddWithValue("@id",this.id);
 
-            int result = ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
+            if (stmt == null)
+                return false;
+
+            stmt.Parameters.AddWithValue("@username", this.username);
+            stmt.Parameters.AddWithValue("@email", this.email);
+            stmt.Parameters.AddWithValue("@reg_mail", this.reg_mail);
+            stmt.Parameters.AddWithValue("@locked", this.locked);
+            stmt.Parameters.AddWithValue("@id", this.id);
+
+            int result = await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
             return result == 1;
         }
 
+        /// <summary>
+        /// Sorts the account list.
+        /// </summary>
+        /// <param name="order">Sort order</param>
+        /// <param name="comparer">The comparer</param>
         public static void SortBy(SortOrder order, Comparison<Account> comparer)
         {
             accounts.Sort((a, b) =>
@@ -147,4 +172,3 @@ namespace TrinityCoreAdmin
         }
     }
 }
-

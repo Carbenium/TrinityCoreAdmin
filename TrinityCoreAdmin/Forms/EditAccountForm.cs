@@ -31,6 +31,9 @@ namespace TrinityCoreAdmin.Forms
 
             this.dataChanged = false;
             this.regEmailChanged = false;
+
+            // Save button should be only enabled if a auth database connection is established.
+            this.toolStripBtnSave.Enabled = ServerManager.currServer.authConnected;
         }
 
         private void toolStripBtnNext_Click(object sender, EventArgs e)
@@ -61,7 +64,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void NextAccount()
         {
-            if (dataChanged)
+            if (dataChanged && ServerManager.currServer.authConnected)
             {
                 switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
                 {
@@ -94,7 +97,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void PrevAccount()
         {
-            if (dataChanged)
+            if (dataChanged && ServerManager.currServer.authConnected)
             {
                 switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
                 {
@@ -130,22 +133,27 @@ namespace TrinityCoreAdmin.Forms
             dataChanged = true;
         }
 
-        private void Save()
+        private async void Save()
         {
             if (dataChanged)
             {
-                currAcc.username = txtUsername.Text;
-                currAcc.email = txtEmail.Text;
-                currAcc.locked = chkLocked.Checked;
+                if (ServerManager.currServer.authConnected)
+                {
+                    currAcc.username = txtUsername.Text;
+                    currAcc.email = txtEmail.Text;
+                    currAcc.locked = chkLocked.Checked;
 
-                if (regEmailChanged && (MessageBox.Show("Wollen Sie die Registrations-Email wirklich ändern?", "Registrations-Email ändern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes))
-                    currAcc.reg_mail = txtRegMail.Text;
+                    if (regEmailChanged && (MessageBox.Show("Wollen Sie die Registrations-Email wirklich ändern?", "Registrations-Email ändern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes))
+                        currAcc.reg_mail = txtRegMail.Text;
 
-                if (currAcc.SaveAccountToDB())
-                    dataChanged = false;
+                    if (await currAcc.SaveAccountToDB())
+                        dataChanged = false;
+                    else
+                        MessageBox.Show("Beim Speichern des Accounts ist ein Fehler aufgetreten.", "Fehler beim Speichern", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
                 else
-                    MessageBox.Show("Beim Speichern des Accounts ist ein Fehler aufgetreten.", "Fehler beim Speichern", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
+                    MessageBox.Show("Es besteht keine Verbindung zur Datenbank. Account konnte nicht gespeichert werden.", "Fehler beim Speichern", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -156,7 +164,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void EditAccountForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (dataChanged)
+            if (dataChanged && ServerManager.currServer.authConnected)
             {
                 switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
                 {

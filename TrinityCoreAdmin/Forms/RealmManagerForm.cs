@@ -302,7 +302,7 @@ namespace TrinityCoreAdmin.Forms
             ServerManager.Status = RealmsStatus.SAVED;
         }
 
-        private void Connect()
+        private async void Connect()
         {
             mainForm.ResetStatusStripColors();
             TreeNode selectedNode = treeServers.SelectedNode;
@@ -364,7 +364,7 @@ namespace TrinityCoreAdmin.Forms
             }
             if (connSuccess)
             {
-                Account.LoadAccountsFromDB();
+                await Account.LoadAccountsFromDB();
                 ServerManager.Save();
                 this.Close();
             }

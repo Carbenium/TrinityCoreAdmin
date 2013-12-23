@@ -14,6 +14,12 @@ namespace TrinityCoreAdmin
 
         public SshConnection sshConn;
 
+        public bool worldConnected = false;
+
+        public bool authConnected = false;
+
+        public bool charConnected = false;
+
         [DataMember]
         public List<Realm> realms = new List<Realm>();
 

@@ -86,13 +86,21 @@ namespace TrinityCoreAdmin.Forms
 
         public void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
         {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((Action<object, OnConnectionStateEventArgs>)authDBConn_OnToggleConnectionStateHandler, sender, e);
+                return;
+            }
+
             if (e.connState == ConnectionState.Open)
             {
-                this.statusStripChar.ForeColor = Color.Green;
+                this.statusStripAuth.ForeColor = Color.Green;
+                ServerManager.currServer.authConnected = true;
             }
             else if (e.connState == ConnectionState.Closed)
             {
-                this.statusStripChar.ForeColor = Color.Red;
+                this.statusStripAuth.ForeColor = Color.Red;
+                ServerManager.currServer.authConnected = false;
             }
         }
 
@@ -105,6 +113,9 @@ namespace TrinityCoreAdmin.Forms
             else if (e.connState == ConnectionState.Closed)
             {
                 this.statusStripSSH.ForeColor = Color.Red;
+                ServerManager.currServer.authConnected = false;
+                ServerManager.currServer.charConnected = false;
+                ServerManager.currServer.worldConnected = false;
             }
         }
 

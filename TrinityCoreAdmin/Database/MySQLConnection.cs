@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TrinityCoreAdmin
@@ -141,6 +142,7 @@ namespace TrinityCoreAdmin
             m_conn.Remove(this);
             connState = ConnectionState.Closed;
             isPrepared = false;
+            this.OnToggleConnectionStateHandler = null;
 
             Logger.LOG_DATABASE.Info("Closed MySQL connection to database " + sqlConn.Database + " at " + sqlConn.DataSource);
         }
@@ -183,30 +185,30 @@ namespace TrinityCoreAdmin
         /// </summary>
         /// <param name="stmt"></param>
         /// <returns></returns>
-        public DataTable Execute(MySqlCommand stmt)
+        public async Task<DataTable> Execute(MySqlCommand stmt)
         {
             DataTable result = null;
             if (connState == ConnectionState.Open)
             {
-                using (MySqlDataReader reader = stmt.ExecuteReader())
+                using (MySqlDataReader reader = await stmt.ExecuteReaderAsync())
                 {
                     var dt = new DataTable();
                     dt.Load(reader);
-                    result  = dt;
+                    result = dt;
                 }
             }
             stmt.Parameters.Clear();
             return result;
         }
 
-        public object ExecuteScalar(MySqlCommand stmt)
+        public async Task<object> ExecuteScalar(MySqlCommand stmt)
         {
             object result = null;
             if (connState == ConnectionState.Open)
             {
                 try
                 {
-                    result = stmt.ExecuteScalar();
+                    result = await stmt.ExecuteScalarAsync();
                 }
                 catch (MySqlException e)
                 {
@@ -217,14 +219,14 @@ namespace TrinityCoreAdmin
             return result;
         }
 
-        public int ExecuteNonQuery(MySqlCommand stmt)
+        public async Task<int> ExecuteNonQuery(MySqlCommand stmt)
         {
             int result = 0;
             if (connState == ConnectionState.Open)
             {
                 try
                 {
-                    result = stmt.ExecuteNonQuery();
+                    result = await stmt.ExecuteNonQueryAsync();
                 }
                 catch (MySqlException e)
                 {
