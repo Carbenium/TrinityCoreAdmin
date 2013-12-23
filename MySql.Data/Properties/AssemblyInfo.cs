@@ -1,7 +1,3 @@
-#define NET_40_OR_GREATER
-#define NET_45_OR_GREATER
-
-
 // Copyright © 2004,2013, Oracle and/or its affiliates.  All rights reserved.
 //
 // MySQL Connector/NET is licensed under the terms of the GPLv2
