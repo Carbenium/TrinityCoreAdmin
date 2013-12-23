@@ -25,6 +25,12 @@ namespace TrinityCoreAdmin
         public SshConnection(string host, int port, string user, string password)
         {
             this.conn = new SshClient(host, port, user, password);
+            conn.ErrorOccurred += conn_ErrorOccurred;
+        }
+
+        private void conn_ErrorOccurred(object sender, Renci.SshNet.Common.ExceptionEventArgs e)
+        {
+            this.Close();
         }
 
         public void Dispose()
@@ -69,6 +75,7 @@ namespace TrinityCoreAdmin
 
                 OnConnectionStateEventArgs e = new OnConnectionStateEventArgs(this, ConnectionState.Closed);
                 OnToggleConnectionState(e);
+                this.OnToggleConnectionStateHandler = null;
             }
         }
 
