@@ -196,6 +196,10 @@
     <None Include="Resources\dialog-accept-2.png" />
     <None Include="Resources\document-save-6.png" />
     <None Include="Resources\TrinityCoreAdmin.ico" />
+    <None Include="Resources\go-next-5.png" />
+    <None Include="Resources\go-previous-5.png" />
+    <None Include="Resources\list-add-5.png" />
+    <None Include="Resources\list-remove-5.png" />
     <Content Include="TrinityCore.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
