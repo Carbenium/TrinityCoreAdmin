@@ -493,7 +493,7 @@
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnNewRealm);
             this.Controls.Add(this.treeServers);
-            this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCore;
+            this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCoreAdmin;
             this.Name = "RealmManagerForm";
             this.Text = "Realmmanager";
             this.Load += new System.EventHandler(this.Settings_Load);

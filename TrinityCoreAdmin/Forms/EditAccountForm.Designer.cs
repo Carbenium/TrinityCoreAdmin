@@ -171,7 +171,7 @@
             // toolStripBtnPrevious
             // 
             this.toolStripBtnPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripBtnPrevious.Image = global::TrinityCoreAdmin.Properties.Resources.arrow_left_3;
+            this.toolStripBtnPrevious.Image = global::TrinityCoreAdmin.Properties.Resources.arrowLeft;
             this.toolStripBtnPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnPrevious.Name = "toolStripBtnPrevious";
             this.toolStripBtnPrevious.Size = new System.Drawing.Size(23, 22);
@@ -181,7 +181,7 @@
             // toolStripBtnNext
             // 
             this.toolStripBtnNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripBtnNext.Image = global::TrinityCoreAdmin.Properties.Resources.arrow_right_3;
+            this.toolStripBtnNext.Image = global::TrinityCoreAdmin.Properties.Resources.arrowRight;
             this.toolStripBtnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnNext.Name = "toolStripBtnNext";
             this.toolStripBtnNext.Size = new System.Drawing.Size(23, 22);
@@ -196,7 +196,7 @@
             // toolStripBtnSave
             // 
             this.toolStripBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripBtnSave.Image = global::TrinityCoreAdmin.Properties.Resources.document_save_6;
+            this.toolStripBtnSave.Image = global::TrinityCoreAdmin.Properties.Resources.documentSave;
             this.toolStripBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnSave.Name = "toolStripBtnSave";
             this.toolStripBtnSave.Size = new System.Drawing.Size(23, 22);

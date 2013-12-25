@@ -63,9 +63,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap arrow_left_3 {
+        internal static System.Drawing.Bitmap arrowLeft {
             get {
-                object obj = ResourceManager.GetObject("arrow-left-3", resourceCulture);
+                object obj = ResourceManager.GetObject("arrowLeft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap arrow_right_3 {
+        internal static System.Drawing.Bitmap arrowRight {
             get {
-                object obj = ResourceManager.GetObject("arrow-right-3", resourceCulture);
+                object obj = ResourceManager.GetObject("arrowRight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dialog_accept_2 {
+        internal static System.Drawing.Bitmap dialogAccept {
             get {
-                object obj = ResourceManager.GetObject("dialog-accept-2", resourceCulture);
+                object obj = ResourceManager.GetObject("dialogAccept", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dialog_cancel_5 {
+        internal static System.Drawing.Bitmap dialogCancel {
             get {
-                object obj = ResourceManager.GetObject("dialog-cancel-5", resourceCulture);
+                object obj = ResourceManager.GetObject("dialogCancel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap document_save_6 {
+        internal static System.Drawing.Bitmap documentSave {
             get {
-                object obj = ResourceManager.GetObject("document-save-6", resourceCulture);
+                object obj = ResourceManager.GetObject("documentSave", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap network_offline_2 {
+        internal static System.Drawing.Bitmap networkOffline {
             get {
-                object obj = ResourceManager.GetObject("network-offline-2", resourceCulture);
+                object obj = ResourceManager.GetObject("networkOffline", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace TrinityCoreAdmin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
-        internal static System.Drawing.Icon TrinityCore {
+        internal static System.Drawing.Icon TrinityCoreAdmin {
             get {
-                object obj = ResourceManager.GetObject("TrinityCore", resourceCulture);
+                object obj = ResourceManager.GetObject("TrinityCoreAdmin", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

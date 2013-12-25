@@ -195,6 +195,7 @@
     <None Include="Resources\dialog-cancel-5.png" />
     <None Include="Resources\dialog-accept-2.png" />
     <None Include="Resources\document-save-6.png" />
+    <None Include="Resources\TrinityCoreAdmin.ico" />
     <Content Include="TrinityCore.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

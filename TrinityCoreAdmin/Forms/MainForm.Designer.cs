@@ -264,7 +264,7 @@
             // toolStripBtnDisconnect
             // 
             this.toolStripBtnDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripBtnDisconnect.Image = global::TrinityCoreAdmin.Properties.Resources.network_offline_2;
+            this.toolStripBtnDisconnect.Image = global::TrinityCoreAdmin.Properties.Resources.networkOffline;
             this.toolStripBtnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripBtnDisconnect.Margin = new System.Windows.Forms.Padding(12, 3, 0, 2);
             this.toolStripBtnDisconnect.Name = "toolStripBtnDisconnect";
@@ -297,7 +297,7 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip);
-            this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCore;
+            this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCoreAdmin;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "TrinityCoreAdmin";
