@@ -36,7 +36,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -190,8 +190,6 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Resources\network-offline-2.png" />
-    <None Include="Resources\arrow-right-3.png" />
-    <None Include="Resources\arrow-left-3.png" />
     <None Include="Resources\dialog-cancel-5.png" />
     <None Include="Resources\dialog-accept-2.png" />
     <None Include="Resources\document-save-6.png" />

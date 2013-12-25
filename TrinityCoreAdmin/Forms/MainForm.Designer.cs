@@ -56,6 +56,8 @@
             this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.txtSearch = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripBtnAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripBtnDelete = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -254,7 +256,9 @@
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripBtnDisconnect,
             this.toolStripSeparator1,
-            this.txtSearch});
+            this.txtSearch,
+            this.toolStripBtnAdd,
+            this.toolStripBtnDelete});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(804, 29);
@@ -288,6 +292,24 @@
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
             this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // toolStripBtnAdd
+            // 
+            this.toolStripBtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripBtnAdd.Image = global::TrinityCoreAdmin.Properties.Resources.add;
+            this.toolStripBtnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnAdd.Name = "toolStripBtnAdd";
+            this.toolStripBtnAdd.Size = new System.Drawing.Size(23, 26);
+            this.toolStripBtnAdd.Text = "Neuer Account";
+            // 
+            // toolStripBtnDelete
+            // 
+            this.toolStripBtnDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripBtnDelete.Image = global::TrinityCoreAdmin.Properties.Resources.remove;
+            this.toolStripBtnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnDelete.Name = "toolStripBtnDelete";
+            this.toolStripBtnDelete.Size = new System.Drawing.Size(23, 26);
+            this.toolStripBtnDelete.Text = "Account löschen";
             // 
             // MainForm
             // 
@@ -343,6 +365,8 @@
         private System.Windows.Forms.ColumnHeader online;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripTextBox txtSearch;
+        private System.Windows.Forms.ToolStripButton toolStripBtnAdd;
+        private System.Windows.Forms.ToolStripButton toolStripBtnDelete;
     }
 }
 
