@@ -35,7 +35,7 @@ namespace TrinityCoreAdmin
         public WorldDatabase worldDBConn
         { get; set; }
 
-        public AuthDatabase authDBConn
+        public CharDatabase charDBConn
         { get; set; }
     }
 }

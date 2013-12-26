@@ -71,6 +71,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="Database\AuthDatabase.cs" />
     <Compile Include="BaseConnection.cs" />
+    <Compile Include="Database\CharDatabase.cs" />
     <Compile Include="Forms\EditAccountForm.cs">
       <SubType>Form</SubType>
     </Compile>

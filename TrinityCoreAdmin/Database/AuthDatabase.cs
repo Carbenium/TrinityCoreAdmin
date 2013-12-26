@@ -15,7 +15,7 @@ namespace TrinityCoreAdmin
         public AuthDatabase(MySqlConnectionStringBuilder connStrBld)
             : base(connStrBld)
         {
-            RealmManager.currRealm.authDBConn = this;
+            ServerManager.currServer.authDBConn = this;
         }
 
         /// <summary>
@@ -24,7 +24,9 @@ namespace TrinityCoreAdmin
         public enum AuthDatabaseStatements
         {
             AUTH_SEL_ACCOUNTS,
-            AUTH_UPD_ACCOUNT
+            AUTH_UPD_ACCOUNT,
+            AUTH_INS_ACCOUNT,
+            AUTH_INS_REALM_CHARACTERS_INIT
         }
 
         /// <summary>
@@ -34,6 +36,8 @@ namespace TrinityCoreAdmin
         {
             PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail, joindate, last_ip, failed_logins, last_login, online, expansion, locked FROM account");
             PrepareStatement(AuthDatabaseStatements.AUTH_UPD_ACCOUNT, "UPDATE account SET username=@username, email=@email, reg_mail=@reg_mail, locked=@locked WHERE id=@id");
+            PrepareStatement(AuthDatabaseStatements.AUTH_INS_ACCOUNT, "INSERT INTO account(username, sha_pass_hash, reg_mail, email, joindate) VALUES(@username, @sha_pass_hash, @reg_mail, @email, NOW()");
+            PrepareStatement(AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT,"INSERT INTO realmcharacters (realmid, acctid, numchars) SELECT realmlist.id, account.id, 0 FROM realmlist, account LEFT JOIN realmcharacters ON acctid=account.id WHERE acctid IS NULL");
         }
 
         private void PrepareStatement(AuthDatabaseStatements index, string sql)

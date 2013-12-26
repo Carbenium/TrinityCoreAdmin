@@ -354,7 +354,7 @@ namespace TrinityCoreAdmin.Forms
 
                         selectedServer.authDBConn = new AuthDatabase(authString);
 
-                        RealmManager.currRealm.authDBConn.OnToggleConnectionStateHandler += mainForm.authDBConn_OnToggleConnectionStateHandler;
+                        ServerManager.currServer.authDBConn.OnToggleConnectionStateHandler += mainForm.authDBConn_OnToggleConnectionStateHandler;
 
                         connSuccess = selectedServer.authDBConn.Open();
 
