@@ -72,6 +72,12 @@
     <Compile Include="Database\AuthDatabase.cs" />
     <Compile Include="BaseConnection.cs" />
     <Compile Include="Database\CharDatabase.cs" />
+    <Compile Include="Forms\AddAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddAccountForm.Designer.cs">
+      <DependentUpon>AddAccountForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\EditAccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,9 @@
     <Compile Include="SshConnection.cs" />
     <Compile Include="Database\WorldDatabase.cs" />
     <Compile Include="XConverter.cs" />
+    <EmbeddedResource Include="Forms\AddAccountForm.resx">
+      <DependentUpon>AddAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\EditAccountForm.resx">
       <DependentUpon>EditAccountForm.cs</DependentUpon>
     </EmbeddedResource>

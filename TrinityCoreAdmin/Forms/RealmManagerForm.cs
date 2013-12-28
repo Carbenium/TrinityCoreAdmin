@@ -339,13 +339,9 @@ namespace TrinityCoreAdmin.Forms
                         if (selectedServer.sshConn != null)
                         {
                             if (selectedServer.sshConn.isConnected)
-                            {
                                 authString.Port = selectedServer.sshForwardedPort;
-                            }
                             else
-                            {
                                 authString.Port = selectedServer.sqlPort;
-                            }
                         }
 
                         authString.UserID = selectedServer.sqlUser;

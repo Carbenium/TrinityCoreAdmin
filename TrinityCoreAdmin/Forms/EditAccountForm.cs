@@ -146,7 +146,7 @@ namespace TrinityCoreAdmin.Forms
                     if (regEmailChanged && (MessageBox.Show("Wollen Sie die Registrations-Email wirklich ändern?", "Registrations-Email ändern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes))
                         currAcc.reg_mail = txtRegMail.Text;
 
-                    if (await currAcc.SaveAccountToDB())
+                    if (await currAcc.UpdateAccount())
                         dataChanged = false;
                     else
                         MessageBox.Show("Beim Speichern des Accounts ist ein Fehler aufgetreten.", "Fehler beim Speichern", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.Types;
 
 namespace TrinityCoreAdmin
 {
@@ -12,7 +15,7 @@ namespace TrinityCoreAdmin
     {
         private static List<Account> accounts = new List<Account>();
 
-        public Account(int id, string username, string reg_mail, string email, DateTime joindate, string last_ip, int failed_logins, DateTime last_login, bool online, Expansion expansion, bool locked)
+        private Account(int id, string username, string reg_mail, string email, DateTime joindate, string last_ip, int failed_logins, DateTime last_login, bool online, Expansion expansion, bool locked)
         {
             this.id = id;
             this.username = username;
@@ -27,16 +30,16 @@ namespace TrinityCoreAdmin
             this.locked = locked;
         }
 
-        public Account(object id, object username, object reg_mail, object email, object joindate, object last_ip, object failed_logins, object last_login, object online, object expansion, object locked)
+        private Account(object id, object username, object reg_mail, object email, object joindate, object last_ip, object failed_logins, object last_login, object online, object expansion, object locked)
         {
             this.id = XConverter.ToInt32(id);
             this.username = Convert.ToString(username);
             this.reg_mail = Convert.ToString(reg_mail);
             this.email = Convert.ToString(email);
-            this.joindate = (DateTime)joindate;
+            this.joindate = Convert.ToDateTime(joindate);
             this.last_ip = Convert.ToString(last_ip);
             this.failed_logins = XConverter.ToInt32(failed_logins);
-            this.last_login = (DateTime)last_login;
+            this.last_login = Convert.ToDateTime(last_login);
             this.online = Convert.ToBoolean(online);
             this.expansion = (Expansion)Enum.ToObject(typeof(Expansion), expansion);
             this.locked = Convert.ToBoolean(locked);
@@ -96,6 +99,11 @@ namespace TrinityCoreAdmin
             return accounts.Find((e) => { return (e.id == id); });
         }
 
+        public static Account GetAccount(string username)
+        {
+            return accounts.Find((e) => {return (e.username == username); });
+        }
+
         /// <summary>
         /// Returns the highest account id.
         /// </summary>
@@ -132,10 +140,10 @@ namespace TrinityCoreAdmin
         }
 
         /// <summary>
-        /// Saves an account to the database.
+        /// Updates the account data in the database.
         /// </summary>
         /// <returns>True if succesful, otherwise false.</returns>
-        public async Task<bool> SaveAccountToDB()
+        public async Task<bool> UpdateAccount()
         {
             MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
 
@@ -150,6 +158,68 @@ namespace TrinityCoreAdmin
 
             int result = await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
             return result == 1;
+        }
+
+        //TODO: Maybe AccountOpResult as return
+        public static async Task<bool> CreateAccount(string username, string password, string email)
+        {
+            if (username.Length > 16) // username is too long
+                return false;
+
+            username = username.ToUpper().Normalize();
+            password = password.ToUpper().Normalize();
+            email = email.Normalize();
+
+            if (GetAccount(username) != null)
+                return false;
+
+            MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_ACCOUNT);
+
+            if (stmt == null)
+                return false;
+
+            stmt.Parameters.AddWithValue("@username", username);
+            stmt.Parameters.AddWithValue("@sha_pass_hash", CalculateShaPassHash(username, password));
+            stmt.Parameters.AddWithValue("@reg_mail", email);
+            stmt.Parameters.AddWithValue("@email", email);
+
+            if (await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt) != 1)
+                return false;
+
+            stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT);
+            await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
+
+            await LoadAccountsFromDB();
+
+            return true;
+
+        }
+
+        public async Task<bool> DeleteAccount()
+        {
+            return true;
+        }
+
+        private static string CalculateShaPassHash(string username, string password)
+        {
+            var SHA1 = new SHA1CryptoServiceProvider();
+
+            byte[] arrayData;
+            byte[] arrayResult;
+            string result = null;
+            string temp = null;
+
+            arrayData = Encoding.ASCII.GetBytes(username + ":" + password);
+            arrayResult = SHA1.ComputeHash(arrayData);
+            for (int i = 0; i < arrayResult.Length; i++)
+            {
+                temp = Convert.ToString(arrayResult[i], 16);
+                if (temp.Length == 1)
+                    temp = "0" + temp;
+                result += temp;
+            }
+
+            return result.ToUpper();
         }
 
         /// <summary>

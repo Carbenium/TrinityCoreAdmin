@@ -96,11 +96,15 @@ namespace TrinityCoreAdmin.Forms
             {
                 this.statusStripAuth.ForeColor = Color.Green;
                 ServerManager.currServer.authConnected = true;
+                toolStripBtnAdd.Enabled = true;
+                toolStripBtnDelete.Enabled = true;
             }
             else if (e.connState == ConnectionState.Closed)
             {
                 this.statusStripAuth.ForeColor = Color.Red;
                 ServerManager.currServer.authConnected = false;
+                toolStripBtnAdd.Enabled = false;
+                toolStripBtnDelete.Enabled = false;
             }
         }
 
@@ -242,6 +246,13 @@ namespace TrinityCoreAdmin.Forms
                 listViewAccounts.VirtualListSize = filteredAccounts.Count;
                 listViewAccounts.Invalidate();
             }
+        }
+
+        private void toolStripBtnAdd_Click(object sender, EventArgs e)
+        {
+            new AddAccountForm().ShowDialog();
+            filteredAccounts = new List<Account>(Account.GetAccounts());
+            listViewAccounts.VirtualListSize = filteredAccounts.Count;
         }
     }
 }
