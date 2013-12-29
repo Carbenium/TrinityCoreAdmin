@@ -161,22 +161,28 @@ namespace TrinityCoreAdmin
         }
 
         //TODO: Maybe AccountOpResult as return
-        public static async Task<bool> CreateAccount(string username, string password, string email)
+        public static async Task<AccountOpResult> CreateAccount(string username, string password, string email)
         {
             if (username.Length > 16) // username is too long
-                return false;
+                return AccountOpResult.AOR_NAME_TOO_LONG;
+
+            if (password.Length > 16)
+                return AccountOpResult.AOR_PASS_TOO_LONG;
+
+            if (email.Length > 64)
+                return AccountOpResult.AOR_EMAIL_TOO_LONG;
 
             username = username.ToUpper().Normalize();
             password = password.ToUpper().Normalize();
             email = email.Normalize();
 
             if (GetAccount(username) != null)
-                return false;
+                return AccountOpResult.AOR_NAME_ALREADY_EXIST;
 
             MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_ACCOUNT);
 
             if (stmt == null)
-                return false;
+                return AccountOpResult.AOR_INTERNAL_ERROR;
 
             stmt.Parameters.AddWithValue("@username", username);
             stmt.Parameters.AddWithValue("@sha_pass_hash", CalculateShaPassHash(username, password));
@@ -184,14 +190,14 @@ namespace TrinityCoreAdmin
             stmt.Parameters.AddWithValue("@email", email);
 
             if (await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt) != 1)
-                return false;
+                return AccountOpResult.AOR_INTERNAL_ERROR;
 
             stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT);
             await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
 
             await LoadAccountsFromDB();
 
-            return true;
+            return AccountOpResult.AOR_OK;
 
         }
 
