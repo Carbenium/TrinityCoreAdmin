@@ -73,12 +73,12 @@ namespace TrinityCoreAdmin
         public static async Task LoadAccountsFromDB()
         {
             accounts.Clear();
-            MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
-            DataTable dt = await ServerManager.currServer.authDBConn.Execute(stmt);
+            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
+            var dt = await ServerManager.currServer.authDBConn.Execute(stmt);
 
             foreach (DataRow row in dt.Rows)
             {
-                Account acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]);
+                var acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]);
                 accounts.Add(acc);
             }
 
@@ -116,7 +116,7 @@ namespace TrinityCoreAdmin
             }
             int maxId = int.MinValue;
 
-            foreach (Account acc in accounts)
+            foreach (var acc in accounts)
             {
                 if (acc.id > maxId)
                 {
@@ -145,7 +145,7 @@ namespace TrinityCoreAdmin
         /// <returns>True if succesful, otherwise false.</returns>
         public async Task<bool> UpdateAccount()
         {
-            MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
+            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
 
             if (stmt == null)
                 return false;
@@ -160,7 +160,6 @@ namespace TrinityCoreAdmin
             return result == 1;
         }
 
-        //TODO: Maybe AccountOpResult as return
         public static async Task<AccountOpResult> CreateAccount(string username, string password, string email)
         {
             if (username.Length > 16) // username is too long
@@ -179,7 +178,7 @@ namespace TrinityCoreAdmin
             if (GetAccount(username) != null)
                 return AccountOpResult.AOR_NAME_ALREADY_EXIST;
 
-            MySqlCommand stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_ACCOUNT);
+            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_ACCOUNT);
 
             if (stmt == null)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
@@ -201,9 +200,19 @@ namespace TrinityCoreAdmin
 
         }
 
-        public async Task<bool> DeleteAccount()
+        public async Task<AccountOpResult> DeleteAccount()
         {
-            return true;
+            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNT_BY_ID);
+
+            if (stmt == null)
+                return AccountOpResult.AOR_INTERNAL_ERROR;
+
+            stmt.Parameters.AddWithValue("@id", this.id);
+
+            if (await ServerManager.currServer.authDBConn.ExecuteScalar(stmt) == null)
+                return AccountOpResult.AOR_NAME_NOT_EXIST;
+
+            return AccountOpResult.AOR_OK;
         }
 
         private static string CalculateShaPassHash(string username, string password)

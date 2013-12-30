@@ -12,7 +12,7 @@ namespace TrinityCoreAdmin.Forms
 
         private async void btnOK_Click(object sender, EventArgs e)
         {
-            AccountOpResult res = await Account.CreateAccount(txtUsename.Text, txtPassword.Text, txtEmail.Text);
+            var res = await Account.CreateAccount(txtUsename.Text, txtPassword.Text, txtEmail.Text);
             if (res == AccountOpResult.AOR_OK)
                 this.Close();
             else

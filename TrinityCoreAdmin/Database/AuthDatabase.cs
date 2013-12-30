@@ -24,6 +24,7 @@ namespace TrinityCoreAdmin
         public enum AuthDatabaseStatements
         {
             AUTH_SEL_ACCOUNTS,
+            AUTH_SEL_ACCOUNT_BY_ID,
             AUTH_UPD_ACCOUNT,
             AUTH_INS_ACCOUNT,
             AUTH_DEL_ACCOUNT,
@@ -36,6 +37,7 @@ namespace TrinityCoreAdmin
         public void DoPrepareStatments()
         {
             PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNTS, "SELECT id, username, email, reg_mail, joindate, last_ip, failed_logins, last_login, online, expansion, locked FROM account");
+            PrepareStatement(AuthDatabaseStatements.AUTH_SEL_ACCOUNT_BY_ID, "SELECT 1 FROM account WHERE id=@id");
             PrepareStatement(AuthDatabaseStatements.AUTH_UPD_ACCOUNT, "UPDATE account SET username=@username, email=@email, reg_mail=@reg_mail, locked=@locked WHERE id=@id");
             PrepareStatement(AuthDatabaseStatements.AUTH_INS_ACCOUNT, "INSERT INTO account(username, sha_pass_hash, reg_mail, email, joindate, last_login) VALUES(@username, @sha_pass_hash, @reg_mail, @email, NOW(), NULL)");
             PrepareStatement(AuthDatabaseStatements.AUTH_DEL_ACCOUNT, "DELETE FROM account WHERE id=@id");
