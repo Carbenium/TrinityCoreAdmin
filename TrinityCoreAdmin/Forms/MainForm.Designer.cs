@@ -41,6 +41,14 @@
             this.statusStripAuth = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripChar = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripWorld = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.txtSearch = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripBtnAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripBtnDelete = new System.Windows.Forms.ToolStripButton();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageAccounts = new System.Windows.Forms.TabPage();
             this.listViewAccounts = new System.Windows.Forms.ListView();
             this.online = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -52,15 +60,11 @@
             this.failed_logins = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.last_login = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.expansion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.txtSearch = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripBtnAdd = new System.Windows.Forms.ToolStripButton();
-            this.toolStripBtnDelete = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPageAccounts.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -70,7 +74,7 @@
             this.bearbeitenMenuStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(804, 24);
+            this.menuStrip.Size = new System.Drawing.Size(821, 24);
             this.menuStrip.TabIndex = 7;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -133,9 +137,9 @@
             this.statusStripAuth,
             this.statusStripChar,
             this.statusStripWorld});
-            this.statusStrip.Location = new System.Drawing.Point(0, 299);
+            this.statusStrip.Location = new System.Drawing.Point(0, 326);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(804, 22);
+            this.statusStrip.Size = new System.Drawing.Size(821, 22);
             this.statusStrip.TabIndex = 9;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -171,83 +175,6 @@
             this.statusStripWorld.Size = new System.Drawing.Size(64, 17);
             this.statusStripWorld.Text = "WorldDB";
             // 
-            // listViewAccounts
-            // 
-            this.listViewAccounts.AutoArrange = false;
-            this.listViewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.online,
-            this.id,
-            this.username,
-            this.reg_mail,
-            this.email,
-            this.joindate,
-            this.last_ip,
-            this.failed_logins,
-            this.last_login,
-            this.expansion});
-            this.listViewAccounts.FullRowSelect = true;
-            this.listViewAccounts.Location = new System.Drawing.Point(12, 56);
-            this.listViewAccounts.Name = "listViewAccounts";
-            this.listViewAccounts.Size = new System.Drawing.Size(780, 227);
-            this.listViewAccounts.TabIndex = 8;
-            this.listViewAccounts.UseCompatibleStateImageBehavior = false;
-            this.listViewAccounts.View = System.Windows.Forms.View.Details;
-            this.listViewAccounts.VirtualMode = true;
-            this.listViewAccounts.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAccounts_ColumnClick);
-            this.listViewAccounts.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewAccounts_ColumnWidthChanging);
-            this.listViewAccounts.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.listViewAccounts_RetrieveVirtualItem);
-            this.listViewAccounts.DoubleClick += new System.EventHandler(this.listViewAccounts_DoubleClick);
-            // 
-            // online
-            // 
-            this.online.Text = "";
-            this.online.Width = 10;
-            // 
-            // id
-            // 
-            this.id.Text = "ID";
-            this.id.Width = 31;
-            // 
-            // username
-            // 
-            this.username.Text = "Username";
-            this.username.Width = 67;
-            // 
-            // reg_mail
-            // 
-            this.reg_mail.Text = "Reg. Email";
-            this.reg_mail.Width = 135;
-            // 
-            // email
-            // 
-            this.email.Text = "Email";
-            this.email.Width = 139;
-            // 
-            // joindate
-            // 
-            this.joindate.Text = "Erstellungsdatum";
-            this.joindate.Width = 94;
-            // 
-            // last_ip
-            // 
-            this.last_ip.Text = "Letzte IP";
-            this.last_ip.Width = 79;
-            // 
-            // failed_logins
-            // 
-            this.failed_logins.Text = "Loginvers.";
-            this.failed_logins.Width = 64;
-            // 
-            // last_login
-            // 
-            this.last_login.Text = "Letzter Login";
-            this.last_login.Width = 83;
-            // 
-            // expansion
-            // 
-            this.expansion.Text = "Erweiterung";
-            this.expansion.Width = 70;
-            // 
             // toolStrip
             // 
             this.toolStrip.AutoSize = false;
@@ -261,7 +188,7 @@
             this.toolStripBtnDelete});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(804, 29);
+            this.toolStrip.Size = new System.Drawing.Size(821, 29);
             this.toolStrip.TabIndex = 10;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -314,13 +241,110 @@
             this.toolStripBtnDelete.Size = new System.Drawing.Size(23, 26);
             this.toolStripBtnDelete.Text = "Account löschen";
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPageAccounts);
+            this.tabControl1.Location = new System.Drawing.Point(12, 56);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(797, 255);
+            this.tabControl1.TabIndex = 11;
+            // 
+            // tabPageAccounts
+            // 
+            this.tabPageAccounts.Controls.Add(this.listViewAccounts);
+            this.tabPageAccounts.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAccounts.Name = "tabPageAccounts";
+            this.tabPageAccounts.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAccounts.Size = new System.Drawing.Size(789, 229);
+            this.tabPageAccounts.TabIndex = 0;
+            this.tabPageAccounts.Text = "Accounts";
+            this.tabPageAccounts.UseVisualStyleBackColor = true;
+            // 
+            // listViewAccounts
+            // 
+            this.listViewAccounts.AutoArrange = false;
+            this.listViewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.online,
+            this.id,
+            this.username,
+            this.reg_mail,
+            this.email,
+            this.joindate,
+            this.last_ip,
+            this.failed_logins,
+            this.last_login,
+            this.expansion});
+            this.listViewAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewAccounts.FullRowSelect = true;
+            this.listViewAccounts.Location = new System.Drawing.Point(3, 3);
+            this.listViewAccounts.Name = "listViewAccounts";
+            this.listViewAccounts.Size = new System.Drawing.Size(783, 223);
+            this.listViewAccounts.TabIndex = 9;
+            this.listViewAccounts.UseCompatibleStateImageBehavior = false;
+            this.listViewAccounts.View = System.Windows.Forms.View.Details;
+            this.listViewAccounts.VirtualMode = true;
+            this.listViewAccounts.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.listViewAccounts_RetrieveVirtualItem);
+            this.listViewAccounts.SearchForVirtualItem += new System.Windows.Forms.SearchForVirtualItemEventHandler(this.listViewAccounts_SearchForVirtualItem);
+            this.listViewAccounts.DoubleClick += new System.EventHandler(this.listViewAccounts_DoubleClick);
+            // 
+            // online
+            // 
+            this.online.Text = "";
+            this.online.Width = 10;
+            // 
+            // id
+            // 
+            this.id.Text = "ID";
+            this.id.Width = 31;
+            // 
+            // username
+            // 
+            this.username.Text = "Username";
+            this.username.Width = 67;
+            // 
+            // reg_mail
+            // 
+            this.reg_mail.Text = "Reg. Email";
+            this.reg_mail.Width = 135;
+            // 
+            // email
+            // 
+            this.email.Text = "Email";
+            this.email.Width = 139;
+            // 
+            // joindate
+            // 
+            this.joindate.Text = "Erstellungsdatum";
+            this.joindate.Width = 94;
+            // 
+            // last_ip
+            // 
+            this.last_ip.Text = "Letzte IP";
+            this.last_ip.Width = 79;
+            // 
+            // failed_logins
+            // 
+            this.failed_logins.Text = "Loginvers.";
+            this.failed_logins.Width = 64;
+            // 
+            // last_login
+            // 
+            this.last_login.Text = "Letzter Login";
+            this.last_login.Width = 83;
+            // 
+            // expansion
+            // 
+            this.expansion.Text = "Erweiterung";
+            this.expansion.Width = 70;
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(804, 321);
+            this.ClientSize = new System.Drawing.Size(821, 348);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.menuStrip);
             this.Icon = global::TrinityCoreAdmin.Properties.Resources.TrinityCoreAdmin;
             this.MainMenuStrip = this.menuStrip;
@@ -333,6 +357,8 @@
             this.statusStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPageAccounts.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,7 +375,20 @@
         private System.Windows.Forms.ToolStripMenuItem einstellungenMenuStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trennenMenuStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripBtnDisconnect;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripSSH;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripChar;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripTextBox txtSearch;
+        private System.Windows.Forms.ToolStripButton toolStripBtnAdd;
+        private System.Windows.Forms.ToolStripButton toolStripBtnDelete;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPageAccounts;
         private System.Windows.Forms.ListView listViewAccounts;
+        private System.Windows.Forms.ColumnHeader online;
         private System.Windows.Forms.ColumnHeader id;
         private System.Windows.Forms.ColumnHeader username;
         private System.Windows.Forms.ColumnHeader reg_mail;
@@ -359,17 +398,6 @@
         private System.Windows.Forms.ColumnHeader failed_logins;
         private System.Windows.Forms.ColumnHeader last_login;
         private System.Windows.Forms.ColumnHeader expansion;
-        private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton toolStripBtnDisconnect;
-        private System.Windows.Forms.ToolStripStatusLabel statusStripSSH;
-        private System.Windows.Forms.ToolStripStatusLabel statusStripAuth;
-        private System.Windows.Forms.ToolStripStatusLabel statusStripChar;
-        private System.Windows.Forms.ToolStripStatusLabel statusStripWorld;
-        private System.Windows.Forms.ColumnHeader online;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripTextBox txtSearch;
-        private System.Windows.Forms.ToolStripButton toolStripBtnAdd;
-        private System.Windows.Forms.ToolStripButton toolStripBtnDelete;
     }
 }
 

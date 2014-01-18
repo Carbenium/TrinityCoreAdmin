@@ -152,6 +152,9 @@ namespace TrinityCoreAdmin.Forms
 
         private void listViewAccounts_DoubleClick(object sender, EventArgs e)
         {
+            if (!ServerManager.currServer.authConnected)
+                return;
+
             ListView.SelectedIndexCollection indexes = this.listViewAccounts.SelectedIndices;
 
             for (int i = 0; i < 1; i++)
