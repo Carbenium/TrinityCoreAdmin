@@ -15,7 +15,7 @@ namespace TrinityCoreAdmin
         public AuthDatabase(MySqlConnectionStringBuilder connStrBld)
             : base(connStrBld)
         {
-            ServerManager.currServer.authDBConn = this;
+            //ServerManager.currServer.authDBConn = this;
         }
 
         /// <summary>

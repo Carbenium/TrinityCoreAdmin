@@ -19,9 +19,12 @@ namespace TrinityCoreAdmin
         /// </summary>
         protected List<MySqlCommand> m_stmts = new List<MySqlCommand>();
 
+        public ConnectionState connState
+        { get; private set; }
+
         private string connStr;
         private MySqlConnection sqlConn;
-        private static ConnectionState connState = ConnectionState.Closed;
+        
         private static bool isPrepared = false;
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace TrinityCoreAdmin
         protected MySQLConnection()
         {
             this.sqlConn = new MySqlConnection();
+            connState = ConnectionState.Closed;
             sqlConn.StateChange += sqlConn_StateChange;
         }
 

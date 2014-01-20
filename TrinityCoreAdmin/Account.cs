@@ -75,8 +75,8 @@ namespace TrinityCoreAdmin
         public static async Task LoadAccountsFromDB()
         {
             accounts.Clear();
-            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
-            var dt = await ServerManager.currServer.authDBConn.Execute(stmt);
+            var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
+            var dt = await ServerManager.authDB.Execute(stmt);
 
             foreach (DataRow row in dt.Rows)
             {
@@ -93,8 +93,8 @@ namespace TrinityCoreAdmin
 
         private async Task LoadCharacters()
         {
-            var stmt = ServerManager.currServer.charDBConn.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARS_BY_ACCOUNT_ID);
-            var dt = await ServerManager.currServer.charDBConn.Execute(stmt);
+            var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARS_BY_ACCOUNT_ID);
+            var dt = await ServerManager.charDB.Execute(stmt);
 
             foreach (DataRow row in dt.Rows)
             {
@@ -159,7 +159,7 @@ namespace TrinityCoreAdmin
         /// <returns>True if succesful, otherwise false.</returns>
         public async Task<bool> UpdateAccount()
         {
-            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
+            var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);
 
             if (stmt == null)
                 return false;
@@ -170,7 +170,7 @@ namespace TrinityCoreAdmin
             stmt.Parameters.AddWithValue("@locked", this.locked);
             stmt.Parameters.AddWithValue("@id", this.id);
 
-            int result = await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
+            int result = await ServerManager.authDB.ExecuteNonQuery(stmt);
             return result == 1;
         }
 
@@ -192,7 +192,7 @@ namespace TrinityCoreAdmin
             if (GetAccount(username) != null)
                 return AccountOpResult.AOR_NAME_ALREADY_EXIST;
 
-            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_ACCOUNT);
+            var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_ACCOUNT);
 
             if (stmt == null)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
@@ -202,11 +202,11 @@ namespace TrinityCoreAdmin
             stmt.Parameters.AddWithValue("@reg_mail", email);
             stmt.Parameters.AddWithValue("@email", email);
 
-            if (await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt) != 1)
+            if (await ServerManager.authDB.ExecuteNonQuery(stmt) != 1)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
 
-            stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT);
-            await ServerManager.currServer.authDBConn.ExecuteNonQuery(stmt);
+            stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT);
+            await ServerManager.authDB.ExecuteNonQuery(stmt);
 
             await LoadAccountsFromDB();
 
@@ -216,14 +216,14 @@ namespace TrinityCoreAdmin
 
         public async Task<AccountOpResult> DeleteAccount()
         {
-            var stmt = ServerManager.currServer.authDBConn.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNT_BY_ID);
+            var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNT_BY_ID);
 
             if (stmt == null)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
 
             stmt.Parameters.AddWithValue("@id", this.id);
 
-            if (await ServerManager.currServer.authDBConn.ExecuteScalar(stmt) == null)
+            if (await ServerManager.authDB.ExecuteScalar(stmt) == null)
                 return AccountOpResult.AOR_NAME_NOT_EXIST;
 
             return AccountOpResult.AOR_OK;

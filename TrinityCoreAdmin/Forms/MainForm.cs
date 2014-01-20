@@ -10,13 +10,28 @@ namespace TrinityCoreAdmin.Forms
     public partial class MainForm : Form
     {
         private List<Account> filteredAccounts = new List<Account>();
+        private static MainForm instance;
+        private static object syncRoot = new Object();
 
-        public MainForm()
+        private MainForm()
         {
             InitializeComponent();
 
             if (Properties.Settings.Default.firstStart)
                 new FirstStartForm().ShowDialog();
+        }
+
+        public static MainForm GetInstance()
+        {
+            if (instance == null || instance.IsDisposed)
+            {
+                lock (syncRoot)
+                {
+                    if (instance == null || instance.IsDisposed)
+                    instance = new MainForm();
+                }
+            }
+            return instance;
         }
 
         private void beendenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -95,14 +110,12 @@ namespace TrinityCoreAdmin.Forms
             if (e.connState == ConnectionState.Open)
             {
                 this.statusStripAuth.ForeColor = Color.Green;
-                ServerManager.currServer.authConnected = true;
                 toolStripBtnAdd.Enabled = true;
                 toolStripBtnDelete.Enabled = true;
             }
             else if (e.connState == ConnectionState.Closed)
             {
                 this.statusStripAuth.ForeColor = Color.Red;
-                ServerManager.currServer.authConnected = false;
                 toolStripBtnAdd.Enabled = false;
                 toolStripBtnDelete.Enabled = false;
             }
@@ -117,9 +130,6 @@ namespace TrinityCoreAdmin.Forms
             else if (e.connState == ConnectionState.Closed)
             {
                 this.statusStripSSH.ForeColor = Color.Red;
-                ServerManager.currServer.authConnected = false;
-                ServerManager.currServer.charConnected = false;
-                ServerManager.currServer.worldConnected = false;
             }
         }
 
@@ -152,7 +162,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void listViewAccounts_DoubleClick(object sender, EventArgs e)
         {
-            if (!ServerManager.currServer.authConnected)
+            if (ServerManager.authDB.connState == ConnectionState.Closed)
                 return;
 
             ListView.SelectedIndexCollection indexes = this.listViewAccounts.SelectedIndices;

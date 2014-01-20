@@ -311,34 +311,27 @@ namespace TrinityCoreAdmin.Forms
             {
                 Server selectedServer = (Server)selectedNode.Parent.Tag;
                 Realm selectedRealm = (Realm)selectedNode.Tag;
-                ServerManager.currServer = selectedServer;
                 RealmManager.currRealm = selectedRealm;
 
                 if (selectedServer.useSSHTunnel)
                 {
                     if (selectedServer.sshHost != String.Empty && selectedServer.sshUser != String.Empty)
                     {
-                        SshConnection.CloseConnections();
-                        selectedServer.sshConn = new SshConnection(selectedServer.sshHost, selectedServer.sshPort, selectedServer.sshUser, selectedServer.sshPassword);
-                        ServerManager.currServer.sshConn.OnToggleConnectionStateHandler += mainForm.sshConn_OnToggleConnectionStateHandler;
-
-                        selectedServer.sshConn.Open();
-                        selectedServer.sshConn.AddForwardedPort(selectedServer.sshForwardedPort, selectedServer.sqlHost, selectedServer.sqlPort);
+                        ServerManager.initSSH(new SshConnection(selectedServer.sshHost, selectedServer.sshPort, selectedServer.sshUser, selectedServer.sshPassword));
+                        ServerManager.sshConn.AddForwardedPort(selectedServer.sshForwardedPort, selectedServer.sqlHost, selectedServer.sqlPort);
                     }
                 }
 
                 if (selectedServer.sqlHost != String.Empty && selectedServer.sqlUser != String.Empty)
                 {
-                    MySQLConnection.CloseConnections();
-
                     if (selectedServer.authdb != String.Empty)
                     {
                         MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
                         authString.Server = selectedServer.sqlHost;
 
-                        if (selectedServer.sshConn != null)
+                        if (ServerManager.sshConn != null)
                         {
-                            if (selectedServer.sshConn.isConnected)
+                            if (ServerManager.sshConn.isConnected)
                                 authString.Port = selectedServer.sshForwardedPort;
                             else
                                 authString.Port = selectedServer.sqlPort;
@@ -348,13 +341,7 @@ namespace TrinityCoreAdmin.Forms
                         authString.Password = selectedServer.sqlPassword;
                         authString.Database = selectedServer.authdb;
 
-                        selectedServer.authDBConn = new AuthDatabase(authString);
-
-                        ServerManager.currServer.authDBConn.OnToggleConnectionStateHandler += mainForm.authDBConn_OnToggleConnectionStateHandler;
-
-                        connSuccess = selectedServer.authDBConn.Open();
-
-                        selectedServer.authDBConn.DoPrepareStatments();
+                        connSuccess = ServerManager.InitDB(new AuthDatabase(authString));
                     }
                 }
             }

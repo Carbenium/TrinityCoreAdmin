@@ -10,18 +10,6 @@ namespace TrinityCoreAdmin
     [DataContract]
     internal class Server
     {
-        public AuthDatabase authDBConn;
-
-        public CharDatabase charDBConn;
-
-        public SshConnection sshConn;
-
-        public bool worldConnected = false;
-
-        public bool authConnected = false;
-
-        public bool charConnected = false;
-
         [DataMember]
         public List<Realm> realms = new List<Realm>();
 

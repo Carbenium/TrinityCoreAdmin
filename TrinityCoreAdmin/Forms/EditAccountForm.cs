@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Data;
 
 namespace TrinityCoreAdmin.Forms
 {
@@ -33,7 +34,7 @@ namespace TrinityCoreAdmin.Forms
             this.regEmailChanged = false;
 
             // Save button should be only enabled if a auth database connection is established.
-            this.toolStripBtnSave.Enabled = ServerManager.currServer.authConnected;
+            this.toolStripBtnSave.Enabled = ServerManager.authDB.connState == ConnectionState.Open;
         }
 
         private void toolStripBtnNext_Click(object sender, EventArgs e)
@@ -64,7 +65,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void NextAccount()
         {
-            if (dataChanged && ServerManager.currServer.authConnected)
+            if (dataChanged && (ServerManager.authDB.connState == ConnectionState.Open))
             {
                 switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
                 {
@@ -97,7 +98,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void PrevAccount()
         {
-            if (dataChanged && ServerManager.currServer.authConnected)
+            if (dataChanged && (ServerManager.authDB.connState == ConnectionState.Open))
             {
                 switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
                 {
@@ -137,7 +138,7 @@ namespace TrinityCoreAdmin.Forms
         {
             if (dataChanged)
             {
-                if (ServerManager.currServer.authConnected)
+                if (ServerManager.authDB.connState == ConnectionState.Open)
                 {
                     currAcc.username = txtUsername.Text;
                     currAcc.email = txtEmail.Text;
@@ -164,7 +165,7 @@ namespace TrinityCoreAdmin.Forms
 
         private void EditAccountForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (dataChanged && ServerManager.currServer.authConnected)
+            if (dataChanged && (ServerManager.authDB.connState == ConnectionState.Open))
             {
                 switch (MessageBox.Show("Möchten Sie die Änderungen speichern?", "Speichern?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
                 {

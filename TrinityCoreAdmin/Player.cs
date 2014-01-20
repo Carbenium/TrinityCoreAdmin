@@ -37,8 +37,8 @@ namespace TrinityCoreAdmin
 
         private async Task LoadFromDB(int guid)
         {
-            var stmt = ServerManager.currServer.charDBConn.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARACTER);
-            var dt = await ServerManager.currServer.charDBConn.Execute(stmt);
+            var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARACTER);
+            var dt = await ServerManager.charDB.Execute(stmt);
 
             if (dt.Rows.Count == 0)
             { 

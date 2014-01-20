@@ -21,7 +21,7 @@ namespace TrinityCoreAdmin
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(MainForm.GetInstance());
         }
 
         static void Application_ApplicationExit(object sender, EventArgs e)

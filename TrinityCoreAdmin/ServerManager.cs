@@ -4,13 +4,19 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
+using TrinityCoreAdmin.Forms;
 
 namespace TrinityCoreAdmin
 {
     internal static class ServerManager
     {
         public static List<Server> servers = new List<Server>();
-        public static Server currServer;
+
+        public static AuthDatabase authDB;
+        public static CharDatabase charDB;
+        public static WorldDatabase worldDB;
+
+        public static SshConnection sshConn;
 
         public static RealmsStatus Status = RealmsStatus.SAVED;
 
@@ -87,6 +93,38 @@ namespace TrinityCoreAdmin
 
                 return servers;
             }
+        }
+
+        public static bool initSSH(SshConnection ssh)
+        {
+            SshConnection.CloseConnections();
+            sshConn = ssh;
+            sshConn.OnToggleConnectionStateHandler += MainForm.GetInstance().sshConn_OnToggleConnectionStateHandler;
+            return sshConn.Open();
+        }
+
+        public static bool InitDB<T>(T db) 
+            where T : MySQLConnection
+        {
+            bool connSucess = true;
+            MySQLConnection.CloseConnections();
+
+            if (db is AuthDatabase)
+            {
+                authDB = db as AuthDatabase;
+                authDB.OnToggleConnectionStateHandler += MainForm.GetInstance().authDBConn_OnToggleConnectionStateHandler;
+                connSucess = authDB.Open() && connSucess;
+                authDB.DoPrepareStatments();
+            }
+                
+
+            if (db is CharDatabase)
+                charDB = db as CharDatabase;
+
+            if (db is WorldDatabase)
+                worldDB = db as WorldDatabase;
+
+            return connSucess;
         }
     }
 }
