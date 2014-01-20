@@ -7,6 +7,40 @@
         WOTLK = 2
     }
 
+    public enum Gender
+    {
+        MALE = 0,
+        FEMALE = 1
+    }
+
+    public enum Race
+    {
+        NONE = 0,
+        HUMAN = 1,
+        ORC = 2,
+        DWARF = 3,
+        NIGHTELF = 4,
+        UNDEAD = 5,
+        TAUREN = 6,
+        GNOME = 7,
+        TROLL = 8,
+        BLOODELF = 10,
+        DRAENEI = 11
+    }
+
+    public enum Class
+    {
+        NONE = 0,
+        WARRIOR = 1,
+        PALADIN = 2,
+        HUNTER = 3,
+        ROGUE = 4,
+        PRIEST = 5,
+        DEATH_KNIGHT = 6,
+        SHAMAN = 7,
+        MAGE = 8
+    }
+
     public enum MySQLError
     {
         MYSQLERROR_CAN_NOT_CONNECT = 0,

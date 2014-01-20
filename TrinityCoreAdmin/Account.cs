@@ -67,6 +67,8 @@ namespace TrinityCoreAdmin
 
         public bool locked { get; set; }
 
+        private List<Player> characters = new List<Player>();
+
         /// <summary>
         /// Loads the accounts from the database.
         /// </summary>
@@ -87,6 +89,18 @@ namespace TrinityCoreAdmin
             {
                 accounts.Add(new Account(i, "user" + i.ToString(),"","",DateTime.Today,"123.456.789.000",0, DateTime.Today,true,Expansion.CLASSIC,false));
             }*/
+        }
+
+        private async Task LoadCharacters()
+        {
+            var stmt = ServerManager.currServer.charDBConn.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARS_BY_ACCOUNT_ID);
+            var dt = await ServerManager.currServer.charDBConn.Execute(stmt);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                var player = await Player.LoadPlayer(XConverter.ToInt32(row[0]));
+                characters.Add(player);
+            }
         }
 
         /// <summary>

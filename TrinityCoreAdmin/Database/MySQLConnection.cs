@@ -201,6 +201,27 @@ namespace TrinityCoreAdmin
             return result;
         }
 
+        /// <summary>
+        /// Execute a SQL prepared statement on the database.
+        /// </summary>
+        /// <param name="stmt"></param>
+        /// <returns></returns>
+        public DataTable ExecuteSync(MySqlCommand stmt)
+        {
+            DataTable result = null;
+            if (connState == ConnectionState.Open)
+            {
+                using (MySqlDataReader reader = stmt.ExecuteReader())
+                {
+                    var dt = new DataTable();
+                    dt.Load(reader);
+                    result = dt;
+                }
+            }
+            stmt.Parameters.Clear();
+            return result;
+        }
+
         public async Task<object> ExecuteScalar(MySqlCommand stmt)
         {
             object result = null;

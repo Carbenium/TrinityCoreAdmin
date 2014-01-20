@@ -12,6 +12,8 @@ namespace TrinityCoreAdmin
     {
         public AuthDatabase authDBConn;
 
+        public CharDatabase charDBConn;
+
         public SshConnection sshConn;
 
         public bool worldConnected = false;
