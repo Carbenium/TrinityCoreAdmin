@@ -107,7 +107,6 @@ namespace TrinityCoreAdmin
             where T : MySQLConnection
         {
             bool connSucess = true;
-            MySQLConnection.CloseConnections();
 
             if (db is AuthDatabase)
             {
@@ -117,10 +116,14 @@ namespace TrinityCoreAdmin
                 authDB.DoPrepareStatments();
             }
                 
-
             if (db is CharDatabase)
+            {
                 charDB = db as CharDatabase;
-
+                charDB.OnToggleConnectionStateHandler += MainForm.GetInstance().charDBConn_OnToggleConnectionStateHandler;
+                connSucess = charDB.Open() && connSucess;
+                charDB.DoPrepareStatments();
+            }
+                
             if (db is WorldDatabase)
                 worldDB = db as WorldDatabase;
 

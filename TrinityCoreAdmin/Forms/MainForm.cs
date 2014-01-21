@@ -121,6 +121,28 @@ namespace TrinityCoreAdmin.Forms
             }
         }
 
+        public void charDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((Action<object, OnConnectionStateEventArgs>)charDBConn_OnToggleConnectionStateHandler, sender, e);
+                return;
+            }
+
+            if (e.connState == ConnectionState.Open)
+            {
+                this.statusStripChar.ForeColor = Color.Green;
+                //toolStripBtnAdd.Enabled = true;
+                //toolStripBtnDelete.Enabled = true;
+            }
+            else if (e.connState == ConnectionState.Closed)
+            {
+                this.statusStripChar.ForeColor = Color.Red;
+                //toolStripBtnAdd.Enabled = false;
+                //toolStripBtnDelete.Enabled = false;
+            }
+        }
+
         public void sshConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
         {
             if (e.connState == ConnectionState.Open)

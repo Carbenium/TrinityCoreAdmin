@@ -81,6 +81,7 @@ namespace TrinityCoreAdmin
             foreach (DataRow row in dt.Rows)
             {
                 var acc = new Account(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]);
+                await acc.LoadCharacters();
                 accounts.Add(acc);
             }
 
@@ -94,6 +95,7 @@ namespace TrinityCoreAdmin
         private async Task LoadCharacters()
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARS_BY_ACCOUNT_ID);
+            stmt.Parameters.AddWithValue("@account", this.id);
             var dt = await ServerManager.charDB.Execute(stmt);
 
             foreach (DataRow row in dt.Rows)

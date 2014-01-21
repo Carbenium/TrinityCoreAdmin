@@ -7,13 +7,13 @@
         WOTLK = 2
     }
 
-    public enum Gender
+    public enum Gender : int
     {
         MALE = 0,
         FEMALE = 1
     }
 
-    public enum Race
+    public enum Race : int
     {
         NONE = 0,
         HUMAN = 1,
@@ -28,7 +28,7 @@
         DRAENEI = 11
     }
 
-    public enum Class
+    public enum Class : int
     {
         NONE = 0,
         WARRIOR = 1,

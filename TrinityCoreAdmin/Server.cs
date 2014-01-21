@@ -93,6 +93,14 @@ namespace TrinityCoreAdmin
         { get; set; }
 
         [DataMember]
+        public string chardb
+        { get; set; }
+
+        [DataMember]
+        public string worlddb
+        { get; set; }
+
+        [DataMember]
         public string sshHost
         { get; set; }
 

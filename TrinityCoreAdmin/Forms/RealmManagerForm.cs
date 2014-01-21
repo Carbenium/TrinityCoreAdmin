@@ -329,19 +329,33 @@ namespace TrinityCoreAdmin.Forms
                         MySqlConnectionStringBuilder authString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
                         authString.Server = selectedServer.sqlHost;
 
-                        if (ServerManager.sshConn != null)
-                        {
-                            if (ServerManager.sshConn.isConnected)
-                                authString.Port = selectedServer.sshForwardedPort;
-                            else
-                                authString.Port = selectedServer.sqlPort;
-                        }
+                        if (ServerManager.sshConn != null && ServerManager.sshConn.isConnected)
+                            authString.Port = selectedServer.sshForwardedPort;
+                        else
+                            authString.Port = selectedServer.sqlPort;
 
                         authString.UserID = selectedServer.sqlUser;
                         authString.Password = selectedServer.sqlPassword;
                         authString.Database = selectedServer.authdb;
 
                         connSuccess = ServerManager.InitDB(new AuthDatabase(authString));
+                    }
+
+                    if (selectedRealm.chardb != String.Empty)
+                    {
+                        MySqlConnectionStringBuilder charString = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+                        charString.Server = selectedServer.sqlHost;
+
+                        if (ServerManager.sshConn != null && ServerManager.sshConn.isConnected)
+                            charString.Port = selectedServer.sshForwardedPort;
+                        else
+                            charString.Port = selectedServer.sqlPort;
+
+                        charString.UserID = selectedServer.sqlUser;
+                        charString.Password = selectedServer.sqlPassword;
+                        charString.Database = selectedRealm.chardb;
+
+                        connSuccess = ServerManager.InitDB(new CharDatabase(charString));
                     }
                 }
             }

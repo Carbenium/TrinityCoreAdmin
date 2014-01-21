@@ -24,7 +24,7 @@ namespace TrinityCoreAdmin
 
         private string connStr;
         private MySqlConnection sqlConn;
-        
+
         private static bool isPrepared = false;
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace TrinityCoreAdmin
         /// </summary>
         /// <param name="stmt"></param>
         /// <returns></returns>
-        public async Task<DataTable> Execute(MySqlCommand stmt)
+        public async Task<DataTable> Execute(MySqlCommand stmt, bool enforceConstraints = true, string[] pKeys = null)
         {
             DataTable result = null;
             if (connState == ConnectionState.Open)
@@ -197,6 +197,24 @@ namespace TrinityCoreAdmin
                 using (MySqlDataReader reader = await stmt.ExecuteReaderAsync())
                 {
                     var dt = new DataTable();
+                    if (!enforceConstraints)
+                    {
+                        var ds = new DataSet();
+                        ds.EnforceConstraints = false;
+                        ds.Tables.Add(dt);
+                    }
+
+                    if (pKeys != null)
+                    {
+                        DataColumn[] keys = new DataColumn[pKeys.Length];
+                        for (int i = 0; i < pKeys.Length; i++)
+                        {
+                            dt.Columns.Add(pKeys[i]);
+                            keys[i] = dt.Columns[pKeys[i]];
+                        }
+                        dt.PrimaryKey = keys;
+                    }
+
                     dt.Load(reader);
                     result = dt;
                 }

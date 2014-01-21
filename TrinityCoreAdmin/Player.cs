@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using System.Data;
+using System;
 
 namespace TrinityCoreAdmin
 {
@@ -38,7 +40,8 @@ namespace TrinityCoreAdmin
         private async Task LoadFromDB(int guid)
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARACTER);
-            var dt = await ServerManager.charDB.Execute(stmt);
+            stmt.Parameters.AddWithValue("@guid", guid);
+            var dt = await ServerManager.charDB.Execute(stmt, false);
 
             if (dt.Rows.Count == 0)
             { 
@@ -55,9 +58,9 @@ namespace TrinityCoreAdmin
             this.guid = XConverter.ToUInt32(dt.Rows[0][0]);
             this.acccountId = XConverter.ToUInt32(dt.Rows[0][1]);
             this.name = dt.Rows[0][2].ToString();
-            this.race = (Race)dt.Rows[0][2];
-            this._class = (Class)dt.Rows[0][3];
-            this.gender = (Gender)dt.Rows[0][4];
+            this.race = (Race)Enum.ToObject(typeof(Race), XConverter.ToInt32(dt.Rows[0][3]));
+            this._class = (Class)Enum.ToObject(typeof(Class), dt.Rows[0][4]);
+            this.gender = (Gender)Enum.ToObject(typeof(Gender), dt.Rows[0][5]);
             this.money = XConverter.ToInt32(dt.Rows[0][8]);
         }
     }
