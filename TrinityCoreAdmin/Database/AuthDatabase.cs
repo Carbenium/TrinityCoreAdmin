@@ -28,7 +28,10 @@ namespace TrinityCoreAdmin
             AUTH_UPD_ACCOUNT,
             AUTH_INS_ACCOUNT,
             AUTH_DEL_ACCOUNT,
-            AUTH_INS_REALM_CHARACTERS_INIT
+            AUTH_INS_REALM_CHARACTERS_INIT,
+            AUTH_DEL_ACCOUNT_ACCESS,
+            AUTH_DEL_REALM_CHARACTERS,
+            AUTH_DEL_ACCOUNT_BANNED
         }
 
         /// <summary>
@@ -42,6 +45,9 @@ namespace TrinityCoreAdmin
             PrepareStatement(AuthDatabaseStatements.AUTH_INS_ACCOUNT, "INSERT INTO account(username, sha_pass_hash, reg_mail, email, joindate, last_login) VALUES(@username, @sha_pass_hash, @reg_mail, @email, NOW(), NULL)");
             PrepareStatement(AuthDatabaseStatements.AUTH_DEL_ACCOUNT, "DELETE FROM account WHERE id=@id");
             PrepareStatement(AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT,"INSERT INTO realmcharacters (realmid, acctid, numchars) SELECT realmlist.id, account.id, 0 FROM realmlist, account LEFT JOIN realmcharacters ON acctid=account.id WHERE acctid IS NULL");
+            PrepareStatement(AuthDatabaseStatements.AUTH_DEL_ACCOUNT_ACCESS, "DELETE FROM account_access WHERE id=@id");
+            PrepareStatement(AuthDatabaseStatements.AUTH_DEL_REALM_CHARACTERS, "DELETE FROM realmcharacters WHERE acctid=@acctid");
+            PrepareStatement(AuthDatabaseStatements.AUTH_DEL_ACCOUNT_BANNED, "DELETE FROM account_banned WHERE id=@id");
         }
 
         private void PrepareStatement(AuthDatabaseStatements index, string sql)

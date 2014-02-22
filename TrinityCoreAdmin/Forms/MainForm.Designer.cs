@@ -240,6 +240,7 @@
             this.toolStripBtnDelete.Name = "toolStripBtnDelete";
             this.toolStripBtnDelete.Size = new System.Drawing.Size(23, 26);
             this.toolStripBtnDelete.Text = "Account löschen";
+            this.toolStripBtnDelete.Click += new System.EventHandler(this.toolStripBtnDelete_Click);
             // 
             // tabControl1
             // 

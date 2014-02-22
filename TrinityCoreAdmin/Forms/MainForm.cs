@@ -187,11 +187,12 @@ namespace TrinityCoreAdmin.Forms
             if (ServerManager.authDB.connState == ConnectionState.Closed)
                 return;
 
-            ListView.SelectedIndexCollection indexes = this.listViewAccounts.SelectedIndices;
+            ListView.SelectedIndexCollection indices = this.listViewAccounts.SelectedIndices;
 
+            // TODO: I don't think that two EditAccountForms should open if more than one item is selected. Maybe take the first one.
             for (int i = 0; i < 1; i++)
             {
-                int index = indexes[i];
+                int index = indices[i];
                 new EditAccountForm((Account)this.listViewAccounts.Items[index].Tag).ShowDialog();
             }
         }
@@ -286,6 +287,21 @@ namespace TrinityCoreAdmin.Forms
         private void toolStripBtnAdd_Click(object sender, EventArgs e)
         {
             new AddAccountForm().ShowDialog();
+            filteredAccounts = new List<Account>(Account.GetAccounts());
+            listViewAccounts.VirtualListSize = filteredAccounts.Count;
+        }
+
+        //TODO: Confirm account deletion; Better way for for-loop ?!
+        private async void toolStripBtnDelete_Click(object sender, EventArgs e)
+        {
+            ListView.SelectedIndexCollection indices = listViewAccounts.SelectedIndices;
+
+            for (int i = 0; i < 1; i++)
+            {
+                int index = indices[i];
+                await ((Account)this.listViewAccounts.Items[index].Tag).DeleteAccount();
+            }
+
             filteredAccounts = new List<Account>(Account.GetAccounts());
             listViewAccounts.VirtualListSize = filteredAccounts.Count;
         }

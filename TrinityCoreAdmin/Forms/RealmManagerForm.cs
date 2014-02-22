@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using TrinityCoreAdmin.Database;
 
 namespace TrinityCoreAdmin.Forms
 {
@@ -361,8 +362,10 @@ namespace TrinityCoreAdmin.Forms
             }
             if (connSuccess)
             {
-                await Account.LoadAccountsFromDB();
+                await Account.LoadFromDB();
                 ServerManager.Save();
+                var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHARACTER_BAN);
+                stmt.Execute();
                 this.Close();
             }
         }

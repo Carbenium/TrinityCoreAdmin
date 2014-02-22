@@ -64,4 +64,11 @@
         AOR_NAME_NOT_EXIST,
         AOR_INTERNAL_ERROR
     }
+
+    public enum CharDeleteMethod
+    {
+        REMOVE, // Completely remove from the database
+        UNLINK  // The character gets unlinked from the account,
+                // the name gets freed up and appears as deleted ingame
+    }
 }

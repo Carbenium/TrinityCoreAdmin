@@ -70,9 +70,9 @@ namespace TrinityCoreAdmin
         private List<Player> characters = new List<Player>();
 
         /// <summary>
-        /// Loads the accounts from the database.
+        /// Load the accounts from the database.
         /// </summary>
-        public static async Task LoadAccountsFromDB()
+        public static async Task LoadFromDB()
         {
             accounts.Clear();
             var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
@@ -100,7 +100,7 @@ namespace TrinityCoreAdmin
 
             foreach (DataRow row in dt.Rows)
             {
-                var player = await Player.LoadPlayer(XConverter.ToInt32(row[0]));
+                var player = await Player.LoadFromDB(XConverter.ToInt32(row[0]));
                 characters.Add(player);
             }
         }
@@ -210,7 +210,7 @@ namespace TrinityCoreAdmin
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT);
             await ServerManager.authDB.ExecuteNonQuery(stmt);
 
-            await LoadAccountsFromDB();
+            await LoadFromDB();
 
             return AccountOpResult.AOR_OK;
 
@@ -227,6 +227,42 @@ namespace TrinityCoreAdmin
 
             if (await ServerManager.authDB.ExecuteScalar(stmt) == null)
                 return AccountOpResult.AOR_NAME_NOT_EXIST;
+
+            foreach (var p in this.characters)
+            {
+                await p.DeleteFromDB(true);
+                characters.Remove(p);
+            }
+
+            stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_TUTORIALS);
+            stmt.Parameters.AddWithValue("@accountId", this.id);
+            await ServerManager.charDB.ExecuteNonQuery(stmt);
+
+            stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ACCOUNT_DATA);
+            stmt.Parameters.AddWithValue("@accountId", this.id);
+            await ServerManager.charDB.ExecuteNonQuery(stmt);
+
+            stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHARACTER_BAN);
+            stmt.Parameters.AddWithValue("@accountId", this.id);
+            await ServerManager.charDB.ExecuteNonQuery(stmt);
+
+            stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT);
+            stmt.Parameters.AddWithValue("@id", this.id);
+            await ServerManager.authDB.ExecuteNonQuery(stmt);
+
+            stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT_ACCESS);
+            stmt.Parameters.AddWithValue("@id", this.id);
+            await ServerManager.authDB.ExecuteNonQuery(stmt);
+
+            stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_REALM_CHARACTERS);
+            stmt.Parameters.AddWithValue("@acctid", this.id);
+            await ServerManager.authDB.ExecuteNonQuery(stmt);
+
+            stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT_BANNED);
+            stmt.Parameters.AddWithValue("@id", this.id);
+            await ServerManager.authDB.ExecuteNonQuery(stmt);
+
+            await LoadFromDB();
 
             return AccountOpResult.AOR_OK;
         }
