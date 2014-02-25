@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -7,7 +6,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.Types;
 using TrinityCoreAdmin.Database;
 
 namespace TrinityCoreAdmin
@@ -118,7 +116,7 @@ namespace TrinityCoreAdmin
 
         public static Account GetAccount(string username)
         {
-            return accounts.Find((e) => {return (e.username == username); });
+            return accounts.Find((e) => { return (e.username == username); });
         }
 
         /// <summary>
@@ -214,7 +212,6 @@ namespace TrinityCoreAdmin
             await LoadFromDB();
 
             return AccountOpResult.AOR_OK;
-
         }
 
         public async Task<AccountOpResult> DeleteAccount()

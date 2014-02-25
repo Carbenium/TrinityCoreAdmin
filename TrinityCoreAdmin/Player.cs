@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 using System.Data;
-using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrinityCoreAdmin.Database;
 
@@ -46,17 +46,17 @@ namespace TrinityCoreAdmin
             var dt = await stmt.Execute(false);
 
             if (dt.Rows.Count == 0)
-            { 
+            {
                 Logger.LOG_DATABASE.Error("Player with GUID " + guid.ToString() + " not found in table `characters`, can't load.");
                 return;
             }
-                
+
             if (XConverter.ToInt32(dt.Rows[0][0]) != guid)
             {
                 Logger.LOG_DATABASE.Error("Error during loading player with GUID " + guid.ToString() + ".");
                 return;
             }
-                
+
             this.guid = XConverter.ToUInt32(dt.Rows[0][0]);
             this.acccountId = XConverter.ToUInt32(dt.Rows[0][1]);
             this.name = dt.Rows[0][2].ToString();
@@ -73,7 +73,6 @@ namespace TrinityCoreAdmin
         /// <returns></returns>
         public async Task DeleteFromDB(bool deleteFinally)
         {
-
             // TODO: Check if player is logged in. If true throw error.
             CharDeleteMethod delMethod = CharDeleteMethod.UNLINK;
 
@@ -82,13 +81,13 @@ namespace TrinityCoreAdmin
 
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_GUILD_LEADER_BY_GUILD_ID);
             stmt.Parameters.AddWithValue("@guildid", GetGuildId());
-            
+
             if (await stmt.ExNonQuery() != 0) // Player is guild leader. Change leader ingame first.
             {
                 MessageBox.Show("Der Charakter" + this.name + "konnte nicht gelöscht werden, da er noch Gildenmeister ist. Bitte erst ingame degradieren.", "Fehler beim Löschen", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; 
+                return;
             }
-            
+
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_GUILD_MEMBER);
             stmt.Parameters.AddWithValue("@guid", this.guid);
             await stmt.ExNonQuery();
@@ -306,7 +305,6 @@ namespace TrinityCoreAdmin
                     await stmt.ExNonQuery();
                     break;
             }
-
         }
 
         public async Task<int> GetGuildId()
@@ -314,7 +312,7 @@ namespace TrinityCoreAdmin
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_GUILDID_BY_GUID);
             stmt.Parameters.AddWithValue("@guid", this.guid);
             var result = await stmt.ExScalar();
-            
+
             if (result == null)
                 return 0;
 
@@ -354,7 +352,7 @@ namespace TrinityCoreAdmin
             stmt.Parameters.AddWithValue("@ownerguid", this.guid);
             await stmt.ExNonQuery();
         }
-        
+
         private async Task DeletePetFromDB(int guid)
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_PET_BY_ID);
@@ -378,5 +376,4 @@ namespace TrinityCoreAdmin
             await stmt.ExNonQuery();
         }
     }
-
 }

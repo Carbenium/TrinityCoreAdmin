@@ -23,6 +23,7 @@ namespace TrinityCoreAdmin
         { get; private set; }
 
         private string connStr;
+
         public MySqlConnection sqlConn
         { get; private set; }
 
