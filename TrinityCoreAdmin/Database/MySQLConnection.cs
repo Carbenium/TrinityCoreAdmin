@@ -23,7 +23,8 @@ namespace TrinityCoreAdmin
         { get; private set; }
 
         private string connStr;
-        private MySqlConnection sqlConn;
+        public MySqlConnection sqlConn
+        { get; private set; }
 
         private static bool isPrepared = false;
 

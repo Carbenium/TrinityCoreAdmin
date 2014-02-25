@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.Types;
+using TrinityCoreAdmin.Database;
 
 namespace TrinityCoreAdmin
 {
@@ -76,7 +77,7 @@ namespace TrinityCoreAdmin
         {
             accounts.Clear();
             var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_SEL_ACCOUNTS);
-            var dt = await ServerManager.authDB.Execute(stmt);
+            var dt = await stmt.Execute();
 
             foreach (DataRow row in dt.Rows)
             {
@@ -96,7 +97,7 @@ namespace TrinityCoreAdmin
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARS_BY_ACCOUNT_ID);
             stmt.Parameters.AddWithValue("@account", this.id);
-            var dt = await ServerManager.charDB.Execute(stmt);
+            var dt = await stmt.Execute();
 
             foreach (DataRow row in dt.Rows)
             {
@@ -172,7 +173,7 @@ namespace TrinityCoreAdmin
             stmt.Parameters.AddWithValue("@locked", this.locked);
             stmt.Parameters.AddWithValue("@id", this.id);
 
-            int result = await ServerManager.authDB.ExecuteNonQuery(stmt);
+            int result = await stmt.ExNonQuery();
             return result == 1;
         }
 
@@ -208,7 +209,7 @@ namespace TrinityCoreAdmin
                 return AccountOpResult.AOR_INTERNAL_ERROR;
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_INS_REALM_CHARACTERS_INIT);
-            await ServerManager.authDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             await LoadFromDB();
 
@@ -225,7 +226,7 @@ namespace TrinityCoreAdmin
 
             stmt.Parameters.AddWithValue("@id", this.id);
 
-            if (await ServerManager.authDB.ExecuteScalar(stmt) == null)
+            if (await stmt.ExScalar() == null)
                 return AccountOpResult.AOR_NAME_NOT_EXIST;
 
             foreach (var p in this.characters)
@@ -236,31 +237,31 @@ namespace TrinityCoreAdmin
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_TUTORIALS);
             stmt.Parameters.AddWithValue("@accountId", this.id);
-            await ServerManager.charDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ACCOUNT_DATA);
             stmt.Parameters.AddWithValue("@accountId", this.id);
-            await ServerManager.charDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHARACTER_BAN);
             stmt.Parameters.AddWithValue("@accountId", this.id);
-            await ServerManager.charDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT);
             stmt.Parameters.AddWithValue("@id", this.id);
-            await ServerManager.authDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT_ACCESS);
             stmt.Parameters.AddWithValue("@id", this.id);
-            await ServerManager.authDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_REALM_CHARACTERS);
             stmt.Parameters.AddWithValue("@acctid", this.id);
-            await ServerManager.authDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT_BANNED);
             stmt.Parameters.AddWithValue("@id", this.id);
-            await ServerManager.authDB.ExecuteNonQuery(stmt);
+            await stmt.ExNonQuery();
 
             await LoadFromDB();
 

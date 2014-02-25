@@ -73,6 +73,7 @@
     <Compile Include="Database\AuthDatabase.cs" />
     <Compile Include="BaseConnection.cs" />
     <Compile Include="Database\CharDatabase.cs" />
+    <Compile Include="Database\PreparedStatementExt.cs" />
     <Compile Include="Forms\AddAccountForm.cs">
       <SubType>Form</SubType>
     </Compile>

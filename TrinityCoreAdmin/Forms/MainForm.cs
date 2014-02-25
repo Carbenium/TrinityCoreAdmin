@@ -28,7 +28,7 @@ namespace TrinityCoreAdmin.Forms
                 lock (syncRoot)
                 {
                     if (instance == null || instance.IsDisposed)
-                    instance = new MainForm();
+                        instance = new MainForm();
                 }
             }
             return instance;
@@ -291,15 +291,22 @@ namespace TrinityCoreAdmin.Forms
             listViewAccounts.VirtualListSize = filteredAccounts.Count;
         }
 
-        //TODO: Confirm account deletion; Better way for for-loop ?!
+        //TODO: Better way for for-loop ?!
         private async void toolStripBtnDelete_Click(object sender, EventArgs e)
         {
             ListView.SelectedIndexCollection indices = listViewAccounts.SelectedIndices;
 
-            for (int i = 0; i < 1; i++)
+            if (indices.Count != 0)
             {
-                int index = indices[i];
-                await ((Account)this.listViewAccounts.Items[index].Tag).DeleteAccount();
+                DialogResult res = MessageBox.Show("Wollen Sie den Account wirklich löschen?", "Löschen?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (res == DialogResult.No)
+                    return;
+
+                for (int i = 0; i < 1; i++)
+                {
+                    int index = indices[i];
+                    await ((Account)this.listViewAccounts.Items[index].Tag).DeleteAccount();
+                }
             }
 
             filteredAccounts = new List<Account>(Account.GetAccounts());
