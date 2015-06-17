@@ -1,5 +1,4 @@
-// Copyright (c) 2009 Sun Microsystems, Inc., 2013 Oracle and/or its affiliates.
-// All rights reserved.
+// Copyright (c) 2009 Sun Microsystems, Inc., 2013, 2014 Oracle and/or its affiliates. All rights reserved.
 //
 // MySQL Connector/NET is licensed under the terms of the GPLv2
 // <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most 
@@ -329,7 +328,7 @@ namespace MySql.Data.Common
 
       byte[] inOptionValues = new byte[12];
       BitConverter.GetBytes(on).CopyTo(inOptionValues, 0);
-      BitConverter.GetBytes(time).CopyTo(inOptionValues, 4);
+      BitConverter.GetBytes(timeMilliseconds).CopyTo(inOptionValues, 4);
       BitConverter.GetBytes(interval).CopyTo(inOptionValues, 8);
       try
       {

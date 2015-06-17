@@ -1,4 +1,4 @@
-// Copyright © 2004, 2011, 2013, Oracle and/or its affiliates. All rights reserved.
+// Copyright © 2004, 2015, Oracle and/or its affiliates. All rights reserved.
 //
 // MySQL Connector/NET is licensed under the terms of the GPLv2
 // <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most 
@@ -222,8 +222,9 @@ namespace MySql.Data.MySqlClient
       packet = stream.ReadPacket();
       int protocol = packet.ReadByte();
       string versionString = packet.ReadString();
+      owner.isFabric = versionString.EndsWith("fabric", StringComparison.OrdinalIgnoreCase);
       version = DBVersion.Parse(versionString);
-      if (!version.isAtLeast(5, 0, 0))
+      if (!owner.isFabric && !version.isAtLeast(5, 0, 0))
         throw new NotSupportedException(Resources.ServerTooOld);
       threadId = packet.ReadInteger(4);
       encryptionSeed = packet.ReadString();
@@ -265,6 +266,9 @@ namespace MySql.Data.MySqlClient
 
       packet.Clear();
       packet.WriteInteger((int)connectionFlags, 4);
+      packet.WriteInteger(maxSinglePacket, 4);
+      packet.WriteByte(33); //character set utf-8
+      packet.Write(new byte[23]);
 
 #if !CF && !RT
       if ((serverCaps & ClientFlags.SSL) == 0)
@@ -284,6 +288,9 @@ namespace MySql.Data.MySqlClient
         StartSSL();
         packet.Clear();
         packet.WriteInteger((int)connectionFlags, 4);
+        packet.WriteInteger(maxSinglePacket, 4);
+        packet.WriteByte(33); //character set utf-8
+        packet.Write(new byte[23]);
       }
 #endif
 
@@ -293,10 +300,6 @@ namespace MySql.Data.MySqlClient
         throw new NotImplementedException("SSL not supported in this WinRT release.");
       }
 #endif
-
-      packet.WriteInteger(maxSinglePacket, 4);
-      packet.WriteByte(8);
-      packet.Write(new byte[23]);
 
       Authenticate(authenticationMethod, false);
 

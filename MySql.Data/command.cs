@@ -1,4 +1,4 @@
-// Copyright © 2004, 2013, Oracle and/or its affiliates. All rights reserved.
+// Copyright © 2004, 2015, Oracle and/or its affiliates. All rights reserved.
 //
 // MySQL Connector/NET is licensed under the terms of the GPLv2
 // <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most 
@@ -38,9 +38,6 @@ using MySql.Data.MySqlClient.Properties;
 #if !CF
 using MySql.Data.MySqlClient.Replication;
 #endif
-#if NET_40_OR_GREATER
-using System.Threading.Tasks;
-#endif
 
 namespace MySql.Data.MySqlClient
 {
@@ -66,8 +63,7 @@ namespace MySql.Data.MySqlClient
     private bool shouldCache;
     private int cacheAge;
     private bool internallyCreated;
-
-    private static List<string> SingleWordKeywords = new List<string>(new string[] { "COMMIT", "ROLLBACK", "USE", "BEGIN", "END" });
+    private static List<string> keywords = null;
 
     /// <include file='docs/mysqlcommand.xml' path='docs/ctor1/*'/>
     public MySqlCommand()
@@ -103,6 +99,20 @@ namespace MySql.Data.MySqlClient
     {
       curTransaction = transaction;
     }
+
+    #region Destructor
+#if !RT
+    ~MySqlCommand()
+    {
+      Dispose(false);
+    }
+#else
+    ~MySqlCommand()
+    {
+      this.Dispose();
+    }
+#endif
+    #endregion
 
     #region Properties
 
@@ -462,9 +472,10 @@ namespace MySql.Data.MySqlClient
         else if (CommandType == CommandType.Text)
         {
           // validates single word statetment (maybe is a stored procedure call)
-          if (sql.IndexOf(" ") == -1 && !SingleWordKeywords.Contains(sql.ToUpper()))
+          if (sql.IndexOf(" ") == -1)
           {
-            sql = "call " + sql;
+            if (AddCallStatement(sql))
+              sql = "call " + sql;
           }
         }
 
@@ -845,6 +856,26 @@ namespace MySql.Data.MySqlClient
       return size;
     }
 
+    /// <summary>
+    /// Verifies if a query is valid even if it has not spaces or is a stored procedure call
+    /// </summary>
+    /// <param name="query">Query to validate</param>
+    /// <returns>If it is necessary to add call statement</returns>
+    private bool AddCallStatement(string query)
+    {
+      if (string.IsNullOrEmpty(query)) return false;
+
+      string keyword = query.ToUpper();
+      int indexChar = keyword.IndexOfAny(new char[] { '(', '"', '@', '\'', '`' });
+      if(indexChar > 0)
+        keyword = keyword.Substring(0, indexChar);
+
+      if (keywords == null)
+        keywords = new List<string>(Resources.keywords.Replace("\r", "").Split('\n'));
+
+      return !keywords.Contains(keyword);
+    }
+
     #endregion
 
     #region ICloneable
@@ -959,57 +990,25 @@ namespace MySql.Data.MySqlClient
       throw ex;
     }
 
+#if !RT
     public void Dispose()
+    {
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+
+    protected override void Dispose(bool disposing)
     {
       if (statement != null && statement.IsPrepared)
         statement.CloseStatement();
-    }
 
-#if NET_40_OR_GREATER
-    #region Async
-    /// <summary>
-    /// Async version of ExecuteNonQuery
-    /// </summary>
-    /// <returns>int</returns>
-    public Task<int> ExecuteNonQueryAsync()
-    {
-      return Task.Factory.StartNew(() =>
-      {
-        return ExecuteNonQuery();
-      });
+      base.Dispose(disposing);
     }
-    /// <summary>
-    /// Async version of ExecuteReader
-    /// </summary>
-    /// <returns>A MySqlDataReader object</returns>
-    public Task<MySqlDataReader> ExecuteReaderAsync()
+#else
+    public void Dispose()
     {
-      return ExecuteReaderAsync(CommandBehavior.Default);
+      GC.SuppressFinalize(this);
     }
-    /// <summary>
-    /// Async version of ExecuteReader
-    /// </summary>
-    /// <param name="behavior">Command Behavior</param>
-    /// <returns>A MySqlDataReader object</returns>
-    public Task<MySqlDataReader> ExecuteReaderAsync(CommandBehavior behavior)
-    {
-      return Task.Factory.StartNew(() =>
-      {
-        return ExecuteReader(behavior);
-      });
-    }
-    /// <summary>
-    /// Async version of ExecuteScalar
-    /// </summary>
-    /// <returns>The first column of the first row in the result set, or a null reference if the result set is empty</returns>
-    public Task<object> ExecuteScalarAsync()
-    {
-      return Task.Factory.StartNew(() =>
-      {
-        return ExecuteScalar();
-      });
-    }
-    #endregion
 #endif
   }
 }
