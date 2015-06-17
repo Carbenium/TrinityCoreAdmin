@@ -42,7 +42,7 @@ namespace TrinityCoreAdmin
         private async Task LoadPlayer(int guid)
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARACTER);
-            stmt.Parameters.AddWithValue("@guid", guid);
+            stmt.Parameters["@guid"].Value =  guid;
             var dt = await stmt.Execute(false);
 
             if (dt.Rows.Count == 0)
@@ -80,22 +80,22 @@ namespace TrinityCoreAdmin
                 delMethod = CharDeleteMethod.REMOVE;
 
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_GUILD_LEADER_BY_GUILD_ID);
-            stmt.Parameters.AddWithValue("@guildid", GetGuildId());
+            stmt.Parameters["@guildid"].Value = await GetGuildId();
 
-            if (await stmt.ExNonQuery() != 0) // Player is guild leader. Change leader ingame first.
+            if (await stmt.ExScalar() != null) // Player is guild leader. Change leader ingame first.
             {
-                MessageBox.Show("Der Charakter" + this.name + "konnte nicht gelöscht werden, da er noch Gildenmeister ist. Bitte erst ingame degradieren.", "Fehler beim Löschen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Der Charakter " + this.name + " konnte nicht gelöscht werden, da er noch Gildenmeister ist. Bitte erst ingame degradieren.", "Fehler beim Löschen", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_GUILD_MEMBER);
-            stmt.Parameters.AddWithValue("@guid", this.guid);
+            stmt.Parameters["@guid"].Value = this.guid;
             await stmt.ExNonQuery();
 
             await LeaveAllArenaTeams();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_GROUP_MEMBER);
-            stmt.Parameters.AddWithValue("@memberGuid", this.guid);
+            stmt.Parameters["@memberGuid"].Value = this.guid;
             await stmt.ExNonQuery();
 
             await RemovePetitionsAndSigns();
@@ -105,7 +105,7 @@ namespace TrinityCoreAdmin
                 case CharDeleteMethod.REMOVE:
                     {
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHAR_COD_ITEM_MAIL);
-                        stmt.Parameters.AddWithValue("@receiver", this.guid);
+                        stmt.Parameters["@receiver"].Value = this.guid;
                         var dt = await stmt.Execute();
 
                         foreach (DataRow row in dt.Rows)
@@ -120,7 +120,7 @@ namespace TrinityCoreAdmin
                             bool has_items = Convert.ToBoolean(row[7]);
 
                             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_MAIL_BY_ID);
-                            stmt.Parameters.AddWithValue("@id", mail_id);
+                            stmt.Parameters["@id"].Value = mail_id;
                             await stmt.ExNonQuery();
 
                             // Mail is not from player
@@ -129,7 +129,7 @@ namespace TrinityCoreAdmin
                                 if (has_items)
                                 {
                                     stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_MAIL_ITEM_BY_ID);
-                                    stmt.Parameters.AddWithValue("@mail_id", mail_id);
+                                    stmt.Parameters["@mail_id"].Value = mail_id;
                                     await stmt.ExNonQuery();
                                 }
                                 continue;
@@ -138,7 +138,7 @@ namespace TrinityCoreAdmin
                             if (has_items)
                             {
                                 stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_MAILITEMS);
-                                stmt.Parameters.AddWithValue("@mail_id", mail_id);
+                                stmt.Parameters["@mail_id"].Value = mail_id;
                                 var dtItems = await stmt.Execute();
 
                                 foreach (DataRow rowItem in dt.Rows)
@@ -146,7 +146,7 @@ namespace TrinityCoreAdmin
                                     int item_guidlow = XConverter.ToInt32(rowItem[11]);
 
                                     stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ITEM_INSTANCE);
-                                    stmt.Parameters.AddWithValue("@guid", item_guidlow);
+                                    stmt.Parameters["@guid"].Value = item_guidlow;
                                     await stmt.ExNonQuery();
 
                                     continue;
@@ -154,12 +154,12 @@ namespace TrinityCoreAdmin
                             }
 
                             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_MAIL_ITEM_BY_ID);
-                            stmt.Parameters.AddWithValue("@mail_id", mail_id);
+                            stmt.Parameters["@mail_id"].Value = mail_id;
                             await stmt.ExNonQuery();
                         }
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHAR_PETS);
-                        stmt.Parameters.AddWithValue("@owner", this.guid);
+                        stmt.Parameters["@owner"].Value = this.guid;
                         dt = await stmt.Execute();
 
                         foreach (DataRow row in dt.Rows)
@@ -169,139 +169,139 @@ namespace TrinityCoreAdmin
                         }
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHARACTER);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PLAYER_ACCOUNT_DATA);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_DECLINED_NAME);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_ACTION);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_AURA);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_GIFT);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PLAYER_HOMEBIND);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_INSTANCE);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_INVENTORY);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_QUESTSTATUS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_QUESTSTATUS_REWARDED);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_REPUTATION);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_SPELL);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_SPELL_COOLDOWN);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PLAYER_GM_TICKETS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ITEM_INSTANCE_BY_OWNER);
-                        stmt.Parameters.AddWithValue("@owner_guid", this.guid);
+                        stmt.Parameters["@owner_guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_SOCIAL_BY_FRIEND);
-                        stmt.Parameters.AddWithValue("@friend", this.guid);
+                        stmt.Parameters["@friend"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_SOCIAL_BY_GUID);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_MAIL);
-                        stmt.Parameters.AddWithValue("@receiver", this.guid);
+                        stmt.Parameters["@receiver"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_MAIL_ITEMS);
-                        stmt.Parameters.AddWithValue("@receiver", this.guid);
+                        stmt.Parameters["@receiver"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_PET_BY_OWNER);
-                        stmt.Parameters.AddWithValue("@owner", this.guid);
+                        stmt.Parameters["@owner"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_PET_DECLINEDNAME_BY_OWNER);
-                        stmt.Parameters.AddWithValue("@owner", this.guid);
+                        stmt.Parameters["@owner"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_ACHIEVEMENTS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_ACHIEVEMENT_PROGRESS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_EQUIPMENTSETS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_GUILD_EVENTLOG_BY_PLAYER);
-                        stmt.Parameters.AddWithValue("@PlayerGuid1", this.guid);
-                        stmt.Parameters.AddWithValue("@PlayerGuid2", this.guid);
+                        stmt.Parameters["@PlayerGuid1"].Value = this.guid;
+                        stmt.Parameters["@PlayerGuid2"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_GUILD_BANK_EVENTLOG_BY_PLAYER);
-                        stmt.Parameters.AddWithValue("@PlayerGuid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PLAYER_BGDATA);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_GLYPHS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_QUESTSTATUS_DAILY);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_TALENT);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_SKILLS);
-                        stmt.Parameters.AddWithValue("@guid", this.guid);
+                        stmt.Parameters["@guid"].Value = this.guid;
                         await stmt.ExNonQuery();
 
                         break;
                     }
                 case CharDeleteMethod.UNLINK:
                     stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_UPD_DELETE_INFO);
-                    stmt.Parameters.AddWithValue("@guid", this.guid);
+                    stmt.Parameters["@guid"].Value = this.guid;
                     await stmt.ExNonQuery();
                     break;
             }
@@ -310,7 +310,7 @@ namespace TrinityCoreAdmin
         public async Task<int> GetGuildId()
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_GUILDID_BY_GUID);
-            stmt.Parameters.AddWithValue("@guid", this.guid);
+            stmt.Parameters["@guid"].Value = this.guid;
             var result = await stmt.ExScalar();
 
             if (result == null)
@@ -322,7 +322,7 @@ namespace TrinityCoreAdmin
         private async Task LeaveAllArenaTeams()
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_PLAYER_ARENA_TEAMS);
-            stmt.Parameters.AddWithValue("@guid", this.guid);
+            stmt.Parameters["@guid"].Value = this.guid;
             var dt = await stmt.Execute();
 
             foreach (DataRow row in dt.Rows)
@@ -331,8 +331,8 @@ namespace TrinityCoreAdmin
                 if (arenaTeamId != 0)
                 {
                     stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ARENA_TEAM_MEMBER);
-                    stmt.Parameters.AddWithValue("arenaTeamId", arenaTeamId);
-                    stmt.Parameters.AddWithValue("guid", this.guid);
+                    stmt.Parameters["@arenaTeamId"].Value = arenaTeamId;
+                    stmt.Parameters["@guid"].Value = this.guid;
                     await stmt.ExNonQuery();
                 }
             }
@@ -341,38 +341,38 @@ namespace TrinityCoreAdmin
         private async Task RemovePetitionsAndSigns()
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ALL_PETITION_SIGNATURES);
-            stmt.Parameters.AddWithValue("@playerguid", this.guid);
+            stmt.Parameters["@playerguid"].Value = this.guid;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PETITION_BY_OWNER);
-            stmt.Parameters.AddWithValue("@ownerguid", this.guid);
+            stmt.Parameters["@ownerguid"].Value = this.guid;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PETITION_SIGNATURE_BY_OWNER);
-            stmt.Parameters.AddWithValue("@ownerguid", this.guid);
+            stmt.Parameters["@ownerguid"].Value = this.guid;
             await stmt.ExNonQuery();
         }
 
         private async Task DeletePetFromDB(int guid)
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_PET_BY_ID);
-            stmt.Parameters.AddWithValue("@id", guid);
+            stmt.Parameters["@id"].Value = this.guid;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHAR_PET_DECLINEDNAME);
-            stmt.Parameters.AddWithValue("@id", guid);
+            stmt.Parameters["@id"].Value = this.guid;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PET_AURAS);
-            stmt.Parameters.AddWithValue("@guid", guid);
+            stmt.Parameters["@guid"].Value = this.guid;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PET_SPELLS);
-            stmt.Parameters.AddWithValue("@guid", guid);
+            stmt.Parameters["@guid"].Value = this.guid;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_PET_SPELL_COOLDOWNS);
-            stmt.Parameters.AddWithValue("@guid", guid);
+            stmt.Parameters["@guid"].Value = this.guid;
             await stmt.ExNonQuery();
         }
     }

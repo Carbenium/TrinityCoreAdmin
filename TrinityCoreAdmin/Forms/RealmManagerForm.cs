@@ -338,6 +338,8 @@ namespace TrinityCoreAdmin.Forms
                         authString.Password = selectedServer.sqlPassword;
                         authString.Database = selectedServer.authdb;
 
+                        authString.IgnorePrepare = false;
+
                         connSuccess = ServerManager.InitDB(new AuthDatabase(authString));
                     }
 
@@ -354,6 +356,8 @@ namespace TrinityCoreAdmin.Forms
                         charString.UserID = selectedServer.sqlUser;
                         charString.Password = selectedServer.sqlPassword;
                         charString.Database = selectedRealm.chardb;
+
+                        charString.IgnorePrepare = false;
 
                         connSuccess = ServerManager.InitDB(new CharDatabase(charString));
                     }

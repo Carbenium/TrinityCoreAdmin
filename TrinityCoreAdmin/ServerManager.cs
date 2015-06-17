@@ -112,21 +112,21 @@ namespace TrinityCoreAdmin
             {
                 authDB = db as AuthDatabase;
                 authDB.OnToggleConnectionStateHandler += MainForm.GetInstance().authDBConn_OnToggleConnectionStateHandler;
-                connSucess = authDB.Open() && connSucess;
-                authDB.DoPrepareStatments();
+                connSucess = authDB.Open() && authDB.DoPrepareStatements() && connSucess;
             }
                 
             if (db is CharDatabase)
             {
                 charDB = db as CharDatabase;
                 charDB.OnToggleConnectionStateHandler += MainForm.GetInstance().charDBConn_OnToggleConnectionStateHandler;
-                connSucess = charDB.Open() && connSucess;
-                charDB.DoPrepareStatments();
+                connSucess = charDB.Open() && charDB.DoPrepareStatements() && connSucess;
             }
                 
             if (db is WorldDatabase)
                 worldDB = db as WorldDatabase;
 
+            if (!connSucess)
+                MessageBox.Show("Error during database init.", "Error");
             return connSucess;
         }
     }

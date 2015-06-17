@@ -94,7 +94,8 @@ namespace TrinityCoreAdmin
         private async Task LoadCharacters()
         {
             var stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_SEL_CHARS_BY_ACCOUNT_ID);
-            stmt.Parameters.AddWithValue("@account", this.id);
+            stmt.Parameters["@account"].Value = this.id;
+
             var dt = await stmt.Execute();
 
             foreach (DataRow row in dt.Rows)
@@ -164,12 +165,11 @@ namespace TrinityCoreAdmin
 
             if (stmt == null)
                 return false;
-
-            stmt.Parameters.AddWithValue("@username", this.username);
-            stmt.Parameters.AddWithValue("@email", this.email);
-            stmt.Parameters.AddWithValue("@reg_mail", this.reg_mail);
-            stmt.Parameters.AddWithValue("@locked", this.locked);
-            stmt.Parameters.AddWithValue("@id", this.id);
+            stmt.Parameters["@username"].Value = this.username;
+            stmt.Parameters["@email"].Value = this.email;
+            stmt.Parameters["@reg_mail"].Value = this.reg_mail;
+            stmt.Parameters["@locked"].Value = this.locked;
+            stmt.Parameters["@id"].Value = this.id;
 
             int result = await stmt.ExNonQuery();
             return result == 1;
@@ -198,10 +198,10 @@ namespace TrinityCoreAdmin
             if (stmt == null)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
 
-            stmt.Parameters.AddWithValue("@username", username);
-            stmt.Parameters.AddWithValue("@sha_pass_hash", CalculateShaPassHash(username, password));
-            stmt.Parameters.AddWithValue("@reg_mail", email);
-            stmt.Parameters.AddWithValue("@email", email);
+            stmt.Parameters["@username"].Value = username;
+            stmt.Parameters["@sha_pass_hash"].Value = CalculateShaPassHash(username, password);
+            stmt.Parameters["@reg_mail"].Value = email;
+            stmt.Parameters["@email"].Value = email;
 
             if (await ServerManager.authDB.ExecuteNonQuery(stmt) != 1)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
@@ -221,7 +221,7 @@ namespace TrinityCoreAdmin
             if (stmt == null)
                 return AccountOpResult.AOR_INTERNAL_ERROR;
 
-            stmt.Parameters.AddWithValue("@id", this.id);
+            stmt.Parameters["@id"].Value = this.id;
 
             if (await stmt.ExScalar() == null)
                 return AccountOpResult.AOR_NAME_NOT_EXIST;
@@ -233,31 +233,31 @@ namespace TrinityCoreAdmin
             }
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_TUTORIALS);
-            stmt.Parameters.AddWithValue("@accountId", this.id);
+            stmt.Parameters["@accountId"].Value = this.id;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_ACCOUNT_DATA);
-            stmt.Parameters.AddWithValue("@accountId", this.id);
+            stmt.Parameters["@accountId"].Value = this.id;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.charDB.GetPreparedStatement(CharDatabase.CharDatabaseStatements.CHAR_DEL_CHARACTER_BAN);
-            stmt.Parameters.AddWithValue("@accountId", this.id);
+            stmt.Parameters["@accountId"].Value = this.id;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT);
-            stmt.Parameters.AddWithValue("@id", this.id);
+            stmt.Parameters["@id"].Value = this.id;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT_ACCESS);
-            stmt.Parameters.AddWithValue("@id", this.id);
+            stmt.Parameters["@id"].Value = this.id;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_REALM_CHARACTERS);
-            stmt.Parameters.AddWithValue("@acctid", this.id);
+            stmt.Parameters["@acctid"].Value = this.id;
             await stmt.ExNonQuery();
 
             stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_DEL_ACCOUNT_BANNED);
-            stmt.Parameters.AddWithValue("@id", this.id);
+            stmt.Parameters["@id"].Value = this.id;
             await stmt.ExNonQuery();
 
             await LoadFromDB();

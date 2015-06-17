@@ -20,15 +20,15 @@ namespace TrinityCoreAdmin
         /// </summary>
         protected List<MySqlCommand> m_stmts = new List<MySqlCommand>();
 
-        public ConnectionState connState
-        { get; private set; }
+        public ConnectionState connState { get; private set; }
 
         private string connStr;
 
-        public MySqlConnection sqlConn
-        { get; private set; }
+        public MySqlConnection sqlConn { get; private set; }
 
-        private static bool isPrepared = false;
+        private bool isPrepared = false;
+
+        protected bool prepareError = false;
 
         /// <summary>
         /// Creates a new MySQL connection.
@@ -96,6 +96,8 @@ namespace TrinityCoreAdmin
             {
                 if (this.sqlConn != null)
                 {
+                    foreach (var s in m_stmts)
+                        s.Dispose();
                     this.sqlConn.Close();
                     this.sqlConn = null;
                 }
@@ -145,6 +147,9 @@ namespace TrinityCoreAdmin
         /// </summary>
         public override void Close()
         {
+            foreach (var s in m_stmts)
+                s.Dispose();
+
             sqlConn.Close();
             m_conn.Remove(this);
             connState = ConnectionState.Closed;
@@ -222,7 +227,6 @@ namespace TrinityCoreAdmin
                     result = dt;
                 }
             }
-            stmt.Parameters.Clear();
             return result;
         }
 
@@ -243,7 +247,6 @@ namespace TrinityCoreAdmin
                     result = dt;
                 }
             }
-            stmt.Parameters.Clear();
             return result;
         }
 
@@ -261,7 +264,6 @@ namespace TrinityCoreAdmin
                     Logger.LOG_DATABASE.Error("Could not execute prepared statement " + stmt.ToString() + " as scalar. " + e.Message);
                 }
             }
-            stmt.Parameters.Clear();
             return result;
         }
 
@@ -279,8 +281,12 @@ namespace TrinityCoreAdmin
                     Logger.LOG_DATABASE.Error("Could not execute prepared statement " + stmt.ToString() + " as NonQuery. " + e.Message);
                 }
             }
-            stmt.Parameters.Clear();
             return result;
+        }
+
+        public virtual bool DoPrepareStatements()
+        {
+            return !prepareError;
         }
 
         /// <summary>
@@ -290,7 +296,7 @@ namespace TrinityCoreAdmin
         /// <returns>Returns a SQL statement</returns>
         protected MySqlCommand GetPreparedStatement(int index)
         {
-            if (!isPrepared)
+            if (prepareError)
             {
                 Logger.LOG_DATABASE.Error("Could not fetch prepared statement " + index.ToString() + " on database " + sqlConn.Database.ToString() + ".");
                 return null;
@@ -308,23 +314,26 @@ namespace TrinityCoreAdmin
         /// <param name="index"></param>
         /// <param name="sql">The SQL command</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:SQL-Abfragen auf Sicherheitsrisiken überprüfen")]
-        protected void PrepareStatement(int index, string sql)
+        protected void PrepareStatement(int index, string sql, Action<MySqlCommand> param)
         {
             try
             {
-                isPrepared = false;
-                if (connState == ConnectionState.Open && !isPrepared)
+                //TODO: Add reconnect case
+                if (connState == ConnectionState.Open)
                 {
                     MySqlCommand stmt = new MySqlCommand(sql, sqlConn);
+                    param(stmt);
                     stmt.Prepare();
 
                     m_stmts.Insert(index, stmt);
-                    isPrepared = true;
                 }
             }
             catch (Exception e)
             {
                 Logger.LOG_DATABASE.Error("Could not prepare statement. Id: " + index + ", sql: " + sql + e.Message);
+                prepareError = true;
+
+                throw e;
             }
         }
     }
