@@ -196,7 +196,7 @@ namespace TrinityCoreAdmin
             DataTable result = null;
             if (connState == ConnectionState.Open)
             {
-                using (MySqlDataReader reader = await stmt.ExecuteReaderAsync())
+                using (DbDataReader reader = await stmt.ExecuteReaderAsync())
                 {
                     var dt = new DataTable();
                     if (!enforceConstraints)
