@@ -2,7 +2,7 @@ language: objective-c
 
 env:
   matrix:
-   - MONO_VER="3.2.4"
+   - MONO_VER="4.0.2"
    
 before_install:
  - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg"
