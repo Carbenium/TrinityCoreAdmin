@@ -157,7 +157,7 @@ namespace TrinityCoreAdmin
         /// <summary>
         /// Updates the account data in the database.
         /// </summary>
-        /// <returns>True if succesful, otherwise false.</returns>
+        /// <returns>True if successful, otherwise false.</returns>
         public async Task<bool> UpdateAccount()
         {
             var stmt = ServerManager.authDB.GetPreparedStatement(AuthDatabase.AuthDatabaseStatements.AUTH_UPD_ACCOUNT);

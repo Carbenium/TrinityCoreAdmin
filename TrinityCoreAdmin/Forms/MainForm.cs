@@ -101,6 +101,7 @@ namespace TrinityCoreAdmin.Forms
 
         public void authDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
         {
+            // Invoke needed since values can only be changed in the main thread
             if (this.InvokeRequired)
             {
                 this.Invoke((Action<object, OnConnectionStateEventArgs>)authDBConn_OnToggleConnectionStateHandler, sender, e);
@@ -123,6 +124,7 @@ namespace TrinityCoreAdmin.Forms
 
         public void charDBConn_OnToggleConnectionStateHandler(object sender, OnConnectionStateEventArgs e)
         {
+            // Invoke needed since values can only be changed in the main thread
             if (this.InvokeRequired)
             {
                 this.Invoke((Action<object, OnConnectionStateEventArgs>)charDBConn_OnToggleConnectionStateHandler, sender, e);
